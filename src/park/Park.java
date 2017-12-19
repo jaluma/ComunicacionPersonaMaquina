@@ -2,40 +2,17 @@ package park;
 
 import fileUtil.AssertParam;
 
-public class Park {
+public class Park extends Place{
 	
-	private String code;
-	private String name;
 	private String country;
 	private String city;
 	private String description;
 	
 	public Park(String code, String name, String country, String city, String description) {
-		setCode(code);
-		setName(name);
+		super(code, name);
 		setCity(city);
 		setCountry(country);
 		setDescription(description);
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	private void setCode(String code) {
-		AssertParam.assertIsEmptry(code);
-		AssertParam.assertNoNullString(code);
-		this.code = code;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	private void setName(String name) {
-		AssertParam.assertIsEmptry(name);
-		AssertParam.assertNoNullString(name);
-		this.name = name;
 	}
 
 	public String getCountry() {

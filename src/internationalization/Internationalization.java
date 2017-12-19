@@ -19,4 +19,5 @@ public class Internationalization {
 	public static Locale getLocate() {
 		return locale;
 	}
+	
 }

@@ -1,25 +1,25 @@
 package park;
 
-public class Accommodation {
+public class Accommodation extends Place {
 	
-	private String code;
+	
 	private TypeHotel type;
 	private int stars;
-	private String name;
-	private String codePark;
+	private String codeAccom;
+	private int num;
 	private double price;
 	
-	public Accommodation(String code, String type, int stars, String name, String codePark, double price)  {
-		setCode(code);
+	public Accommodation(String code, String type, int stars, String name, String codeAccom, int num, double price)  {
+		super(code, name);
 		setType(type);
 		setStars(stars);
-		setCodePark(codePark);
+		setCodePark(codeAccom);
+		setNum(num);
 		setPrice(price);
-		setName(name);
 	}
 
-	private void setCode(String code) {
-		this.code = code;
+	private void setNum(int num) {
+		this.num = num;
 	}
 
 	private void setType(String type) {
@@ -30,20 +30,12 @@ public class Accommodation {
 		this.stars = stars;
 	}
 
-	private void setName(String name) {
-		this.name = name;
-	}
-
-	private void setCodePark(String codePark) {
-		this.codePark = codePark;
+	private void setCodePark(String codeAccom) {
+		this.codeAccom = codeAccom;
 	}
 
 	private void setPrice(double price) {
 		this.price = price;
-	}
-
-	public String getCode() {
-		return code;
 	}
 
 	public String getType() {
@@ -54,16 +46,23 @@ public class Accommodation {
 		return stars;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getCodePark() {
-		return codePark;
+	public String getCodeAccom() {
+		return codeAccom;
 	}
 
 	public double getPrice() {
 		return price;
+	}
+	
+	public int getNum() {
+		return num;
+	}
+
+	@Override
+	public String serialize() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(code).append("@").append(type).append("@").append(stars).append("@").append(name).append("@").append(codeAccom).append("@").append(codeAccom);
+		return sb.toString();
 	}
 	
 	

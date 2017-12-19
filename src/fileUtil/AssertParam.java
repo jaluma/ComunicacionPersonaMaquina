@@ -21,5 +21,5 @@ public class AssertParam {
 			throw new IllegalArgumentException(
 					"ERROR: Object.String is emptry");
 	}
-
+	
 }
