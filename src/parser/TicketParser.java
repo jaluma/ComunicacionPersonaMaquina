@@ -6,7 +6,7 @@ import park.Ticket;
 public class TicketParser extends ParserAdapter<Ticket> {
 
 	public Ticket parseLine(String line) throws IncorrectLineFormat {
-		String[] lineArray = line.split("\t");
+		String[] lineArray = line.split("@");
 
 		assertArray(lineArray);
 		assertTicket(lineArray);

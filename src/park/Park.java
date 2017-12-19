@@ -2,7 +2,7 @@ package park;
 
 import fileUtil.AssertParam;
 
-public class Park extends Place{
+public class Park extends Product{
 	
 	private String country;
 	private String city;
@@ -45,10 +45,15 @@ public class Park extends Place{
 		this.description = description;
 	}
 	
-	public String serialize() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(code).append("@").append(name).append("@").append(country).append("@").append(city).append("@").append(description);
-		return sb.toString();
+	
+	//no se puede contratar por si solo, en todo caso entradas
+	public String toString() {
+		return "";
+	}
+
+	@Override
+	public double getTotal() {
+		return 0;
 	}
 	
 	

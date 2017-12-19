@@ -1,22 +1,31 @@
 package park;
 
-import fileUtil.AssertParam;
+import java.util.Date;
 
-public class Package extends Place {
+import fileUtil.AssertParam;
+import internationalization.Internationalization;
+import logic.ListProduct;
+
+public class Package extends Product {
 	
 	private Park park;
 	private Accommodation accom;
-	private int duration;
 	private double priceAdult;
 	private double priceChild;
 	
 	public Package(String code, String name, String codePark, String codeAccom, int duration, double priceAdult, double priceChild) {
 		super(code, name);
-		setPark(new Park(codePark));
-		setAccom(new Accommodation(codeAccom));
+		setPark((Park)ListProduct.search(codePark));
+		setAccom((Accommodation)ListProduct.search(codeAccom));
 		setDuration(duration);
 		setPriceAdult(priceAdult);
 		setPriceChild(priceChild);
+	}
+	
+	public void loadData(int numberAdult, int numberChild, Date date) {
+		setNumberAdult(numberAdult);
+		setNumberChild(numberChild);
+		setDate(date);
 	}
 
 	public String getCode() {
@@ -29,10 +38,6 @@ public class Package extends Place {
 
 	public Accommodation getAccom() {
 		return accom;
-	}
-
-	public int getDuration() {
-		return duration;
 	}
 
 	public double getPriceAdult() {
@@ -51,11 +56,6 @@ public class Package extends Place {
 		this.accom = accom;
 	}
 
-	private void setDuration(int duration) {
-		AssertParam.assertNoNegative(duration);
-		this.duration = duration;
-	}
-
 	private void setPriceAdult(double priceAdult) {
 		AssertParam.assertNoNegative((int)priceAdult);
 		this.priceAdult = priceAdult;
@@ -67,11 +67,17 @@ public class Package extends Place {
 	}
 
 	@Override
-	public String serialize() {
-		// TODO Auto-generated method stub
-		return null;
+	public double getTotal() {
+		return numberAdult * priceAdult + numberChild * priceChild;
 	}
-	
-	
 
+	@Override
+	public String toString() {
+		String str = "";
+		str += Internationalization.getString("package_subtitle") + ": " + code + " / " + name + " / " + park.getName() + " / " + duration + " " + Internationalization.getString("days") + "\n";
+		str += Internationalization.getString("initial_date") + ": " + Internationalization.getFormatDate(date) + "\n";
+		str += Internationalization.getString("number_adult") + ": " + numberAdult + " / " + Internationalization.getString("number_child") + ": " + numberChild + "\n";
+		return str;
+	}	
+	
 }

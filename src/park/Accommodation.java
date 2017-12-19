@@ -1,23 +1,40 @@
 package park;
 
-public class Accommodation extends Place {
+import java.util.Date;
+
+import internationalization.Internationalization;
+import logic.ListProduct;
+
+public class Accommodation extends Product {
 	
-	
+	private static final double BREAKFAST = 1.1;
 	private TypeHotel type;
 	private int stars;
-	private String codeAccom;
+	private String codePark;
 	private int num;
 	private double price;
+	private boolean breakfast;
 	
-	public Accommodation(String code, String type, int stars, String name, String codeAccom, int num, double price)  {
+	public Accommodation(String code, String type, int stars, String name, String codePark, int num, double price)  {
 		super(code, name);
 		setType(type);
 		setStars(stars);
-		setCodePark(codeAccom);
+		setCodePark(codePark);
 		setNum(num);
 		setPrice(price);
 	}
+	
+	public void loadData(int numberAdult, int numberChild, Date date, int days) {
+		setNumberAdult(numberAdult);
+		setNumberChild(numberChild);
+		setDate(date);
+		setDuration(days);
+	}
 
+	public void setBreakfast() {
+		breakfast = true;
+	}
+	
 	private void setNum(int num) {
 		this.num = num;
 	}
@@ -30,8 +47,8 @@ public class Accommodation extends Place {
 		this.stars = stars;
 	}
 
-	private void setCodePark(String codeAccom) {
-		this.codeAccom = codeAccom;
+	private void setCodePark(String codePark) {
+		this.codePark = codePark;
 	}
 
 	private void setPrice(double price) {
@@ -46,8 +63,8 @@ public class Accommodation extends Place {
 		return stars;
 	}
 
-	public String getCodeAccom() {
-		return codeAccom;
+	public String getCodePark() {
+		return codePark;
 	}
 
 	public double getPrice() {
@@ -59,12 +76,37 @@ public class Accommodation extends Place {
 	}
 
 	@Override
-	public String serialize() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(code).append("@").append(type).append("@").append(stars).append("@").append(name).append("@").append(codeAccom).append("@").append(codeAccom);
-		return sb.toString();
+	public String toString() {
+		String str = "";
+		str += Internationalization.getString("accom_subtitle") + ": " + code + " / " + type + " / " + name + " / " + stars + " " + Internationalization.getString("stars") + " / " + ListProduct.search(codePark).getName() + "\n";
+		str += Internationalization.getString("initial_date") + ": " + Internationalization.getFormatDate(date) + " / " + Internationalization.getString("number_days") + ": " + duration + printBreakfast() +"\n";
+		str += Internationalization.getString("number_people") + ": " + (numberAdult + numberChild) + "\n";
+		return str;
 	}
 	
-	
+	private String printBreakfast() {
+		String str = "";
+		if (type.equals(TypeHotel.HO)) {
+			str += " / " + Internationalization.getString("breakfast") + ": "; 
+			if (breakfast)
+				str += Internationalization.getString("yes_one_letter");
+			else
+				str += Internationalization.getString("no_one_letter");
+		}
+		return str;
+	}
+
+	@Override
+	public double getTotal() {
+		int numPeople = numberAdult + numberChild;
+		double total = price * duration;
+		if (type.equals(TypeHotel.HO))
+			total *= numPeople;
+
+		if (breakfast)		//cost breakfast
+			total *= BREAKFAST;
+		
+		return total;
+	}
 
 }

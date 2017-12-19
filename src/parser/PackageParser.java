@@ -2,13 +2,13 @@ package parser;
 
 import fileUtil.IncorrectLineFormat;
 import park.Package;
-import park.Place;
+import park.Product;
 
-public class PackageParser extends ParserAdapter<Place> {
+public class PackageParser extends ParserAdapter<Product> {
 
 	@Override
-	public Place parseLine(String line) throws IncorrectLineFormat {
-		String[] lineArray = line.split("\t");
+	public Product parseLine(String line) throws IncorrectLineFormat {
+		String[] lineArray = line.split("@");
 
 		assertArray(lineArray);
 		assertPackage(lineArray);
