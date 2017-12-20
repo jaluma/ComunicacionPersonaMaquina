@@ -11,8 +11,7 @@ import java.util.List;
 
 public class FileUtil {
 
-	public List<String> loadLines(String fileName)
-			throws FileNotFoundException, IOException {
+	public List<String> loadLines(String fileName) throws FileNotFoundException, IOException {
 		List<String> lines = new LinkedList<String>();
 
 		BufferedReader br = new BufferedReader(new FileReader(fileName));

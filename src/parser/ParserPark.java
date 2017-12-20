@@ -19,7 +19,7 @@ public class ParserPark extends ParserAdapter<Product> {
 		String country = lineArray[2];
 		String city = lineArray[3];
 		String description = lineArray[4];
-		
+
 		return new Park(code, name, country, city, description);
 	}
 
@@ -27,8 +27,7 @@ public class ParserPark extends ParserAdapter<Product> {
 
 	private void assertPark(String[] lineArray) throws IncorrectLineFormat {
 		if (lineArray.length != 5) {
-			throw new IncorrectLineFormat(
-					"ERROR: Line lenght's wrong.");
+			throw new IncorrectLineFormat("ERROR: Line lenght's wrong.");
 		}
 
 	}

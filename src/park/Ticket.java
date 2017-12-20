@@ -6,12 +6,12 @@ import internationalization.Internationalization;
 import logic.ListProduct;
 
 public class Ticket extends Product {
-	
+
 	private String codeTicket;
 	private String codePark;
 	private double priceAdult;
 	private double priceChild;
-	
+
 	public Ticket(String codeTicket, String codePark, double priceAdult, double priceChild) {
 		super(codeTicket, ListProduct.search(codePark).getName());
 		setCodeTicket(codeTicket);
@@ -19,7 +19,7 @@ public class Ticket extends Product {
 		setPriceAdult(priceAdult);
 		setPriceChild(priceChild);
 	}
-	
+
 	public void loadData(int numberAdult, int numberChild, Date date, int days) {
 		setNumberAdult(numberAdult);
 		setNumberChild(numberChild);
@@ -58,18 +58,25 @@ public class Ticket extends Product {
 	private void setPriceChild(double priceChild) {
 		this.priceChild = priceChild;
 	}
-	
+
 	public String toString() {
 		String str = "";
 		str += Internationalization.getString("ticket_subtitle") + ": " + code + " / " + name + "\n";
-		str += Internationalization.getString("initial_date") + ": " + Internationalization.getFormatDate(date) + " / " + Internationalization.getString("number_days") + ": " + duration + "\n";
-		str += Internationalization.getString("number_adult") + ": " + numberAdult + " / " + Internationalization.getString("number_child") + ": " + numberChild + "\n";
+		str += Internationalization.getString("initial_date") + ": " + Internationalization.getFormatDate(date) + " / "
+				+ Internationalization.getString("number_days") + ": " + duration + "\n";
+		str += Internationalization.getString("number_adult") + ": " + numberAdult + " / "
+				+ Internationalization.getString("number_child") + ": " + numberChild + "\n";
 		return str;
 	}
 
 	@Override
 	public double getTotal() {
 		return numberAdult * priceAdult + numberChild * priceChild;
+	}
+
+	@Override
+	public boolean isSale() {
+		return ((Park) ListProduct.search(codePark)).isSale();
 	}
 
 }

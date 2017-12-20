@@ -1,6 +1,5 @@
 package fileUtil;
 
-
 public class IncorrectLineFormat extends Exception {
 
 	/**
@@ -13,4 +12,3 @@ public class IncorrectLineFormat extends Exception {
 	}
 
 }
-

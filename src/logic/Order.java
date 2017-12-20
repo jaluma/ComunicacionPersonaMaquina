@@ -21,7 +21,7 @@ public class Order {
 	}
 
 	private void setDni(String dni) {
-		this.dni = dni;		
+		this.dni = dni;
 	}
 
 	public String getName() {
@@ -35,16 +35,20 @@ public class Order {
 	public int getItems() {
 		return products.size();
 	}
-	
-	public void add(Product product) {
-		products.add(product);
+
+	public void add(String code, int numberAdult, int numberChild, Date date, int days) {
+		Product productList = ListProduct.search(code);
+		productList.loadData(numberAdult, numberChild, date, days);
+		products.add(productList);
 	}
 
 	@Override
 	public String toString() {
 		String str = "";
-		str += Internationalization.getString("travels").toUpperCase() + "\t" + Internationalization.getString("company").toUpperCase() + "\n\n";
-		str += Internationalization.getString("proof").toUpperCase() + " - " + Internationalization.getActualDate() + "\n";
+		str += Internationalization.getString("travels").toUpperCase() + "\t"
+				+ Internationalization.getString("company").toUpperCase() + "\n\n";
+		str += Internationalization.getString("proof").toUpperCase() + " - " + Internationalization.getActualDate()
+				+ "\n";
 		str += "------------------------------------------------------------------------------\n";
 		str += dni + " - " + name.toUpperCase() + "\n\n";
 		str += "**** " + Internationalization.getString("data_reservations").toUpperCase() + " ****\n\n";
@@ -67,57 +71,55 @@ public class Order {
 		}
 		str += "\n";
 		str += "**** " + Internationalization.getString("paid_title").toUpperCase() + " ****\n\n";
-		str += Internationalization.getString("package_title") + ": " + addTab(7) + Internationalization.getCurrency(getPrice(Package.class)) + "\n";
-		str += Internationalization.getString("accom_title") + ": " + addTab(8) + Internationalization.getCurrency(getPrice(Accommodation.class)) + "\n";
-		str += Internationalization.getString("tickets_title") + ": " + addTab(8) + Internationalization.getCurrency(getPrice(Ticket.class)) + "\n";
-		
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("package_title"), " ",
+				Internationalization.getCurrency(getPrice(Package.class)));
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("accom_title"), " ",
+				Internationalization.getCurrency(getPrice(Accommodation.class)));
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("tickets_title"), " ",
+				Internationalization.getCurrency(getPrice(Ticket.class)));
+
 		if (checkOffer())
-			str += Internationalization.getString("discount_title") + ": " + addTab(8) + Internationalization.getCurrency(getDiscount()) + "\n";
+			str += String.format("%-30s %31s %15s \n", Internationalization.getString("discount_title"), " ",
+					Internationalization.getCurrency(getDiscount()));
 		str += "\n";
-		
-		str += Internationalization.getString("total_title") + ": " + addTab(8) + Internationalization.getCurrency(getTotal());
+
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("total_title"), " ",
+				Internationalization.getCurrency(getTotal()));
 		return str;
 	}
-	
-	private String addTab(int number) {
-		String str = "";
-		for (int i = 0; i < number; i++)
-			str += "\t";
-		return str;
-	}
-	
+
 	private boolean checkOffer() {
 		for (Product e : products) {
-			if (e.isOffer())
+			if (e.isSale())
 				return true;
 		}
 		return false;
 	}
-	
+
 	private double getDiscount() {
 		double total = 0.0;
 		for (Product e : products) {
-			if (e.isOffer())
-				total += e.discount();
+			if (e.isSale())
+				total += e.getDiscount();
 		}
 		return total;
 	}
-	
+
 	private double getPrice(Class<?> c) {
 		double total = 0.0;
-		for (int i = 0; i < products.size();i++) {
-			if (products.get(i).getClass().equals(c)) {			//instanceof
+		for (int i = 0; i < products.size(); i++) {
+			if (products.get(i).getClass().equals(c)) { // instanceof
 				total += products.get(i).getTotal();
 			}
 		}
 		return total;
 	}
-	
+
 	private double getTotal() {
 		double total = 0.0;
-		for (int i = 0; i < products.size(); i++) 
+		for (int i = 0; i < products.size(); i++)
 			total += products.get(i).getTotal();
-		
-		return total;
+
+		return total - getDiscount();
 	}
 }

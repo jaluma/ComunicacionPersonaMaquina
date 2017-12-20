@@ -6,7 +6,7 @@ import java.util.List;
 import fileUtil.IncorrectLineFormat;
 
 public abstract class ParserAdapter<T> implements Parser<T> {
-	
+
 	public List<T> parser(List<String> lines) {
 		List<T> list = new LinkedList<T>();
 
@@ -18,17 +18,14 @@ public abstract class ParserAdapter<T> implements Parser<T> {
 
 				list.add(parseLine(line));
 			} catch (IncorrectLineFormat e) {
-				System.err.println("ERROR: Line " + (i + 1) + ". "
-						+ e.getMessage());
+				System.err.println("ERROR: Line " + (i + 1) + ". " + e.getMessage());
 			}
 		}
 
 		return list;
 	}
-	
+
 	public abstract T parseLine(String line) throws IncorrectLineFormat;
-	
-	
 
 	// <----------------------------------------------------------------------------------------------------->
 

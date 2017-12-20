@@ -1,18 +1,29 @@
 package park;
 
+import java.util.Date;
+
 import fileUtil.AssertParam;
 
-public class Park extends Product{
-	
+public class Park extends Product {
+
 	private String country;
 	private String city;
 	private String description;
-	
+	private boolean sale;
+
 	public Park(String code, String name, String country, String city, String description) {
 		super(code, name);
 		setCity(city);
 		setCountry(country);
 		setDescription(description);
+	}
+
+	public void sale() {
+		sale = true;
+	}
+
+	public boolean isSale() {
+		return sale;
 	}
 
 	public String getCountry() {
@@ -44,18 +55,23 @@ public class Park extends Product{
 		AssertParam.assertNoNullString(description);
 		this.description = description;
 	}
-	
-	
-	//no se puede contratar por si solo, en todo caso entradas
-	public String toString() {
-		return "";
+
+	@Override
+	public void loadData(int numberAdult, int numberChild, Date date, int days) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public double getTotal() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
