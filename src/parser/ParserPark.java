@@ -2,11 +2,10 @@ package parser;
 
 import fileUtil.IncorrectLineFormat;
 import park.Park;
-import park.Product;
 
-public class ParserPark extends ParserAdapter<Product> {
+public class ParserPark extends ParserAdapter<Park> {
 
-	public Product parseLine(String line) throws IncorrectLineFormat {
+	public Park parseLine(String line) throws IncorrectLineFormat {
 		String[] lineArray = line.split("@");
 
 		assertArray(lineArray);

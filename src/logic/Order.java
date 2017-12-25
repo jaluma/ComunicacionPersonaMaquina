@@ -37,9 +37,13 @@ public class Order {
 	}
 
 	public void add(String code, int numberAdult, int numberChild, Date date, int days) {
-		Product productList = ListProduct.search(code);
+		Product productList = ListProduct.searchProduct(code);
 		productList.loadData(numberAdult, numberChild, date, days);
 		products.add(productList);
+	}
+	
+	public void remove(String code) {
+		products.remove(ListProduct.searchProduct(code));
 	}
 
 	@Override

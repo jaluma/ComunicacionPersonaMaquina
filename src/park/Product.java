@@ -70,8 +70,8 @@ public abstract class Product {
 
 	public abstract double getTotal();
 
-	public abstract String toString();
-
 	public abstract boolean isSale();
+	
+	public abstract String toString();
 
 }

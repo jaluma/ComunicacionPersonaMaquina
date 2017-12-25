@@ -1,18 +1,19 @@
 package park;
 
-import java.util.Date;
-
 import fileUtil.AssertParam;
 
-public class Park extends Product {
+public class Park {
 
+	private String name;
+	private String code;
 	private String country;
 	private String city;
 	private String description;
 	private boolean sale;
 
 	public Park(String code, String name, String country, String city, String description) {
-		super(code, name);
+		setCode(code);
+		setName(name);
 		setCity(city);
 		setCountry(country);
 		setDescription(description);
@@ -55,23 +56,26 @@ public class Park extends Product {
 		AssertParam.assertNoNullString(description);
 		this.description = description;
 	}
-
-	@Override
-	public void loadData(int numberAdult, int numberChild, Date date, int days) {
-		// TODO Auto-generated method stub
-
+	
+	public String getName() {
+		return name;
 	}
 
-	@Override
-	public double getTotal() {
-		// TODO Auto-generated method stub
-		return 0;
+	private void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	private void setCode(String code) {
+		this.code = code;
 	}
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 }

@@ -16,8 +16,8 @@ public class Package extends Product {
 	public Package(String code, String name, String codePark, String codeAccom, int duration, double priceAdult,
 			double priceChild) {
 		super(code, name);
-		setPark((Park) ListProduct.search(codePark));
-		setAccom((Accommodation) ListProduct.search(codeAccom));
+		setPark(ListProduct.searchPark(codePark));
+		setAccom((Accommodation) ListProduct.searchProduct(codeAccom));
 		setDuration(duration);
 		setPriceAdult(priceAdult);
 		setPriceChild(priceChild);
@@ -86,7 +86,7 @@ public class Package extends Product {
 
 	@Override
 	public boolean isSale() {
-		return ((Park) ListProduct.search(park.getCode())).isSale();
+		return park.isSale();
 	}
 
 }

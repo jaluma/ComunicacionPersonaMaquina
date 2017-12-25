@@ -10,7 +10,7 @@ public class Accommodation extends Product {
 	private static final double BREAKFAST = 1.1;
 	private TypeHotel type;
 	private int stars;
-	private String codePark;
+	private Park park;
 	private int num;
 	private double price;
 	private boolean breakfast;
@@ -19,7 +19,7 @@ public class Accommodation extends Product {
 		super(code, name);
 		setType(type);
 		setStars(stars);
-		setCodePark(codePark);
+		setPark(ListProduct.searchPark(codePark));
 		setNum(num);
 		setPrice(price);
 	}
@@ -47,8 +47,8 @@ public class Accommodation extends Product {
 		this.stars = stars;
 	}
 
-	private void setCodePark(String codePark) {
-		this.codePark = codePark;
+	private void setPark(Park park) {
+		this.park = park;
 	}
 
 	private void setPrice(double price) {
@@ -64,7 +64,7 @@ public class Accommodation extends Product {
 	}
 
 	public String getCodePark() {
-		return codePark;
+		return park.getName();
 	}
 
 	public double getPrice() {
@@ -79,7 +79,7 @@ public class Accommodation extends Product {
 	public String toString() {
 		String str = "";
 		str += Internationalization.getString("accom_subtitle") + ": " + code + " / " + type + " / " + name + " / "
-				+ stars + " " + Internationalization.getString("stars") + " / " + ListProduct.search(codePark).getName()
+				+ stars + " " + Internationalization.getString("stars") + " / " + park.getName()
 				+ "\n";
 		str += Internationalization.getString("initial_date") + ": " + Internationalization.getFormatDate(date) + " / "
 				+ Internationalization.getString("number_days") + ": " + duration + printBreakfast() + "\n";
@@ -114,7 +114,7 @@ public class Accommodation extends Product {
 
 	@Override
 	public boolean isSale() {
-		return ((Park) ListProduct.search(codePark)).isSale();
+		return park.isSale();
 	}
 
 }
