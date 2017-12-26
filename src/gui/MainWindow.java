@@ -1,49 +1,19 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.util.Date;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
-import java.awt.Color;
-import java.awt.Toolkit;
-
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import javax.swing.JTextPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JCheckBox;
-import javax.swing.JSlider;
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
+import javax.swing.border.EmptyBorder;
 
-import net.miginfocom.swing.MigLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.ScrollPaneConstants;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import logic.Order;
 
 public class MainWindow extends JFrame {
 
@@ -52,6 +22,15 @@ public class MainWindow extends JFrame {
 	public static double RESOLUTION_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
 	private JPanel contentPane;
+	private InitialWindow initialPanel;
+	private ProductListWindow productListPanel;
+	private CartWindow cartWindow;
+	
+	private Order order;
+	private int numberChild;
+	private int numberAdult;
+	private Date date;
+	private int days;
 	/**
 	 * Launch the application.
 	 */
@@ -79,12 +58,14 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
+		order = new Order();
 		setTitle("EII TOURS");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/img/logo.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/img/ico.png")));
 		// Default
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 964, 614);
+		setBounds(100, 100, 900, 650);
 		setLocationRelativeTo(null);
+		setMinimumSize(new Dimension(900, 650));
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -92,12 +73,11 @@ public class MainWindow extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		// inicializamos layout inicial
-		//new InitialWindow(this, contentPane);
-
-		new ProductListWindow(this, contentPane);
+		initialPanel = new InitialWindow(this, contentPane);
+		//new ProductListWindow(this, contentPane);
 		
-		JDialog dialog = new LogUpWindow(this);
-		dialog.setVisible(true);
+		//JDialog dialog = new LogUpWindow(this);
+		//dialog.setVisible(true);
 
 		// contentPane.removeAll();
 		// new InfoOrderWindow(this, contentPane);
@@ -105,6 +85,66 @@ public class MainWindow extends JFrame {
 		// contentPane.revalidate();
 
 		// info order
+	}
+	
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setNumberChild(int numberChild) {
+		this.numberChild = numberChild;
+	}
+
+	public void setNumberAdult(int numberAdult) {
+		this.numberAdult = numberAdult;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public void setDays(int days) {
+		this.days = days;
+	}
+
+	public int getNumberChild() {
+		return numberChild;
+	}
+
+	public int getNumberAdult() {
+		return numberAdult;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public int getDays() {
+		return days;
+	}
+	
+	public InitialWindow getInitialPanel() {
+		return initialPanel;
+	}
+
+	public ProductListWindow getProductListPanel() {
+		return productListPanel;
+	}
+
+	public void setProductListPanel(ProductListWindow productListPanel) {
+		this.productListPanel = productListPanel;
+	}
+
+	public CartWindow getCartWindow() {
+		return cartWindow;
+	}
+
+	public void setCartWindow(CartWindow cartWindow) {
+		this.cartWindow = cartWindow;
+	}
+
+	public void setOrder(Order order2) {
+		this.order = order2;
 	}
 	
 	

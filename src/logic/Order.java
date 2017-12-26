@@ -1,23 +1,43 @@
 package logic;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import internationalization.Internationalization;
 import park.Accommodation;
 import park.Package;
 import park.Product;
 import park.Ticket;
 
-import java.util.*;
-
-import internationalization.Internationalization;
-
 public class Order {
 	private String name;
 	private String dni;
+	private String obs;
 	private List<Product> products;
 
-	public Order(String name, String dni) {
+	public Order() {
+		setName("");
+		setDni("");
+		setObs("");
+		products = new ArrayList<Product>();
+	}
+	
+	public Order(Order order, String name, String dni,String obs) {
+		this();
+		if (order != null)
+			products = order.getProducts();
 		setName(name);
 		setDni(dni);
-		products = new ArrayList<Product>();
+		setObs(obs);
+	}
+	
+	public String getObs() {
+		return obs;
+	}
+
+	private void setObs(String obs) {
+		this.obs = obs;
 	}
 
 	private void setDni(String dni) {
@@ -27,6 +47,10 @@ public class Order {
 	public String getName() {
 		return name;
 	}
+	
+	public String getDni() {
+		return dni;
+	}
 
 	private void setName(String name) {
 		this.name = name;
@@ -35,11 +59,28 @@ public class Order {
 	public int getItems() {
 		return products.size();
 	}
+	
+	public Product getProduct(int i) {
+		return products.get(i);
+	}
+	
+	public List<Product> getProducts() {
+		return products;
+	}
 
 	public void add(String code, int numberAdult, int numberChild, Date date, int days) {
 		Product productList = ListProduct.searchProduct(code);
 		productList.loadData(numberAdult, numberChild, date, days);
 		products.add(productList);
+	}
+	
+	public void add(String code) {
+		Product productList = ListProduct.searchProduct(code);
+		products.add(productList);
+	}
+	
+	public void add(Product product) {
+		products.add(product);
 	}
 
 	public void remove(String code) {
@@ -100,7 +141,7 @@ public class Order {
 		return false;
 	}
 
-	private double getDiscount() {
+	public double getDiscount() {
 		double total = 0.0;
 		for (Product e : products) {
 			if (e.isSale())
@@ -119,7 +160,7 @@ public class Order {
 		return total;
 	}
 
-	private double getTotal() {
+	public double getTotal() {
 		double total = 0.0;
 		for (int i = 0; i < products.size(); i++)
 			total += products.get(i).getTotal();

@@ -1,11 +1,11 @@
 package parser;
 
-import fileUtil.IncorrectLineFormat;
+import fileUtil.IncorrectLineFormatException;
 import park.Park;
 
 public class ParserPark extends ParserAdapter<Park> {
 
-	public Park parseLine(String line) throws IncorrectLineFormat {
+	public Park parseLine(String line) throws IncorrectLineFormatException {
 		String[] lineArray = line.split("@");
 
 		assertArray(lineArray);
@@ -24,9 +24,9 @@ public class ParserPark extends ParserAdapter<Park> {
 
 	// <----------------------------------------------------------------------------------------------------->
 
-	private void assertPark(String[] lineArray) throws IncorrectLineFormat {
+	private void assertPark(String[] lineArray) throws IncorrectLineFormatException {
 		if (lineArray.length != 5) {
-			throw new IncorrectLineFormat("ERROR: Line lenght's wrong.");
+			throw new IncorrectLineFormatException("ERROR: Line lenght's wrong.");
 		}
 
 	}

@@ -4,24 +4,39 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 
 import internationalization.Internationalization;
+import logic.Order;
 
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Window.Type;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import event.FocusTextFieldEvent;
+
+import java.awt.Component;
+import java.awt.Dialog.ModalityType;
+import javax.swing.SwingConstants;
 
 public class LogUpWindow extends JDialog {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private MainWindow mainWindow;
 	private JPanel contentPane;
 	private JPanel panelNorth;
@@ -41,6 +56,7 @@ public class LogUpWindow extends JDialog {
 
 	
 	public LogUpWindow(MainWindow mainWindow) {
+		setModalityType(ModalityType.APPLICATION_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LogUpWindow.class.getResource("/img/user.png")));
 		setTitle(Internationalization.getString("LogUpWindow.this.title")); //$NON-NLS-1$
 		setResizable(false);
@@ -54,6 +70,7 @@ public class LogUpWindow extends JDialog {
 		setModal(true);
 		setBounds(0,0,1028, 561);
 		setLocationRelativeTo(null);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getTxName(), getTxSurname(), getTxObs(), getBtnCancel(), getBtnFinish()}));
 	}
 
 	
@@ -90,6 +107,11 @@ public class LogUpWindow extends JDialog {
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton(Internationalization.getString("log_cancel"));
+			btnCancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LogUpWindow.this.dispose();
+				}
+			});
 			btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			btnCancel.setToolTipText(Internationalization.getToolTips("log_cancel"));
 		}
@@ -97,9 +119,18 @@ public class LogUpWindow extends JDialog {
 	}
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
-			btnFinish = new JButton(Internationalization.getString("log_finish"));
+			btnFinish = new JButton(Internationalization.getString("log_next"));
+			btnFinish.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText(), txDni.getText(), txObs.getText()));
+					contentPane.removeAll();
+					new InfoOrderWindow(mainWindow, contentPane);
+					revalidate();
+					repaint();
+				}
+			});
 			btnFinish.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			btnFinish.setToolTipText(Internationalization.getToolTips("log_finish"));
+			btnFinish.setToolTipText(Internationalization.getToolTips("log_next"));
 		}
 		return btnFinish;
 	}
@@ -164,9 +195,9 @@ public class LogUpWindow extends JDialog {
 	private JLabel getLblName() {
 		if (lblName == null) {
 			lblName = new JLabel(Internationalization.getString("log_name"));
+			lblName.setLabelFor(getTxName());
 			lblName.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblName.setToolTipText(Internationalization.getToolTips("log_name"));
-			lblName.setLabelFor(txName);
 			lblName.setDisplayedMnemonic(Internationalization.getMnemonic("log_name"));
 		}
 		return lblName;
@@ -174,9 +205,9 @@ public class LogUpWindow extends JDialog {
 	private JLabel getLblSurname() {
 		if (lblSurname == null) {
 			lblSurname = new JLabel(Internationalization.getString("log_surname"));
+			lblSurname.setLabelFor(getTxSurname());
 			lblSurname.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblSurname.setToolTipText(Internationalization.getToolTips("log_surname"));
-			lblSurname.setLabelFor(txSurname);
 			lblSurname.setDisplayedMnemonic(Internationalization.getMnemonic("log_surname"));
 		}
 		return lblSurname;
@@ -184,7 +215,10 @@ public class LogUpWindow extends JDialog {
 	private JTextField getTxName() {
 		if (txName == null) {
 			txName = new JTextField();
+			txName.setForeground(Color.DARK_GRAY);
 			txName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txName.setText(Internationalization.getString("log_name").toLowerCase());
+			txName.addFocusListener(new FocusTextFieldEvent("log_name"));
 			txName.setColumns(10);
 		}
 		return txName;
@@ -192,17 +226,21 @@ public class LogUpWindow extends JDialog {
 	private JTextField getTxSurname() {
 		if (txSurname == null) {
 			txSurname = new JTextField();
+			txSurname.setForeground(Color.DARK_GRAY);
+			txSurname.setHorizontalAlignment(SwingConstants.LEFT);
 			txSurname.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txSurname.setColumns(10);
+			txSurname.setText(Internationalization.getString("log_surname").toLowerCase());
+			txSurname.addFocusListener(new FocusTextFieldEvent("log_surname"));
 		}
 		return txSurname;
 	}
 	private JLabel getLblDni() {
 		if (lblDni == null) {
 			lblDni = new JLabel(Internationalization.getString("log_dni"));
+			lblDni.setLabelFor(getTxDNI());
 			lblDni.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblDni.setToolTipText(Internationalization.getToolTips("log_dni"));
-			lblDni.setLabelFor(txDni);
 			lblDni.setDisplayedMnemonic(Internationalization.getMnemonic("log_dni"));
 		}
 		return lblDni;
@@ -210,17 +248,20 @@ public class LogUpWindow extends JDialog {
 	private JTextField getTxDNI() {
 		if (txDni == null) {
 			txDni = new JTextField();
+			txDni.setForeground(Color.DARK_GRAY);
 			txDni.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txDni.setColumns(10);
+			txDni.setText(Internationalization.getString("log_dni").toLowerCase());
+			txDni.addFocusListener(new FocusTextFieldEvent("log_dni"));
 		}
 		return txDni;
 	}
 	private JLabel getLblObs() {
 		if (lblObs == null) {
 			lblObs = new JLabel(Internationalization.getString("log_obs"));
+			lblObs.setLabelFor(getTxObs());
 			lblObs.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblObs.setToolTipText(Internationalization.getToolTips("log_obs"));
-			lblObs.setLabelFor(txObs);
 			lblObs.setDisplayedMnemonic(Internationalization.getMnemonic("log_obs"));
 		}
 		return lblObs;
@@ -228,11 +269,15 @@ public class LogUpWindow extends JDialog {
 	private JTextArea getTxObs() {
 		if (txObs == null) {
 			txObs = new JTextArea();
+			txObs.setForeground(Color.DARK_GRAY);
 			txObs.setBorder(UIManager.getBorder("TextField.border"));
 			txObs.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txObs.setWrapStyleWord(true);
 			txObs.setLineWrap(true);
+			txObs.setText(Internationalization.getString("log_obs").toLowerCase());
+			txObs.addFocusListener(new FocusTextFieldEvent("log_obs"));
 		}
 		return txObs;
 	}
+	
 }

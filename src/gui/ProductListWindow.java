@@ -2,16 +2,20 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -20,16 +24,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import event.ChangeLisnerSliderEvent;
+import event.ComboBoxSortEvent;
 import internationalization.Internationalization;
+import logic.ListProduct;
 import net.miginfocom.swing.MigLayout;
+import park.Product;
 
 public class ProductListWindow extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	private MainWindow mainWindow;
 	private JPanel contentPane;
 
@@ -74,31 +81,34 @@ public class ProductListWindow extends JPanel {
 	private JLabel lblSort;
 	private JComboBox<String> comboBoxSort;
 	private JScrollPane scrollPaneItem;
-	private JPanel panelItem;
-	private JPanel panel;
-	private JPanel panel_1;
-	private JPanel panelPhoto;
-	private JPanel panelInfo;
-	private JPanel panelInfoPrice;
-	private JLabel lblPhoto;
-	private JTextArea txtrInfo;
-	private JLabel lblPrice_2;
-	private JButton btnAdd;
-	private JLabel lblNameproduct;
-	private JPanel panelSouth;
-	private JLabel lblDateinitial;
-	private JLabel lblDays;
-	private JLabel lblPlace;
 	private ComboBoxModel<String> modelSort;
+	private JPanel panelTypeLabel;
+	private List<Product> list;
+	private JSlider sliderChild;
+	private JPanel panelPlace;
+	private JLabel lblPlace;
+	private JPanel panelCombo;
+	private JComboBox<String> comboBox;
+	private DefaultComboBoxModel<String> modelPlace;
 
 	public ProductListWindow(MainWindow mainWindow, JPanel contentPane) {
 		this.mainWindow = mainWindow;
 		this.contentPane = contentPane;
+		list = ListProduct.products;
+		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
 		this.contentPane.setLayout(new BorderLayout(0, 0));
 		this.contentPane.add(getPanelNorth(), BorderLayout.NORTH);
 		this.contentPane.add(getPanelFilter(), BorderLayout.WEST);
 		this.contentPane.add(getPanelCentral(), BorderLayout.CENTER);
 		contentPane = this.contentPane;
+	}
+	
+	public List<Product> getListProduct() {
+		return list;
+	}
+	
+	public void setListProduct(List<Product>list) {
+		this.list = list;
 	}
 
 	private JPanel getPanelNorth() {
@@ -134,19 +144,20 @@ public class ProductListWindow extends JPanel {
 
 	private JLabel getLblNumberitems() {
 		if (lblNumberitems == null) {
-			lblNumberitems = new JLabel(String.format(Internationalization.getString("number_items"), 0));
+			lblNumberitems = new JLabel();
 			lblNumberitems.setHorizontalAlignment(SwingConstants.RIGHT);
+			setNumberItemsCart(0);
 		}
 		return lblNumberitems;
+	}
+	
+	public void setNumberItemsCart(int items) {
+		lblNumberitems.setText(String.format(Internationalization.getString("number_items"), items));
 	}
 
 	private JButton getBtnCart() {
 		if (btnCart == null) {
 			btnCart = new JButton("");
-			btnCart.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
 			ResizableImage.setResizeImage(contentPane, btnCart, "/img/cesta.png", 50, 50);
 			btnCart.setBackground(Color.WHITE);
 			btnCart.addActionListener(new ActionListener() {
@@ -166,12 +177,50 @@ public class ProductListWindow extends JPanel {
 			panelFilter = new JPanel();
 			panelFilter.setBackground(Color.WHITE);
 			panelFilter.setBorder(null);
-			panelFilter.setLayout(new GridLayout(0, 1, 50, 25));
-			panelFilter.add(getPanelType());
-			panelFilter.add(getPanelCategory());
-			panelFilter.add(getPanelPeople());
-			panelFilter.add(getPanelPrice());
-			panelFilter.add(getPanelOnlyPhotos());
+			GridBagLayout gbl_panelFilter = new GridBagLayout();
+			gbl_panelFilter.columnWidths = new int[]{207, 0, 0, 0};
+			gbl_panelFilter.rowHeights = new int[]{46, 74, 50, 76, 64, 32, 0, 0};
+			gbl_panelFilter.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_panelFilter.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			panelFilter.setLayout(gbl_panelFilter);
+			GridBagConstraints gbc_panelPlace = new GridBagConstraints();
+			gbc_panelPlace.anchor = GridBagConstraints.NORTH;
+			gbc_panelPlace.fill = GridBagConstraints.HORIZONTAL;
+			gbc_panelPlace.insets = new Insets(0, 0, 5, 5);
+			gbc_panelPlace.gridx = 0;
+			gbc_panelPlace.gridy = 0;
+			panelFilter.add(getPanelPlace(), gbc_panelPlace);
+			GridBagConstraints gbc_panelType = new GridBagConstraints();
+			gbc_panelType.insets = new Insets(0, 0, 5, 5);
+			gbc_panelType.fill = GridBagConstraints.BOTH;
+			gbc_panelType.gridx = 0;
+			gbc_panelType.gridy = 1;
+			panelFilter.add(getPanelType(), gbc_panelType);
+			GridBagConstraints gbc_panelCategory = new GridBagConstraints();
+			gbc_panelCategory.fill = GridBagConstraints.BOTH;
+			gbc_panelCategory.insets = new Insets(0, 0, 5, 5);
+			//gbc_panelCategory.insets = new Insets(0, 0, 15, 0);
+			gbc_panelCategory.gridx = 0;
+			gbc_panelCategory.gridy = 2;
+			panelFilter.add(getPanelCategory(), gbc_panelCategory);
+			GridBagConstraints gbc_panelPeople = new GridBagConstraints();
+			gbc_panelPeople.fill = GridBagConstraints.BOTH;
+			gbc_panelPeople.insets = new Insets(0, 0, 5, 5);
+			gbc_panelPeople.gridx = 0;
+			gbc_panelPeople.gridy = 3;
+			panelFilter.add(getPanelPeople(), gbc_panelPeople);
+			GridBagConstraints gbc_panelPrice = new GridBagConstraints();
+			gbc_panelPrice.fill = GridBagConstraints.BOTH;
+			gbc_panelPrice.insets = new Insets(0, 0, 5, 5);
+			gbc_panelPrice.gridx = 0;
+			gbc_panelPrice.gridy = 4;
+			panelFilter.add(getPanelPrice(), gbc_panelPrice);
+			GridBagConstraints gbc_panelOnlyPhotos = new GridBagConstraints();
+			gbc_panelOnlyPhotos.fill = GridBagConstraints.BOTH;
+			gbc_panelOnlyPhotos.insets = new Insets(0, 0, 5, 5);
+			gbc_panelOnlyPhotos.gridx = 0;
+			gbc_panelOnlyPhotos.gridy = 5;
+			panelFilter.add(getPanelOnlyPhotos(), gbc_panelOnlyPhotos);
 		}
 		return panelFilter;
 	}
@@ -181,8 +230,8 @@ public class ProductListWindow extends JPanel {
 			panelType = new JPanel();
 			panelType.setBackground(Color.WHITE);
 			panelType.setBorder(UIManager.getBorder("Spinner.border"));
-			panelType.setLayout(new GridLayout(2, 1, 0, 0));
-			panelType.add(getLblType());
+			panelType.setLayout(new BoxLayout(panelType, BoxLayout.Y_AXIS));
+			panelType.add(getPanelTypeLabel());
 			panelType.add(getPanelCheckBoxType());
 		}
 		return panelType;
@@ -191,9 +240,10 @@ public class ProductListWindow extends JPanel {
 	private JPanel getPanelCategory() {
 		if (panelCategory == null) {
 			panelCategory = new JPanel();
+			panelCategory.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			panelCategory.setBackground(Color.WHITE);
 			panelCategory.setBorder(UIManager.getBorder("Spinner.border"));
-			panelCategory.setLayout(new GridLayout(2, 1, 100, 0));
+			panelCategory.setLayout(new BoxLayout(panelCategory, BoxLayout.Y_AXIS));
 			panelCategory.add(getLblCategory());
 			panelCategory.add(getPanelStar());
 		}
@@ -203,9 +253,10 @@ public class ProductListWindow extends JPanel {
 	private JPanel getPanelPeople() {
 		if (panelPeople == null) {
 			panelPeople = new JPanel();
+			panelPeople.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			panelPeople.setBackground(Color.WHITE);
 			panelPeople.setBorder(UIManager.getBorder("Spinner.border"));
-			panelPeople.setLayout(new GridLayout(2, 1, 0, 0));
+			panelPeople.setLayout(new BoxLayout(panelPeople, BoxLayout.Y_AXIS));
 			panelPeople.add(getLblNumberperson());
 			panelPeople.add(getPanelSliderPerson());
 		}
@@ -215,9 +266,10 @@ public class ProductListWindow extends JPanel {
 	private JPanel getPanelOnlyPhotos() {
 		if (panelOnlyPhotos == null) {
 			panelOnlyPhotos = new JPanel();
+			panelOnlyPhotos.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			panelOnlyPhotos.setBackground(Color.WHITE);
 			panelOnlyPhotos.setBorder(UIManager.getBorder("Spinner.border"));
-			panelOnlyPhotos.setLayout(new BoxLayout(panelOnlyPhotos, BoxLayout.LINE_AXIS));
+			panelOnlyPhotos.setLayout(new BoxLayout(panelOnlyPhotos, BoxLayout.X_AXIS));
 			panelOnlyPhotos.add(getChOnlyPhotos());
 		}
 		return panelOnlyPhotos;
@@ -226,6 +278,9 @@ public class ProductListWindow extends JPanel {
 	private JLabel getLblType() {
 		if (lblType == null) {
 			lblType = new JLabel(Internationalization.getString("type"));
+			lblType.setBackground(Color.WHITE);
+			lblType.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblType.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblType.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblType;
@@ -234,6 +289,7 @@ public class ProductListWindow extends JPanel {
 	private JCheckBox getChckbxOnlyaccom() {
 		if (chckbxOnlyaccom == null) {
 			chckbxOnlyaccom = new JCheckBox(Internationalization.getString("type_only_accom"));
+			chckbxOnlyaccom.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			chckbxOnlyaccom.setBackground(Color.WHITE);
 		}
 		return chckbxOnlyaccom;
@@ -242,6 +298,7 @@ public class ProductListWindow extends JPanel {
 	private JCheckBox getChckbxOnlyPackages() {
 		if (chckbxOnlyPackages == null) {
 			chckbxOnlyPackages = new JCheckBox(Internationalization.getString("type_only_packages"));
+			chckbxOnlyPackages.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			chckbxOnlyPackages.setBackground(Color.WHITE);
 		}
 		return chckbxOnlyPackages;
@@ -250,6 +307,7 @@ public class ProductListWindow extends JPanel {
 	private JCheckBox getChckbkOnlyTicket() {
 		if (chckbkOnlyTicket == null) {
 			chckbkOnlyTicket = new JCheckBox(Internationalization.getString("type_only_ticket"));
+			chckbkOnlyTicket.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			chckbkOnlyTicket.setBackground(Color.WHITE);
 		}
 		return chckbkOnlyTicket;
@@ -258,6 +316,8 @@ public class ProductListWindow extends JPanel {
 	private JLabel getLblCategory() {
 		if (lblCategory == null) {
 			lblCategory = new JLabel(Internationalization.getString("category"));
+			lblCategory.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblCategory.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblCategory.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblCategory;
@@ -266,8 +326,9 @@ public class ProductListWindow extends JPanel {
 	private JPanel getPanelStar() {
 		if (panelStar == null) {
 			panelStar = new JPanel();
+			panelStar.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 			panelStar.setBackground(Color.WHITE);
-			panelStar.setLayout(new GridLayout(0, 5, 0, 0));
+			panelStar.setLayout(new BoxLayout(panelStar, BoxLayout.X_AXIS));
 			panelStar.add(getBtnStar1());
 			panelStar.add(getBtnStar2());
 			panelStar.add(getBtnStar3());
@@ -280,6 +341,7 @@ public class ProductListWindow extends JPanel {
 	private JButton getBtnStar1() {
 		if (btnStar1 == null) {
 			btnStar1 = new JButton("\u2606");
+			btnStar1.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnStar1.setBackground(Color.WHITE);
 		}
 		return btnStar1;
@@ -288,6 +350,7 @@ public class ProductListWindow extends JPanel {
 	private JButton getBtnStar2() {
 		if (btnStar2 == null) {
 			btnStar2 = new JButton("\u2606");
+			btnStar2.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnStar2.setBackground(Color.WHITE);
 		}
 		return btnStar2;
@@ -296,6 +359,7 @@ public class ProductListWindow extends JPanel {
 	private JButton getBtnStar5() {
 		if (btnStar5 == null) {
 			btnStar5 = new JButton("\u2606");
+			btnStar5.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnStar5.setBackground(Color.WHITE);
 		}
 		return btnStar5;
@@ -304,6 +368,7 @@ public class ProductListWindow extends JPanel {
 	private JButton getBtnStar3() {
 		if (btnStar3 == null) {
 			btnStar3 = new JButton("\u2606");
+			btnStar3.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnStar3.setBackground(Color.WHITE);
 		}
 		return btnStar3;
@@ -312,6 +377,7 @@ public class ProductListWindow extends JPanel {
 	private JButton getBtnStar4() {
 		if (btnStar4 == null) {
 			btnStar4 = new JButton("\u2606");
+			btnStar4.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnStar4.setBackground(Color.WHITE);
 		}
 		return btnStar4;
@@ -320,10 +386,9 @@ public class ProductListWindow extends JPanel {
 	private JPanel getPanelCheckBoxType() {
 		if (panelCheckBoxType == null) {
 			panelCheckBoxType = new JPanel();
+			panelCheckBoxType.setAlignmentX(Component.LEFT_ALIGNMENT);
 			panelCheckBoxType.setBackground(Color.WHITE);
-			FlowLayout fl_panelCheckBoxType = new FlowLayout(FlowLayout.CENTER, 0, 6);
-			fl_panelCheckBoxType.setAlignOnBaseline(true);
-			panelCheckBoxType.setLayout(fl_panelCheckBoxType);
+			panelCheckBoxType.setLayout(new BoxLayout(panelCheckBoxType, BoxLayout.PAGE_AXIS));
 			panelCheckBoxType.add(getChckbxOnlyaccom());
 			panelCheckBoxType.add(getChckbxOnlyPackages());
 			panelCheckBoxType.add(getChckbkOnlyTicket());
@@ -333,7 +398,10 @@ public class ProductListWindow extends JPanel {
 
 	private JLabel getLblNumberperson() {
 		if (lblNumberperson == null) {
-			lblNumberperson = new JLabel("numberPerson");
+			lblNumberperson = new JLabel(Internationalization.getString("number_person"));
+			lblNumberperson.setFont(new Font("Tahoma", Font.BOLD, 16));
+			lblNumberperson.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblNumberperson.setAlignmentY(Component.TOP_ALIGNMENT);
 			lblNumberperson.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblNumberperson;
@@ -342,6 +410,7 @@ public class ProductListWindow extends JPanel {
 	private JSlider getSliderPerson() {
 		if (sliderPerson == null) {
 			sliderPerson = new JSlider();
+			sliderPerson.setAlignmentY(Component.TOP_ALIGNMENT);
 			sliderPerson.setBackground(Color.WHITE);
 			sliderPerson.setPaintLabels(true);
 			sliderPerson.setValue(5);
@@ -354,8 +423,9 @@ public class ProductListWindow extends JPanel {
 		if (panelSliderPerson == null) {
 			panelSliderPerson = new JPanel();
 			panelSliderPerson.setBackground(Color.WHITE);
-			panelSliderPerson.setLayout(new GridLayout(2, 1, 5, 0));
+			panelSliderPerson.setLayout(new BoxLayout(panelSliderPerson, BoxLayout.Y_AXIS));
 			panelSliderPerson.add(getSliderPerson());
+			panelSliderPerson.add(getSliderChild());
 			panelSliderPerson.add(getLblNewLabel());
 		}
 		return panelSliderPerson;
@@ -363,7 +433,9 @@ public class ProductListWindow extends JPanel {
 
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("^--> person");
+			String str = updateLblPrice();
+			lblNewLabel = new JLabel(str);
+			lblNewLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblNewLabel;
@@ -372,9 +444,10 @@ public class ProductListWindow extends JPanel {
 	private JPanel getPanelPrice() {
 		if (panelPrice == null) {
 			panelPrice = new JPanel();
+			panelPrice.setAlignmentX(Component.RIGHT_ALIGNMENT);
 			panelPrice.setBorder(UIManager.getBorder("Spinner.border"));
 			panelPrice.setBackground(Color.WHITE);
-			panelPrice.setLayout(new GridLayout(2, 1, 0, 0));
+			panelPrice.setLayout(new BoxLayout(panelPrice, BoxLayout.Y_AXIS));
 			panelPrice.add(getLblPrice());
 			panelPrice.add(getPanelSliderPrice());
 		}
@@ -384,6 +457,9 @@ public class ProductListWindow extends JPanel {
 	private JLabel getLblPrice() {
 		if (lblPrice == null) {
 			lblPrice = new JLabel(Internationalization.getString("price"));
+			lblPrice.setFont(new Font("Tahoma", Font.BOLD, 16));
+			lblPrice.setAlignmentY(Component.TOP_ALIGNMENT);
+			lblPrice.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lblPrice.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblPrice;
@@ -393,7 +469,7 @@ public class ProductListWindow extends JPanel {
 		if (panelSliderPrice == null) {
 			panelSliderPrice = new JPanel();
 			panelSliderPrice.setBackground(Color.WHITE);
-			panelSliderPrice.setLayout(new GridLayout(2, 1, 5, 0));
+			panelSliderPrice.setLayout(new BoxLayout(panelSliderPrice, BoxLayout.Y_AXIS));
 			panelSliderPrice.add(getSlider());
 			panelSliderPrice.add(getLblPrice_1());
 		}
@@ -403,26 +479,39 @@ public class ProductListWindow extends JPanel {
 	private JSlider getSlider() {
 		if (slider == null) {
 			slider = new JSlider();
-			slider.setValue(5);
+			slider.setForeground(Color.BLACK);
+			slider.setValue(ListProduct.getMaxPrice() / 2);
 			slider.setPaintLabels(true);
-			slider.setMaximum(10);
+			slider.setMinimum(0);
+			slider.setMaximum(ListProduct.getMaxPrice());
 			slider.setBackground(Color.WHITE);
+			slider.addChangeListener(new ChangeLisnerSliderEvent(getLblPrice_1()));
 		}
 		return slider;
 	}
 
 	private JLabel getLblPrice_1() {
 		if (lblPrice_1 == null) {
-			lblPrice_1 = new JLabel("^--> price");
+			lblPrice_1 = new JLabel(String.valueOf(slider.getValue()));
+			lblPrice_1.setAlignmentY(Component.TOP_ALIGNMENT);
+			lblPrice_1.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lblPrice_1.setLabelFor(getSlider());
 			lblPrice_1.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblPrice_1;
 	}
 
+	private String updateLblPrice() {
+		String str = Internationalization.getString("person_adult") + mainWindow.getNumberAdult() + " | " + Internationalization.getString("person_child") + mainWindow.getNumberChild();
+		return str;
+	}
+
 	private JCheckBox getChOnlyPhotos() {
 		if (chOnlyPhotos == null) {
 			chOnlyPhotos = new JCheckBox(Internationalization.getString("only_photos"));
+			chOnlyPhotos.setAlignmentX(Component.CENTER_ALIGNMENT);
+			chOnlyPhotos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			chOnlyPhotos.setAlignmentY(Component.TOP_ALIGNMENT);
 			chOnlyPhotos.setBackground(Color.WHITE);
 			chOnlyPhotos.setHorizontalAlignment(SwingConstants.CENTER);
 		}
@@ -501,8 +590,9 @@ public class ProductListWindow extends JPanel {
 	private JComboBox<String> getComboBoxSort() {
 		if (comboBoxSort == null) {
 			comboBoxSort = new JComboBox<String>();
-			modelSort = new DefaultComboBoxModel<String>(new String[] {Internationalization.getString("box_combo_price_down"), Internationalization.getString("box_combo_price_up"), Internationalization.getString("box_combo_category_down"), Internationalization.getString("box_combo_category_up")});
+			modelSort = new DefaultComboBoxModel<String>(new String[] {Internationalization.getString("box_combo_relevance"), Internationalization.getString("box_combo_price_down"), Internationalization.getString("box_combo_price_up")});
 			comboBoxSort.setModel(modelSort);
+			comboBoxSort.addItemListener(new ComboBoxSortEvent(mainWindow, this));
 		}
 		return comboBoxSort;
 	}
@@ -510,156 +600,101 @@ public class ProductListWindow extends JPanel {
 	private JScrollPane getScrollPaneItem() {
 		if (scrollPaneItem == null) {
 			scrollPaneItem = new JScrollPane();
-			scrollPaneItem.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPaneItem.setViewportView(getPanelItem());
+			loadProduct();
+			scrollPaneItem.getVerticalScrollBar().setValue(0);
+			scrollPaneItem.getVerticalScrollBar().setUnitIncrement(20);
 		}
+		
 		return scrollPaneItem;
 	}
 
-	private JPanel getPanelItem() {
-		if (panelItem == null) {
-			panelItem = new JPanel();
-			panelItem.setBackground(Color.WHITE);
-			panelItem.setLayout(new GridLayout(5, 1, 25, 25));
-			panelItem.add(getPanel());
-			panelItem.add(getPanel_1_2());
+	private void loadProduct() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		for (int i = 0; i < list.size(); i++) {
+			Product product = list.get(i);
+			product.loadData(mainWindow.getNumberAdult(), mainWindow.getNumberChild(), mainWindow.getDate(),
+					mainWindow.getDays());
+
+			if (product.getPark().getCity().equals(mainWindow.getInitialPanel().getSelectedItem())
+					|| product.getPark().getCountry().equals(mainWindow.getInitialPanel().getSelectedItem())) {
+				panel.add(new ItemPanel(mainWindow, list.get(i)));
+			}
+			ListProduct.products = list;
 		}
-		return panelItem;
+		scrollPaneItem.setViewportView(panel);
 	}
 
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setBorder(UIManager.getBorder("Spinner.border"));
-			panel.setBackground(Color.WHITE);
-			panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-			panel.add(getPanelPhoto());
-			panel.add(getPanelInfo());
+	private JPanel getPanelTypeLabel() {
+		if (panelTypeLabel == null) {
+			panelTypeLabel = new JPanel();
+			panelTypeLabel.setBackground(Color.WHITE);
+			panelTypeLabel.setLayout(new BorderLayout(0, 0));
+			panelTypeLabel.add(getLblType());
 		}
-		return panel;
+		return panelTypeLabel;
+	}
+	private JSlider getSliderChild() {
+		if (sliderChild == null) {
+			sliderChild = new JSlider();
+			sliderChild.setValue(5);
+			sliderChild.setPaintLabels(true);
+			sliderChild.setMaximum(10);
+			sliderChild.setBackground(Color.WHITE);
+			sliderChild.setAlignmentY(0.0f);
+		}
+		return sliderChild;
 	}
 
-	private JPanel getPanel_1_2() {
-		if (panel_1 == null) {
-			panel_1 = new JPanel();
-			panel_1.setBackground(Color.WHITE);
+	private JPanel getPanelPlace() {
+		if (panelPlace == null) {
+			panelPlace = new JPanel();
+			panelPlace.setBorder(UIManager.getBorder("Spinner.border"));
+			panelPlace.setAlignmentX(Component.RIGHT_ALIGNMENT);
+			panelPlace.setBackground(Color.WHITE);
+			panelPlace.setLayout(new BoxLayout(panelPlace, BoxLayout.Y_AXIS));
+			panelPlace.add(getLblPlace());
+			panelPlace.add(getPanel_1_1());
 		}
-		return panel_1;
+		return panelPlace;
 	}
-
-	private JPanel getPanelPhoto() {
-		if (panelPhoto == null) {
-			panelPhoto = new JPanel();
-			panelPhoto.setBackground(Color.WHITE);
-			panelPhoto.setLayout(new BoxLayout(panelPhoto, BoxLayout.X_AXIS));
-			panelPhoto.add(getLblPhoto());
-		}
-		return panelPhoto;
-	}
-
-	private JPanel getPanelInfo() {
-		if (panelInfo == null) {
-			panelInfo = new JPanel();
-			panelInfo.setBackground(Color.WHITE);
-			panelInfo.setLayout(new BorderLayout(0, 0));
-			panelInfo.add(getLblNameproduct(), BorderLayout.NORTH);
-			panelInfo.add(getTxtrInfo(), BorderLayout.CENTER);
-			panelInfo.add(getPanelInfoPrice(), BorderLayout.EAST);
-			panelInfo.add(getPanelSouth(), BorderLayout.SOUTH);
-		}
-		return panelInfo;
-	}
-
-	private JPanel getPanelInfoPrice() {
-		if (panelInfoPrice == null) {
-			panelInfoPrice = new JPanel();
-			panelInfoPrice.setBackground(Color.WHITE);
-			panelInfoPrice.setLayout(new BorderLayout(0, 40));
-			panelInfoPrice.add(getLblPrice_2(), BorderLayout.NORTH);
-			panelInfoPrice.add(getBtnAdd(), BorderLayout.EAST);
-		}
-		return panelInfoPrice;
-	}
-
-	private JLabel getLblPhoto() {
-		if (lblPhoto == null) {
-			lblPhoto = new JLabel("\r\n\r\n");
-			lblPhoto.setIcon(new ImageIcon(MainWindow.class.getResource("/img/PT001.jpg")));
-		}
-		return lblPhoto;
-	}
-
-	private JTextArea getTxtrInfo() {
-		if (txtrInfo == null) {
-			txtrInfo = new JTextArea();
-			txtrInfo.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			txtrInfo.setEditable(false);
-			txtrInfo.setWrapStyleWord(true);
-			txtrInfo.setLineWrap(true);
-			txtrInfo.setText(
-					"szdxfctrgvbhyujnujjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-		}
-		return txtrInfo;
-	}
-
-	private JLabel getLblPrice_2() {
-		if (lblPrice_2 == null) {
-			lblPrice_2 = new JLabel(Internationalization.getString("item_price").toUpperCase());
-			lblPrice_2.setVerticalAlignment(SwingConstants.BOTTOM);
-			lblPrice_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-			lblPrice_2.setHorizontalAlignment(SwingConstants.CENTER);
-		}
-		return lblPrice_2;
-	}
-
-	private JButton getBtnAdd() {
-		if (btnAdd == null) {
-			btnAdd = new JButton(Internationalization.getString("item_add").toUpperCase());
-			btnAdd.setFont(new Font("Tahoma", Font.BOLD, 33));
-		}
-		return btnAdd;
-	}
-
-	private JLabel getLblNameproduct() {
-		if (lblNameproduct == null) {
-			lblNameproduct = new JLabel("nameProduct");
-			lblNameproduct.setBackground(Color.WHITE);
-			lblNameproduct.setFont(new Font("Tahoma", Font.BOLD, 18));
-		}
-		return lblNameproduct;
-	}
-
-	private JPanel getPanelSouth() {
-		if (panelSouth == null) {
-			panelSouth = new JPanel();
-			panelSouth.setBackground(Color.WHITE);
-			panelSouth.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-			panelSouth.add(getLblDateinitial());
-			panelSouth.add(getLblDays());
-			panelSouth.add(getLblPlace());
-		}
-		return panelSouth;
-	}
-
-	private JLabel getLblDateinitial() {
-		if (lblDateinitial == null) {
-			lblDateinitial = new JLabel("dateInitial");
-		}
-		return lblDateinitial;
-	}
-
-	private JLabel getLblDays() {
-		if (lblDays == null) {
-			lblDays = new JLabel("days");
-		}
-		return lblDays;
-	}
-
 	private JLabel getLblPlace() {
 		if (lblPlace == null) {
-			lblPlace = new JLabel("place");
+			lblPlace = new JLabel(Internationalization.getString("place"));
+			lblPlace.setAlignmentY(Component.TOP_ALIGNMENT);
+			lblPlace.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblPlace.setBackground(Color.WHITE);
+			lblPlace.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPlace.setFont(new Font("Tahoma", Font.BOLD, 16));
 		}
 		return lblPlace;
 	}
+	private JPanel getPanel_1_1() {
+		if (panelCombo == null) {
+			panelCombo = new JPanel();
+			panelCombo.setBackground(Color.WHITE);
+			panelCombo.setLayout(new BoxLayout(panelCombo, BoxLayout.Y_AXIS));
+			panelCombo.add(getComboBox());
+		}
+		return panelCombo;
+	}
+	
+	private JComboBox<String> getComboBox() {
+		if (comboBox == null) {
+			comboBox = new JComboBox<String>();
+			comboBox.setFont(new Font("Tahoma", Font.BOLD, 13));
+			comboBox.setEditable(true);
+			comboBox.setBackground(Color.WHITE);
+			comboBox.setModel(modelPlace);
+		}
+		return comboBox;
+	}
 
+	public void refresh() {
+		scrollPaneItem = null;
+		getScrollPaneItem();
+		scrollPaneItem.revalidate();
+		scrollPaneItem.repaint();
+		
+	}
 }

@@ -2,6 +2,8 @@ package park;
 
 import java.util.Date;
 
+import logic.ListProduct;
+
 public abstract class Product {
 
 	private static final double DISCOUNT = 0.2;
@@ -12,12 +14,14 @@ public abstract class Product {
 	protected int numberChild;
 	protected Date date;
 	protected int duration;
+	protected Park park;
 
-	public Product(String code, String name) {
+	public Product(String code, String name, String codePark) {
 		setCode(code);
 		setName(name);
 		setNumberAdult(0);
 		setNumberChild(0);
+		setPark(ListProduct.searchPark(codePark));
 	}
 
 	public abstract void loadData(int numberAdult, int numberChild, Date date, int days);
@@ -50,6 +54,10 @@ public abstract class Product {
 		this.name = name;
 	}
 
+	protected void setPark(Park park) {
+		this.park = park;
+	}
+
 	public String getCode() {
 		return code;
 	}
@@ -60,6 +68,10 @@ public abstract class Product {
 
 	public int getDuration() {
 		return duration;
+	}
+
+	public Park getPark() {
+		return park;
 	}
 
 	public double getDiscount() {

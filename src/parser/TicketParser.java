@@ -1,11 +1,11 @@
 package parser;
 
-import fileUtil.IncorrectLineFormat;
+import fileUtil.IncorrectLineFormatException;
 import park.Ticket;
 
 public class TicketParser extends ParserAdapter<Ticket> {
 
-	public Ticket parseLine(String line) throws IncorrectLineFormat {
+	public Ticket parseLine(String line) throws IncorrectLineFormatException {
 		String[] lineArray = line.split("@");
 
 		assertArray(lineArray);
@@ -21,15 +21,15 @@ public class TicketParser extends ParserAdapter<Ticket> {
 
 			return new Ticket(codeTicket, codePark, priceAdult, priceChild);
 		} catch (NumberFormatException e) {
-			throw new IncorrectLineFormat("ERROR");
+			throw new IncorrectLineFormatException("ERROR");
 		}
 	}
 
 	// <----------------------------------------------------------------------------------------------------->
 
-	private void assertTicket(String[] lineArray) throws IncorrectLineFormat {
+	private void assertTicket(String[] lineArray) throws IncorrectLineFormatException {
 		if (lineArray.length != 4) {
-			throw new IncorrectLineFormat("ERROR: Line lenght's wrong.");
+			throw new IncorrectLineFormatException("ERROR: Line lenght's wrong.");
 		}
 
 	}

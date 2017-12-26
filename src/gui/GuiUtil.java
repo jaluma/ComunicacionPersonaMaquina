@@ -1,6 +1,5 @@
 package gui;
 
-import java.text.Format;
 import java.text.NumberFormat;
 
 import javax.swing.text.NumberFormatter;

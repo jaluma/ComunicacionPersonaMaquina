@@ -1,13 +1,13 @@
 package parser;
 
-import fileUtil.IncorrectLineFormat;
+import fileUtil.IncorrectLineFormatException;
 import park.Package;
 import park.Product;
 
-public class PackageParser extends ParserAdapter<Product> {
+public class ParserPackage extends ParserAdapter<Product> {
 
 	@Override
-	public Product parseLine(String line) throws IncorrectLineFormat {
+	public Product parseLine(String line) throws IncorrectLineFormatException {
 		String[] lineArray = line.split("@");
 
 		assertArray(lineArray);
@@ -27,15 +27,15 @@ public class PackageParser extends ParserAdapter<Product> {
 			return new Package(code, name, codePark, codeAccom, duration, priceAdult, priceChild);
 
 		} catch (NumberFormatException e) {
-			throw new IncorrectLineFormat("ERROR");
+			throw new IncorrectLineFormatException("ERROR");
 		}
 	}
 
 	// <----------------------------------------------------------------------------------------------------->
 
-	private void assertPackage(String[] lineArray) throws IncorrectLineFormat {
+	private void assertPackage(String[] lineArray) throws IncorrectLineFormatException {
 		if (lineArray.length != 7) {
-			throw new IncorrectLineFormat("ERROR: Line lenght's wrong.");
+			throw new IncorrectLineFormatException("ERROR: Line lenght's wrong.");
 		}
 
 	}

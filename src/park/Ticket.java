@@ -8,14 +8,12 @@ import logic.ListProduct;
 public class Ticket extends Product {
 
 	private String codeTicket;
-	private Park park;
 	private double priceAdult;
 	private double priceChild;
 
 	public Ticket(String codeTicket, String codePark, double priceAdult, double priceChild) {
-		super(codeTicket, ListProduct.searchPark(codePark).getName());
+		super(codeTicket, ListProduct.searchPark(codePark).getName(), codePark);
 		setCodeTicket(codeTicket);
-		setPark(ListProduct.searchPark(codePark));
 		setPriceAdult(priceAdult);
 		setPriceChild(priceChild);
 	}
@@ -31,10 +29,6 @@ public class Ticket extends Product {
 		return codeTicket;
 	}
 
-	public String getPark() {
-		return park.getName();
-	}
-
 	public double getPriceAdult() {
 		return priceAdult;
 	}
@@ -45,10 +39,6 @@ public class Ticket extends Product {
 
 	private void setCodeTicket(String codeTicket) {
 		this.codeTicket = codeTicket;
-	}
-
-	private void setPark(Park park) {
-		this.park = park;
 	}
 
 	private void setPriceAdult(double priceAdult) {

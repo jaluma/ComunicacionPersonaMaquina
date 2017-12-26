@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import logic.ListProduct;
+
 public class Internationalization {
 	private static final String BUNDLE_NAME = "resources.values";
 
@@ -74,5 +76,16 @@ public class Internationalization {
 		String str = key + "_tt";
 		return Internationalization.getString(str);
 		
+	}
+
+	public static String getProduct(String code) {
+		String str = code + "_name";
+		String aux = Internationalization.getString(str);
+		char letter = aux.charAt(0);
+		return letter == '!' ? ListProduct.searchProduct(code).getName() : aux;
+	}
+
+	public static String getCountry(String country) {
+		return Internationalization.getString(country);
 	}
 }

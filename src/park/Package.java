@@ -8,15 +8,13 @@ import logic.ListProduct;
 
 public class Package extends Product {
 
-	private Park park;
 	private Accommodation accom;
 	private double priceAdult;
 	private double priceChild;
 
 	public Package(String code, String name, String codePark, String codeAccom, int duration, double priceAdult,
 			double priceChild) {
-		super(code, name);
-		setPark(ListProduct.searchPark(codePark));
+		super(code, name, codePark);
 		setAccom((Accommodation) ListProduct.searchProduct(codeAccom));
 		setDuration(duration);
 		setPriceAdult(priceAdult);
@@ -34,10 +32,6 @@ public class Package extends Product {
 		return code;
 	}
 
-	public Park getPark() {
-		return park;
-	}
-
 	public Accommodation getAccom() {
 		return accom;
 	}
@@ -48,10 +42,6 @@ public class Package extends Product {
 
 	public double getPriceChild() {
 		return priceChild;
-	}
-
-	private void setPark(Park park) {
-		this.park = park;
 	}
 
 	private void setAccom(Accommodation accom) {

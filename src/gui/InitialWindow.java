@@ -2,8 +2,10 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +13,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,13 +30,7 @@ import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
 import fileUtil.StringUtil;
 import internationalization.Internationalization;
-import logic.ListOrders;
 import logic.ListProduct;
-import logic.Order;
-
-import javax.swing.JComboBox;
-
-import javax.swing.DefaultComboBoxModel;
 
 public class InitialWindow extends JPanel {
 
@@ -74,6 +72,9 @@ public class InitialWindow extends JPanel {
 	private MainWindow mainWindow;
 	private JPanel contentPane;
 	private DefaultComboBoxModel<String> modelPlace;
+	JSpinnerDateEditor spinnerDateEditor;
+	JSpinnerDateEditor spinnerDateEditor_1;
+	
 
 	public InitialWindow(MainWindow mainWindow, JPanel contentPane) {
 		this.mainWindow = mainWindow;
@@ -84,7 +85,8 @@ public class InitialWindow extends JPanel {
 		this.contentPane.add(getPanelCenter(), BorderLayout.CENTER);
 		this.contentPane.add(getPanelSouth(), BorderLayout.SOUTH);
 		this.mainWindow.setResizable(false);
-		lblPlace.grabFocus();
+		comboBox.requestFocus();
+		mainWindow.getRootPane().setDefaultButton(btnSearch);
 	}
 
 	private JPanel getPanelNorth() {
@@ -188,26 +190,6 @@ public class InitialWindow extends JPanel {
 			txtDni.setText(Internationalization.getString("dni").toLowerCase());
 			txtDni.setColumns(10);
 			txtDni.addFocusListener(new FocusTextFieldEvent("dni"));
-			//check dni
-			txtDni.addFocusListener(new FocusAdapter() {
-				
-				@Override
-				public void focusLost(FocusEvent e) {
-					String text = txtDni.getText();
-					try {
-					// no dni length
-					if (text.length() != 9)
-						throw new NumberFormatException();
-					// first 8 chracters no Digit
-					Integer.parseInt(text.substring(0, text.length() - 1));
-					} catch(NumberFormatException exc) {
-						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
-								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
-					}
-					
-				}
-				
-			});
 		}
 		return txtDni;
 	}
@@ -245,16 +227,29 @@ public class InitialWindow extends JPanel {
 		return panelButtonRestoreInfo;
 	}
 
-	@SuppressWarnings("deprecation")
 	private JButton getBtnRestoreinfo() {
 		if (btnRestoreinfo == null) {
 			btnRestoreinfo = new JButton(Internationalization.getString("restore_info"));
 			btnRestoreinfo.setMnemonic(Internationalization.getMnemonic("restore_info"));
 			btnRestoreinfo.setHorizontalAlignment(SwingConstants.RIGHT);
+			btnRestoreinfo.setFont(new Font("Tahoma", Font.BOLD, 16));
 			btnRestoreinfo.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					//check dnio
+					String text = txtDni.getText();
+					try {
+					// no dni length
+					if (text.length() != 9)
+						throw new NumberFormatException();
+					// first 8 chracters no Digit
+					Integer.parseInt(text.substring(0, text.length() - 1));
+					} catch(NumberFormatException exc) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
+								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
+					}
+					
 //					Order order = ListOrders.search(new Date(txtCode.getText()), txtDni.getText());
 //					if (order != null) {
 //						JDialog dialog = new CartWindow(InitialWindow.this.mainWindow);
@@ -323,13 +318,13 @@ public class InitialWindow extends JPanel {
 			panelDate.setLayout(new GridLayout(0, 2, 10, 0));
 			panelDate.add(getLblStart());
 			panelDate.add(getLblFinish());
-			JSpinnerDateEditor spinnerDateEditor = new JSpinnerDateEditor();
+			spinnerDateEditor = new JSpinnerDateEditor();
 			spinnerDateEditor.setFont(new Font("Tahoma", Font.BOLD, 14));
 			JDateChooser jd = new JDateChooser(null, new Date(), null, spinnerDateEditor);
 			getLblStart().setLabelFor(jd);
 			jd.setMinSelectableDate(new Date(System.currentTimeMillis() - 86400000));
 			panelDate.add(jd);
-			JSpinnerDateEditor spinnerDateEditor_1 = new JSpinnerDateEditor();
+			spinnerDateEditor_1 = new JSpinnerDateEditor();
 			spinnerDateEditor_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 			JDateChooser jdN = new JDateChooser(null, new Date(System.currentTimeMillis() + 86400000), null, spinnerDateEditor_1);
 			getLblFinish().setLabelFor(jdN);
@@ -420,6 +415,7 @@ public class InitialWindow extends JPanel {
 	private JLabel getLblAdult() {
 		if (lblAdult == null) {
 			lblAdult = new JLabel(Internationalization.getString("number_adult"));
+			lblAdult.setHorizontalAlignment(SwingConstants.CENTER);
 			lblAdult.setDisplayedMnemonic(Internationalization.getMnemonic("number_adult"));
 			lblAdult.setLabelFor(getTxtNumberadult());
 			lblAdult.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -430,6 +426,7 @@ public class InitialWindow extends JPanel {
 	private JLabel getLblChild() {
 		if (lblChild == null) {
 			lblChild = new JLabel(Internationalization.getString("number_child"));
+			lblChild.setHorizontalAlignment(SwingConstants.CENTER);
 			lblChild.setDisplayedMnemonic(Internationalization.getMnemonic("number_child"));
 			lblChild.setLabelFor(getTxtNumberchild());
 			lblChild.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -461,7 +458,7 @@ public class InitialWindow extends JPanel {
 		if (btnSearch == null) {
 			btnSearch = new JButton(Internationalization.getString("search"));
 			btnSearch.setFont(new Font("Tahoma", Font.BOLD, 36));
-			btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
+			//btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
 			btnSearch.addActionListener(new ActionListener() {
 				
 				@Override
@@ -480,12 +477,22 @@ public class InitialWindow extends JPanel {
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
 					else {	//valores correctos, pasamos a siguiente ventana
+						//update values mainWindow
+						mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
+						mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
+						mainWindow.setDate(spinnerDateEditor.getDate());
+
+						long diff = Math.abs(spinnerDateEditor_1.getDate().getTime() - spinnerDateEditor.getDate().getTime());
+						long diffDays = diff / (24 * 60 * 60 * 1000);
+						mainWindow.setDays((int)diffDays);
+						mainWindow.setMinimumSize(new Dimension(1200, 650));
+						mainWindow.setLocationRelativeTo(null);
 						contentPane.removeAll();
-						new ProductListWindow(InitialWindow.this.mainWindow, contentPane);
+						mainWindow.setProductListPanel(new ProductListWindow(InitialWindow.this.mainWindow, contentPane));
 						contentPane.repaint();
 						contentPane.revalidate();
 						mainWindow.setResizable(true);
-						mainWindow.setExtendedState(mainWindow.getExtendedState() | mainWindow.MAXIMIZED_BOTH);
+						mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
 					}
 					
 				}
@@ -513,5 +520,9 @@ public class InitialWindow extends JPanel {
 			comboBox.setModel(modelPlace);
 		}
 		return comboBox;
+	}
+	
+	public String getSelectedItem() {
+		return String.valueOf(comboBox.getSelectedItem());
 	}
 }

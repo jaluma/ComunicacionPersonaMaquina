@@ -11,7 +11,7 @@ class testLogic {
 	@SuppressWarnings("deprecation")
 	@Test
 	void test() {
-		Order o = new Order("javi", "71456789");
+		Order o = new Order(null, "javi", "71456789", "jejejej");
 		// para accom
 		o.add("AL002", 5, 9, new Date(1998, 02, 17), 4);
 		// para package

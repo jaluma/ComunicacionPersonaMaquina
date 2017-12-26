@@ -4,43 +4,41 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.Toolkit;
 
-import javax.swing.ImageIcon;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 import internationalization.Internationalization;
-import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.GridLayout;
+import javax.swing.border.EmptyBorder;
+import javax.swing.UIManager;
 
 public class CartWindow extends JDialog {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel panelNorth;
 	private JLabel lblLogo;
 	private JPanel bottomPanel;
 	private JButton btnAddmore;
 	private JButton btnFinish;
+	private MainWindow mainWindow;
+	private JPanel contentPane;
 	private JPanel panelCenter;
 	private JLabel lblOrder;
 	private JScrollPane scrollPane;
-	private JPanel panelScroll;
-	private JPanel panel;
-	private JLabel lblName;
-	private JLabel lblPhoto;
-	private JPanel panelCenterOrder;
-	private JPanel panelToolsOrder;
-	private JButton btnRemove;
-	private JButton btnEdit;
-	private JTextArea txtrDescription;
-	private MainWindow mainWindow;
-	private JPanel contentPane;
+	private JLabel lblSubTotal;
+	private JPanel panelAcount;
+	private JLabel lblSubtotal;
 
 	public CartWindow(MainWindow mainWindow) {
 		setTitle(Internationalization.getString("CartWindow.this.title")); //$NON-NLS-1$
@@ -53,17 +51,17 @@ public class CartWindow extends JDialog {
 		contentPane.add(getBottomPanel(), BorderLayout.SOUTH);
 		setContentPane(contentPane);
 		setModal(true);
-		setBounds(0,0,798, 589);
-		setLocationRelativeTo(null);
+		setBounds(0,0,900, 589);
+		setLocationRelativeTo(mainWindow);
 	}
 
 	private JPanel getPanelNorth() {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
 			panelNorth.setBackground(Color.WHITE);
-			FlowLayout flowLayout = (FlowLayout) panelNorth.getLayout();
-			flowLayout.setAlignment(FlowLayout.LEFT);
+			panelNorth.setLayout(new GridLayout(1, 2, 0, 0));
 			panelNorth.add(getLblLogo());
+			panelNorth.add(getPanelAcount());
 		}
 		return panelNorth;
 	}
@@ -91,6 +89,11 @@ public class CartWindow extends JDialog {
 	private JButton getBtnAddmore() {
 		if (btnAddmore == null) {
 			btnAddmore = new JButton(Internationalization.getString("cart_add_more"));
+			btnAddmore.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					CartWindow.this.dispose();
+				}
+			});
 			btnAddmore.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		}
 		return btnAddmore;
@@ -99,11 +102,23 @@ public class CartWindow extends JDialog {
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("cart_finish"));
+			btnFinish.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (mainWindow.getOrder().getItems() == 0)
+						JOptionPane.showMessageDialog(CartWindow.this, Internationalization.getString("error_cart_emptry"), Internationalization.getString("error_cart_emptry_title"), JOptionPane.WARNING_MESSAGE);
+					else {
+						CartWindow.this.dispose();
+						System.out.println(mainWindow.getOrder().toString());
+						JDialog dialog = new LogUpWindow(mainWindow);
+						dialog.setVisible(true);
+					}
+				}
+			});
 			btnFinish.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		}
 		return btnFinish;
 	}
-
+	
 	private JPanel getPanelCenter() {
 		if (panelCenter == null) {
 			panelCenter = new JPanel();
@@ -124,103 +139,63 @@ public class CartWindow extends JDialog {
 		}
 		return lblOrder;
 	}
-
+	
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			scrollPane.setViewportView(getPanelScroll());
+			JPanel panel = new JPanel();
+			panel.setBorder(UIManager.getBorder("Spinner.border"));
+			panel.setAutoscrolls(true);
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+			scrollPane.setViewportView(panel);
+			scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+			for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
+				panel.add(new CartItemPanel(mainWindow, mainWindow.getOrder().getProduct(i)));
+			}
 		}
 		return scrollPane;
 	}
 
-	private JPanel getPanelScroll() {
-		if (panelScroll == null) {
-			panelScroll = new JPanel();
-			panelScroll.setLayout(new GridLayout(2, 1, 0, 0));
-			panelScroll.add(getPanel());
+	public void refresh() {
+		scrollPane.removeAll();
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		scrollPane.setViewportView(panel);
+		for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
+			panel.add(new CartItemPanel(mainWindow, mainWindow.getOrder().getProduct(i)));
 		}
-		return panelScroll;
+		scrollPane.repaint();
+		scrollPane.revalidate();
+		
 	}
-
-	private JPanel getPanel() {
-		if (panel == null) {
-			panel = new JPanel();
-			panel.setBorder(UIManager.getBorder("Spinner.border"));
-			panel.setLayout(new BorderLayout(0, 0));
-			panel.add(getLblPhoto(), BorderLayout.WEST);
-			panel.add(getPanelCenterOrder(), BorderLayout.CENTER);
+	private JLabel getLblSubTotal() {
+		if (lblSubTotal == null) {
+			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal() - mainWindow.getOrder().getDiscount())); //$NON-NLS-1$
+			lblSubTotal.setForeground(Color.DARK_GRAY);
+			lblSubTotal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
+			lblSubTotal.setBackground(Color.WHITE);
+			lblSubTotal.setBorder(new EmptyBorder(0, 0, 0, 10));
+			lblSubTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
-		return panel;
+		return lblSubTotal;
 	}
-
-	private JLabel getLblName() {
-		if (lblName == null) {
-			lblName = new JLabel("name");
-			lblName.setHorizontalAlignment(SwingConstants.CENTER);
-			lblName.setFont(new Font("Tahoma", Font.BOLD, 18));
+	private JPanel getPanelAcount() {
+		if (panelAcount == null) {
+			panelAcount = new JPanel();
+			panelAcount.setBackground(Color.WHITE);
+			panelAcount.setBorder(UIManager.getBorder("Spinner.border"));
+			panelAcount.setLayout(new GridLayout(0, 1, 0, 0));
+			panelAcount.add(getLblSubtotal());
+			panelAcount.add(getLblSubTotal());
 		}
-		return lblName;
+		return panelAcount;
 	}
-
-	private JLabel getLblPhoto() {
-		if (lblPhoto == null) {
-			lblPhoto = new JLabel("");
-			lblPhoto.setBackground(Color.WHITE);
-			lblPhoto.setIcon(new ImageIcon(MainWindow.class.getResource("/img/PT001.jpg")));
+	private JLabel getLblSubtotal() {
+		if (lblSubtotal == null) {
+			lblSubtotal = new JLabel(Internationalization.getString("CartWindow.lblSubtotal.text")); //$NON-NLS-1$
+			lblSubtotal.setFont(new Font("Tahoma", Font.BOLD, 18));
 		}
-		return lblPhoto;
-	}
-
-	private JPanel getPanelCenterOrder() {
-		if (panelCenterOrder == null) {
-			panelCenterOrder = new JPanel();
-			panelCenterOrder.setBackground(Color.WHITE);
-			panelCenterOrder.setLayout(new BorderLayout(0, 0));
-			panelCenterOrder.add(getTxtrDescription());
-			panelCenterOrder.add(getLblName(), BorderLayout.NORTH);
-			panelCenterOrder.add(getPanelToolsOrder(), BorderLayout.SOUTH);
-		}
-		return panelCenterOrder;
-	}
-
-	private JPanel getPanelToolsOrder() {
-		if (panelToolsOrder == null) {
-			panelToolsOrder = new JPanel();
-			panelToolsOrder.setBackground(Color.WHITE);
-			FlowLayout fl_panelToolsOrder = (FlowLayout) panelToolsOrder.getLayout();
-			fl_panelToolsOrder.setAlignment(FlowLayout.RIGHT);
-			panelToolsOrder.add(getBtnEdit());
-			panelToolsOrder.add(getBtnRemove());
-		}
-		return panelToolsOrder;
-	}
-
-	private JButton getBtnRemove() {
-		if (btnRemove == null) {
-			btnRemove = new JButton(Internationalization.getString("cart_remove"));
-			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		}
-		return btnRemove;
-	}
-
-	private JButton getBtnEdit() {
-		if (btnEdit == null) {
-			btnEdit = new JButton(Internationalization.getString("cart_edit"));
-			btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		}
-		return btnEdit;
-	}
-
-	private JTextArea getTxtrDescription() {
-		if (txtrDescription == null) {
-			txtrDescription = new JTextArea();
-			txtrDescription.setEditable(false);
-			txtrDescription.setLineWrap(true);
-			txtrDescription.setWrapStyleWord(true);
-			txtrDescription.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			txtrDescription.setText("description");
-		}
-		return txtrDescription;
+		return lblSubtotal;
 	}
 }

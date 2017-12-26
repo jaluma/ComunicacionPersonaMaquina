@@ -3,7 +3,7 @@ package parser;
 import java.util.LinkedList;
 import java.util.List;
 
-import fileUtil.IncorrectLineFormat;
+import fileUtil.IncorrectLineFormatException;
 
 public abstract class ParserAdapter<T> implements Parser<T> {
 
@@ -17,7 +17,7 @@ public abstract class ParserAdapter<T> implements Parser<T> {
 				assertLine(line);
 
 				list.add(parseLine(line));
-			} catch (IncorrectLineFormat e) {
+			} catch (IncorrectLineFormatException e) {
 				System.err.println("ERROR: Line " + (i + 1) + ". " + e.getMessage());
 			}
 		}
@@ -25,18 +25,18 @@ public abstract class ParserAdapter<T> implements Parser<T> {
 		return list;
 	}
 
-	public abstract T parseLine(String line) throws IncorrectLineFormat;
+	public abstract T parseLine(String line) throws IncorrectLineFormatException;
 
 	// <----------------------------------------------------------------------------------------------------->
 
-	protected void assertLine(String line) throws IncorrectLineFormat {
+	protected void assertLine(String line) throws IncorrectLineFormatException {
 		if (line.trim().length() == 0)
-			throw new IncorrectLineFormat("Line is emptry");
+			throw new IncorrectLineFormatException("Line is emptry");
 	}
 
-	protected void assertArray(String[] lineArray) throws IncorrectLineFormat {
+	protected void assertArray(String[] lineArray) throws IncorrectLineFormatException {
 		if (lineArray.length == 0) {
-			throw new IncorrectLineFormat("ERROR: Line lenght's wrong.");
+			throw new IncorrectLineFormatException("ERROR: Line lenght's wrong.");
 		}
 
 	}

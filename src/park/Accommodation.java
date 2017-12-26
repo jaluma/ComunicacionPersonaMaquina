@@ -3,23 +3,20 @@ package park;
 import java.util.Date;
 
 import internationalization.Internationalization;
-import logic.ListProduct;
 
 public class Accommodation extends Product {
 
 	private static final double BREAKFAST = 1.1;
 	private TypeHotel type;
 	private int stars;
-	private Park park;
 	private int num;
 	private double price;
 	private boolean breakfast;
 
 	public Accommodation(String code, String type, int stars, String name, String codePark, int num, double price) {
-		super(code, name);
+		super(code, name, codePark);
 		setType(type);
 		setStars(stars);
-		setPark(ListProduct.searchPark(codePark));
 		setNum(num);
 		setPrice(price);
 	}
@@ -47,10 +44,6 @@ public class Accommodation extends Product {
 		this.stars = stars;
 	}
 
-	private void setPark(Park park) {
-		this.park = park;
-	}
-
 	private void setPrice(double price) {
 		this.price = price;
 	}
@@ -61,10 +54,6 @@ public class Accommodation extends Product {
 
 	public int getStars() {
 		return stars;
-	}
-
-	public String getCodePark() {
-		return park.getName();
 	}
 
 	public double getPrice() {

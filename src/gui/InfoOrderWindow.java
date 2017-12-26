@@ -3,14 +3,21 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Window;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
+import fileUtil.FileUtil;
 import internationalization.Internationalization;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Arrays;
+import java.awt.event.ActionEvent;
 
 public class InfoOrderWindow extends JPanel {
 
@@ -68,6 +75,7 @@ public class InfoOrderWindow extends JPanel {
 			txtrInfoOrder.setWrapStyleWord(true);
 			txtrInfoOrder.setLineWrap(true);
 			txtrInfoOrder.setEditable(false);
+			txtrInfoOrder.setText(mainWindow.getOrder().toString());
 		}
 		return txtrInfoOrder;
 	}
@@ -87,6 +95,23 @@ public class InfoOrderWindow extends JPanel {
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("info_finish"));
+			btnFinish.setToolTipText(Internationalization.getToolTips("info_finish"));
+			btnFinish.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String nameFile = "/files/";
+					nameFile = Internationalization.getFormatDate(mainWindow.getDate()) + "-" + mainWindow.getOrder().getDni();
+					nameFile += ".dat";
+					
+					try {
+						FileUtil.saveToFile(nameFile, Arrays.asList(mainWindow.getOrder().toString()));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+				}
+			});
 		}
 		return btnFinish;
 	}
@@ -94,6 +119,13 @@ public class InfoOrderWindow extends JPanel {
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton(Internationalization.getString("info_cancel"));
+			btnCancel.setToolTipText(Internationalization.getToolTips("info_cancel"));
+			btnCancel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Window w = SwingUtilities.getWindowAncestor(InfoOrderWindow.this);
+			        w.dispose();
+				}
+			});
 		}
 		return btnCancel;
 	}

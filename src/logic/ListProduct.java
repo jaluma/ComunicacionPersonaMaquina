@@ -6,26 +6,23 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import javax.swing.event.ListSelectionEvent;
-
-import parser.PackageParser;
+import fileUtil.FileUtil;
+import fileUtil.IncorrectLineFormatException;
+import park.Park;
+import park.Product;
 import parser.ParserAccommodation;
+import parser.ParserPackage;
 import parser.ParserPark;
 import parser.TicketParser;
-import fileUtil.FileUtil;
-import fileUtil.IncorrectLineFormat;
-import park.Product;
-import park.Park;
 
 public class ListProduct {
 
-	private static List<Park> parks = loadPark();
-	private static List<Product> products = loadProducts();
+	public static List<Park> parks = loadPark();
+	public static List<Product> products = loadProducts();
 
-	public static List<Product> loadProducts() {
+	private static List<Product> loadProducts() {
 		List<Product> productsList = new ArrayList<Product>();
 		List<String> nameFiles = Arrays.asList("alojamientos.dat", "entradas.dat", "paquetes.dat");
 		for (String file : nameFiles) {
@@ -37,9 +34,9 @@ public class ListProduct {
 					} else if (file.equals(nameFiles.get(1))) {
 						productsList.add(new TicketParser().parseLine(line));
 					} else if (file.equals(nameFiles.get(2))) {
-						productsList.add(new PackageParser().parseLine(line));
+						productsList.add(new ParserPackage().parseLine(line));
 					} else {
-						throw new IncorrectLineFormat("ERROR");
+						throw new IncorrectLineFormatException("ERROR");
 					}
 				}
 			} catch (Exception e) {
@@ -104,5 +101,25 @@ public class ListProduct {
 			throw new IllegalArgumentException();
 		}
 
+	}
+	
+	public static int getMaxPrice() {
+		double max = 0;
+		for (Product e : products) {
+			double price = e.getTotal();
+			if (price > max)
+				max = price;
+		}
+		return (int)max + 1;
+	}
+	
+	public static int getMinPrice() {
+		double min = Double.MAX_VALUE;
+		for (Product e : products) {
+			double price =e.getTotal();
+			if (price < min)
+				min = price;
+		}
+		return (int)min;
 	}
 }
