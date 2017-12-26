@@ -21,6 +21,29 @@ import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JCheckBox;
+import javax.swing.JSlider;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+
+import net.miginfocom.swing.MigLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.ScrollPaneConstants;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.FormSpecs;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class MainWindow extends JFrame {
 
@@ -29,9 +52,6 @@ public class MainWindow extends JFrame {
 	public static double RESOLUTION_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
 	private JPanel contentPane;
-	private CardLayout cards;
-
-
 	/**
 	 * Launch the application.
 	 */
@@ -59,22 +79,33 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
-		cards = new CardLayout();
-
+		setTitle("EII TOURS");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/img/logo.png")));
 		// Default
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 964, 608);
+		setBounds(100, 100, 964, 614);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		//inicializamos layout inicial
-		new InitialWindow(this, contentPane);
-		//info order
-		//new InfoOrderWindow(this, contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		// inicializamos layout inicial
+		//new InitialWindow(this, contentPane);
+
+		new ProductListWindow(this, contentPane);
+		
+		JDialog dialog = new LogUpWindow(this);
+		dialog.setVisible(true);
+
+		// contentPane.removeAll();
+		// new InfoOrderWindow(this, contentPane);
+		// contentPane.repaint();
+		// contentPane.revalidate();
+
+		// info order
 	}
-
-
+	
 	
 }

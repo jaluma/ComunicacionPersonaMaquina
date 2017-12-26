@@ -10,8 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import internationalization.Internationalization;
+
 public class InfoOrderWindow extends JPanel {
-	
+
 	private static final long serialVersionUID = 1L;
 	private MainWindow mainWindow;
 	private JPanel contentPane;
@@ -22,14 +24,17 @@ public class InfoOrderWindow extends JPanel {
 	private JPanel panelButton;
 	private JButton btnFinish;
 	private JButton btnCancel;
-	
+
 	public InfoOrderWindow(MainWindow mainWindow, JPanel contentPane) {
 		this.mainWindow = mainWindow;
-		contentPane.add(getPanelNorth(), BorderLayout.NORTH);
-		contentPane.add(getScrollPaneOrder(), BorderLayout.CENTER);
-		contentPane.add(getPanelSouth(), BorderLayout.SOUTH);
+		this.contentPane = contentPane;
+		this.contentPane.setLayout(new BorderLayout(0, 0));
+		this.contentPane.add(getPanelNorth(), BorderLayout.NORTH);
+		this.contentPane.add(getScrollPaneOrder(), BorderLayout.CENTER);
+		this.contentPane.add(getPanelSouth(), BorderLayout.SOUTH);
+		contentPane = this.contentPane;
 	}
-	
+
 	private JPanel getPanelNorth() {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
@@ -40,6 +45,7 @@ public class InfoOrderWindow extends JPanel {
 		}
 		return panelNorth;
 	}
+
 	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("");
@@ -47,6 +53,7 @@ public class InfoOrderWindow extends JPanel {
 		}
 		return lblLogo;
 	}
+
 	private JScrollPane getScrollPaneOrder() {
 		if (scrollPaneOrder == null) {
 			scrollPaneOrder = new JScrollPane();
@@ -54,6 +61,7 @@ public class InfoOrderWindow extends JPanel {
 		}
 		return scrollPaneOrder;
 	}
+
 	private JTextArea getTxtrInfoOrder() {
 		if (txtrInfoOrder == null) {
 			txtrInfoOrder = new JTextArea();
@@ -63,6 +71,7 @@ public class InfoOrderWindow extends JPanel {
 		}
 		return txtrInfoOrder;
 	}
+
 	private JPanel getPanelSouth() {
 		if (panelButton == null) {
 			panelButton = new JPanel();
@@ -74,15 +83,17 @@ public class InfoOrderWindow extends JPanel {
 		}
 		return panelButton;
 	}
+
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
-			btnFinish = new JButton("finish");
+			btnFinish = new JButton(Internationalization.getString("info_finish"));
 		}
 		return btnFinish;
 	}
+
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
-			btnCancel = new JButton("cancel");
+			btnCancel = new JButton(Internationalization.getString("info_cancel"));
 		}
 		return btnCancel;
 	}

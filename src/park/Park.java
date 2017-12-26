@@ -56,7 +56,7 @@ public class Park {
 		AssertParam.assertNoNullString(description);
 		this.description = description;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

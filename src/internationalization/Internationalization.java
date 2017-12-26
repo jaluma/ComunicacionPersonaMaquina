@@ -64,4 +64,15 @@ public class Internationalization {
 	public static String getCurrency(double amount) {
 		return NumberFormat.getCurrencyInstance(locale).format(amount);
 	}
+	
+	public static char getMnemonic(String key) {
+		String str = key + "_m";
+		return Internationalization.getString(str).charAt(0);
+	}
+	
+	public static String getToolTips(String key) {
+		String str = key + "_tt";
+		return Internationalization.getString(str);
+		
+	}
 }

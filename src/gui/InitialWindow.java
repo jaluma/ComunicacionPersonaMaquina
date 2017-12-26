@@ -4,13 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -19,10 +22,22 @@ import javax.swing.UIManager;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JSpinnerDateEditor;
 
+import event.FocusTextFieldEvent;
+import event.NumberTextFieldFormatEvent;
+import fileUtil.StringUtil;
+import internationalization.Internationalization;
+import logic.ListOrders;
+import logic.ListProduct;
+import logic.Order;
+
+import javax.swing.JComboBox;
+
+import javax.swing.DefaultComboBoxModel;
+
 public class InitialWindow extends JPanel {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private JPanel panelCenter;
 	private JPanel panelNorth;
 	private JLabel lblLogo;
@@ -44,7 +59,6 @@ public class InitialWindow extends JPanel {
 	private JPanel panelDate;
 	private JPanel panelPeople;
 	private JLabel lblPlace;
-	private JTextField txtPlace;
 	private JLabel lblStart;
 	private JLabel lblFinish;
 	private JLabel lblPeople;
@@ -55,17 +69,24 @@ public class InitialWindow extends JPanel {
 	private JTextField txtNumberadult;
 	private JTextField txtNumberchild;
 	private JButton btnSearch;
-	private JDateChooser dateChooser;
 	private JPanel panelPeopleCount;
+	private JComboBox<String> comboBox;
 	private MainWindow mainWindow;
-	
+	private JPanel contentPane;
+	private DefaultComboBoxModel<String> modelPlace;
+
 	public InitialWindow(MainWindow mainWindow, JPanel contentPane) {
 		this.mainWindow = mainWindow;
-		contentPane.add(getPanelNorth(), BorderLayout.NORTH);
-		contentPane.add(getPanelCenter(), BorderLayout.CENTER);
-		contentPane.add(getPanelSouth(), BorderLayout.SOUTH);
+		this.contentPane = contentPane;
+		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
+		this.contentPane.setLayout(new BorderLayout(0, 0));
+		this.contentPane.add(getPanelNorth(), BorderLayout.NORTH);
+		this.contentPane.add(getPanelCenter(), BorderLayout.CENTER);
+		this.contentPane.add(getPanelSouth(), BorderLayout.SOUTH);
+		this.mainWindow.setResizable(false);
+		lblPlace.grabFocus();
 	}
-	
+
 	private JPanel getPanelNorth() {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
@@ -81,21 +102,12 @@ public class InitialWindow extends JPanel {
 		if (panelCenter == null) {
 			panelCenter = new JPanel();
 			panelCenter.setBackground(Color.WHITE);
-			GridBagLayout gbl_panelCenter = new GridBagLayout();
-			gbl_panelCenter.columnWidths = new int[] { 196, 0, 596, 0, 0 };
-			gbl_panelCenter.rowHeights = new int[] { 200 };
-			gbl_panelCenter.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
-			gbl_panelCenter.rowWeights = new double[] { 0.0 };
-			panelCenter.setLayout(gbl_panelCenter);
-			GridBagConstraints gbc_panelSearch = new GridBagConstraints();
-			gbc_panelSearch.fill = GridBagConstraints.BOTH;
-			gbc_panelSearch.gridx = 2;
-			gbc_panelSearch.gridy = 0;
-			panelCenter.add(getPanelSearch(), gbc_panelSearch);
+			panelCenter.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
+			panelCenter.add(getPanelSearch());
 		}
 		return panelCenter;
 	}
-	
+
 	private JPanel getPanelSouth() {
 		if (panelSouth == null) {
 			panelSouth = new JPanel();
@@ -131,9 +143,11 @@ public class InitialWindow extends JPanel {
 
 	private JLabel getLblCode() {
 		if (lblCode == null) {
-			lblCode = new JLabel("code");
+			lblCode = new JLabel(Internationalization.getString("date"));
 			lblCode.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCode.setBackground(Color.WHITE);
+			lblCode.setLabelFor(txtCode);
+			lblCode.setDisplayedMnemonic(Internationalization.getMnemonic("code"));
 			lblCode.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblCode;
@@ -141,10 +155,13 @@ public class InitialWindow extends JPanel {
 
 	private JLabel getLblDni() {
 		if (lblDni == null) {
-			lblDni = new JLabel("dni");
+			lblDni = new JLabel(Internationalization.getString("dni"));
 			lblDni.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblDni.setBackground(Color.WHITE);
+			lblDni.setLabelFor(txtDni);
+			lblDni.setDisplayedMnemonic(Internationalization.getMnemonic("date"));
 			lblDni.setHorizontalAlignment(SwingConstants.CENTER);
+			
 		}
 		return lblDni;
 	}
@@ -154,8 +171,10 @@ public class InitialWindow extends JPanel {
 			txtCode = new JTextField();
 			txtCode.setBackground(Color.WHITE);
 			txtCode.setHorizontalAlignment(SwingConstants.CENTER);
-			txtCode.setText("code");
+			txtCode.setForeground(Color.DARK_GRAY);
+			txtCode.setText(Internationalization.getString("date").toLowerCase());
 			txtCode.setColumns(10);
+			txtCode.addFocusListener(new FocusTextFieldEvent("date"));
 		}
 		return txtCode;
 	}
@@ -165,15 +184,37 @@ public class InitialWindow extends JPanel {
 			txtDni = new JTextField();
 			txtDni.setBackground(Color.WHITE);
 			txtDni.setHorizontalAlignment(SwingConstants.CENTER);
-			txtDni.setText("dni");
+			txtDni.setForeground(Color.DARK_GRAY);
+			txtDni.setText(Internationalization.getString("dni").toLowerCase());
 			txtDni.setColumns(10);
+			txtDni.addFocusListener(new FocusTextFieldEvent("dni"));
+			//check dni
+			txtDni.addFocusListener(new FocusAdapter() {
+				
+				@Override
+				public void focusLost(FocusEvent e) {
+					String text = txtDni.getText();
+					try {
+					// no dni length
+					if (text.length() != 9)
+						throw new NumberFormatException();
+					// first 8 chracters no Digit
+					Integer.parseInt(text.substring(0, text.length() - 1));
+					} catch(NumberFormatException exc) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
+								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
+					}
+					
+				}
+				
+			});
 		}
 		return txtDni;
 	}
 
 	private JLabel getLblLogUp() {
 		if (lblLogUp == null) {
-			lblLogUp = new JLabel("isLogIn");
+			lblLogUp = new JLabel(Internationalization.getString("log_in"));
 			lblLogUp.setFont(new Font("Tahoma", Font.BOLD, 18));
 			lblLogUp.setBackground(Color.WHITE);
 		}
@@ -204,10 +245,28 @@ public class InitialWindow extends JPanel {
 		return panelButtonRestoreInfo;
 	}
 
+	@SuppressWarnings("deprecation")
 	private JButton getBtnRestoreinfo() {
 		if (btnRestoreinfo == null) {
-			btnRestoreinfo = new JButton("restoreInfo");
+			btnRestoreinfo = new JButton(Internationalization.getString("restore_info"));
+			btnRestoreinfo.setMnemonic(Internationalization.getMnemonic("restore_info"));
 			btnRestoreinfo.setHorizontalAlignment(SwingConstants.RIGHT);
+			btnRestoreinfo.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+//					Order order = ListOrders.search(new Date(txtCode.getText()), txtDni.getText());
+//					if (order != null) {
+//						JDialog dialog = new CartWindow(InitialWindow.this.mainWindow);
+//						dialog.setVisible(true);
+//					} else {
+//						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_search_order"),
+//								Internationalization.getString("error_search_order_title"),
+//								JOptionPane.WARNING_MESSAGE);
+//					}
+					
+				}
+			});
 		}
 		return btnRestoreinfo;
 	}
@@ -251,7 +310,7 @@ public class InitialWindow extends JPanel {
 			panelPlace.setBackground(Color.WHITE);
 			panelPlace.setLayout(new GridLayout(2, 1, 0, 0));
 			panelPlace.add(getLblPlace());
-			panelPlace.add(getTxtPlace());
+			panelPlace.add(getComboBox());
 		}
 		return panelPlace;
 	}
@@ -264,8 +323,18 @@ public class InitialWindow extends JPanel {
 			panelDate.setLayout(new GridLayout(0, 2, 10, 0));
 			panelDate.add(getLblStart());
 			panelDate.add(getLblFinish());
-			panelDate.add(new JDateChooser(null, new Date(), null, new JSpinnerDateEditor()));
-			panelDate.add(new JDateChooser(null, new Date(System.currentTimeMillis() + 86400000), null, new JSpinnerDateEditor()));
+			JSpinnerDateEditor spinnerDateEditor = new JSpinnerDateEditor();
+			spinnerDateEditor.setFont(new Font("Tahoma", Font.BOLD, 14));
+			JDateChooser jd = new JDateChooser(null, new Date(), null, spinnerDateEditor);
+			getLblStart().setLabelFor(jd);
+			jd.setMinSelectableDate(new Date(System.currentTimeMillis() - 86400000));
+			panelDate.add(jd);
+			JSpinnerDateEditor spinnerDateEditor_1 = new JSpinnerDateEditor();
+			spinnerDateEditor_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+			JDateChooser jdN = new JDateChooser(null, new Date(System.currentTimeMillis() + 86400000), null, spinnerDateEditor_1);
+			getLblFinish().setLabelFor(jdN);
+			jdN.setMinSelectableDate(new Date(System.currentTimeMillis()));
+			panelDate.add(jdN);
 		}
 		return panelDate;
 	}
@@ -284,7 +353,9 @@ public class InitialWindow extends JPanel {
 
 	private JLabel getLblPlace() {
 		if (lblPlace == null) {
-			lblPlace = new JLabel("place");
+			lblPlace = new JLabel(Internationalization.getString("place"));
+			lblPlace.setDisplayedMnemonic(Internationalization.getMnemonic("place"));
+			lblPlace.setLabelFor(getComboBox());
 			lblPlace.setBackground(Color.WHITE);
 			lblPlace.setHorizontalAlignment(SwingConstants.CENTER);
 			lblPlace.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -292,20 +363,10 @@ public class InitialWindow extends JPanel {
 		return lblPlace;
 	}
 
-	private JTextField getTxtPlace() {
-		if (txtPlace == null) {
-			txtPlace = new JTextField();
-			txtPlace.setHorizontalAlignment(SwingConstants.CENTER);
-			txtPlace.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			txtPlace.setText("place");
-			txtPlace.setColumns(10);
-		}
-		return txtPlace;
-	}
-
 	private JLabel getLblStart() {
 		if (lblStart == null) {
-			lblStart = new JLabel("start");
+			lblStart = new JLabel(Internationalization.getString("start"));
+			lblStart.setDisplayedMnemonic(Internationalization.getMnemonic("start"));
 			lblStart.setBackground(UIManager.getColor("Button.background"));
 			lblStart.setHorizontalAlignment(SwingConstants.CENTER);
 			lblStart.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -315,7 +376,8 @@ public class InitialWindow extends JPanel {
 
 	private JLabel getLblFinish() {
 		if (lblFinish == null) {
-			lblFinish = new JLabel("finish");
+			lblFinish = new JLabel(Internationalization.getString("finish"));
+			lblFinish.setDisplayedMnemonic(Internationalization.getMnemonic("finish"));
 			lblFinish.setBackground(UIManager.getColor("Button.background"));
 			lblFinish.setHorizontalAlignment(SwingConstants.CENTER);
 			lblFinish.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -325,7 +387,7 @@ public class InitialWindow extends JPanel {
 
 	private JLabel getLblPeople() {
 		if (lblPeople == null) {
-			lblPeople = new JLabel("people");
+			lblPeople = new JLabel(Internationalization.getString("number_people"));
 			lblPeople.setBackground(Color.WHITE);
 			lblPeople.setHorizontalAlignment(SwingConstants.CENTER);
 			lblPeople.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -357,7 +419,9 @@ public class InitialWindow extends JPanel {
 
 	private JLabel getLblAdult() {
 		if (lblAdult == null) {
-			lblAdult = new JLabel("adult");
+			lblAdult = new JLabel(Internationalization.getString("number_adult"));
+			lblAdult.setDisplayedMnemonic(Internationalization.getMnemonic("number_adult"));
+			lblAdult.setLabelFor(getTxtNumberadult());
 			lblAdult.setFont(new Font("Tahoma", Font.BOLD, 14));
 		}
 		return lblAdult;
@@ -365,7 +429,9 @@ public class InitialWindow extends JPanel {
 
 	private JLabel getLblChild() {
 		if (lblChild == null) {
-			lblChild = new JLabel("child");
+			lblChild = new JLabel(Internationalization.getString("number_child"));
+			lblChild.setDisplayedMnemonic(Internationalization.getMnemonic("number_child"));
+			lblChild.setLabelFor(getTxtNumberchild());
 			lblChild.setFont(new Font("Tahoma", Font.BOLD, 14));
 		}
 		return lblChild;
@@ -375,8 +441,8 @@ public class InitialWindow extends JPanel {
 		if (txtNumberadult == null) {
 			txtNumberadult = new JTextField();
 			txtNumberadult.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			txtNumberadult.setText("numberAdult");
 			txtNumberadult.setColumns(10);
+			txtNumberadult.addKeyListener(new NumberTextFieldFormatEvent());
 		}
 		return txtNumberadult;
 	}
@@ -385,35 +451,67 @@ public class InitialWindow extends JPanel {
 		if (txtNumberchild == null) {
 			txtNumberchild = new JTextField();
 			txtNumberchild.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			txtNumberchild.setText("numberChild");
 			txtNumberchild.setColumns(10);
+			txtNumberchild.addKeyListener(new NumberTextFieldFormatEvent());
 		}
 		return txtNumberchild;
 	}
 
 	private JButton getBtnSearch() {
 		if (btnSearch == null) {
-			btnSearch = new JButton("search");
-			btnSearch.setFont(new Font("Tahoma", Font.BOLD, 18));
-			//btnSearch.addActionListener();
+			btnSearch = new JButton(Internationalization.getString("search"));
+			btnSearch.setFont(new Font("Tahoma", Font.BOLD, 36));
+			btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
+			btnSearch.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					//algun campo vacio
+					if (modelPlace.getIndexOf(StringUtil.formatSentece((String)comboBox.getSelectedItem())) == -1)
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_place"),
+								Internationalization.getString("error_place_title"),
+								JOptionPane.WARNING_MESSAGE);
+					else if (txtNumberadult.getText().isEmpty())
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_adult"),
+								Internationalization.getString("error_number_adult_title"),
+								JOptionPane.WARNING_MESSAGE);
+					else if (txtNumberchild.getText().isEmpty())
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_child"),
+								Internationalization.getString("error_number_child_title"),
+								JOptionPane.WARNING_MESSAGE);
+					else {	//valores correctos, pasamos a siguiente ventana
+						contentPane.removeAll();
+						new ProductListWindow(InitialWindow.this.mainWindow, contentPane);
+						contentPane.repaint();
+						contentPane.revalidate();
+						mainWindow.setResizable(true);
+						mainWindow.setExtendedState(mainWindow.getExtendedState() | mainWindow.MAXIMIZED_BOTH);
+					}
+					
+				}
+			});
 		}
 		return btnSearch;
-	}
-
-	private JDateChooser getDateChooser() {
-		if (dateChooser == null) {
-			dateChooser = new JDateChooser(null, null, null, new JSpinnerDateEditor());;
-		}
-		return dateChooser;
 	}
 
 	private JPanel getPanelPeopleCount() {
 		if (panelPeopleCount == null) {
 			panelPeopleCount = new JPanel();
 			panelPeopleCount.setBackground(Color.WHITE);
+			panelPeopleCount.setLayout(new GridLayout(0, 2, 0, 0));
 			panelPeopleCount.add(getPanelAdult());
 			panelPeopleCount.add(getPanelChild());
 		}
 		return panelPeopleCount;
+	}
+	private JComboBox<String> getComboBox() {
+		if (comboBox == null) {
+			comboBox = new JComboBox<String>();
+			comboBox.setFont(new Font("Tahoma", Font.BOLD, 13));
+			comboBox.setEditable(true);
+			comboBox.setBackground(Color.WHITE);
+			comboBox.setModel(modelPlace);
+		}
+		return comboBox;
 	}
 }

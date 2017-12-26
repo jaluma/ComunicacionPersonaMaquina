@@ -71,7 +71,7 @@ public abstract class Product {
 	public abstract double getTotal();
 
 	public abstract boolean isSale();
-	
+
 	public abstract String toString();
 
 }

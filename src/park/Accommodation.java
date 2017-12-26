@@ -79,8 +79,7 @@ public class Accommodation extends Product {
 	public String toString() {
 		String str = "";
 		str += Internationalization.getString("accom_subtitle") + ": " + code + " / " + type + " / " + name + " / "
-				+ stars + " " + Internationalization.getString("stars") + " / " + park.getName()
-				+ "\n";
+				+ stars + " " + Internationalization.getString("stars") + " / " + park.getName() + "\n";
 		str += Internationalization.getString("initial_date") + ": " + Internationalization.getFormatDate(date) + " / "
 				+ Internationalization.getString("number_days") + ": " + duration + printBreakfast() + "\n";
 		str += Internationalization.getString("number_people") + ": " + (numberAdult + numberChild) + "\n";

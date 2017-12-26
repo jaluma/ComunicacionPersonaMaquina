@@ -41,7 +41,7 @@ public class Order {
 		productList.loadData(numberAdult, numberChild, date, days);
 		products.add(productList);
 	}
-	
+
 	public void remove(String code) {
 		products.remove(ListProduct.searchProduct(code));
 	}

@@ -3,8 +3,13 @@ package logic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import javax.swing.event.ListSelectionEvent;
 
 import parser.PackageParser;
 import parser.ParserAccommodation;
@@ -62,6 +67,17 @@ public class ListProduct {
 		}
 		return parkList;
 	}
+	
+	public static String[] loadPlaces() {
+		List<String> list = new ArrayList<String>();
+		for (int i = 0; i < parks.size(); i++) {
+			list.add(parks.get(i).getCity());
+			list.add(parks.get(i).getCountry());
+		}
+		list = list.stream().distinct().collect(Collectors.toList());
+		Collections.sort(list);
+		return list.toArray(new String[list.size()]);
+	}
 
 	public static Product searchProduct(String code) { // codePark debe ser correcto
 		for (Product e : products) {
@@ -70,13 +86,13 @@ public class ListProduct {
 		}
 		throw new IllegalArgumentException(); // si entra por aqui codigo incorrecto, se supone que todo esta correcto
 	}
-	
+
 	public static Park searchPark(String codePark) {
 		for (Park park : parks) {
-			if(park.getCode().equals(codePark))
+			if (park.getCode().equals(codePark))
 				return park;
 		}
-		throw new IllegalArgumentException(); 
+		throw new IllegalArgumentException();
 	}
 
 	private static int randomOffer() {

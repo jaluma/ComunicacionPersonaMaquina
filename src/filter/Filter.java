@@ -7,11 +7,11 @@ import java.util.stream.Stream;
 
 import park.Product;
 
-public class Filter {	
-	
+public class Filter {
+
 	public List<Product> filter(List<Product> list, TypesFilter type, String filt) {
 		Stream<Product> listFilter = list.stream();
-		
+
 		Method method;
 		try {
 			method = Class.forName("Product").getMethod(type.toString());
@@ -19,7 +19,7 @@ public class Filter {
 			e.printStackTrace();
 			throw new IllegalArgumentException("ERROR");
 		}
-		
+
 		if (type.getClassType().equals(String.class)) {
 			list = listFilter.filter(p -> method.equals(filt)).collect(Collectors.toList());
 		} else if (type.getClassType().equals(int.class)) {
@@ -29,7 +29,7 @@ public class Filter {
 		} else if (type.getClassType().equals(boolean.class)) {
 			list = listFilter.filter(p -> method.equals(true)).collect(Collectors.toList());
 		}
-			
+
 		return list;
 	}
 

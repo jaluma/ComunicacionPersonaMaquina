@@ -22,5 +22,5 @@ public class ResizableImage {
 		label.setIcon(new ImageIcon(imgResize));
 		label.setDisabledIcon(new ImageIcon(imgResize));
 	}
-	
+
 }
