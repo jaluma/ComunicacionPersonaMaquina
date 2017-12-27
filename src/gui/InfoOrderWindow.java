@@ -16,7 +16,10 @@ import fileUtil.FileUtil;
 import internationalization.Internationalization;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class InfoOrderWindow extends JPanel {
@@ -32,14 +35,12 @@ public class InfoOrderWindow extends JPanel {
 	private JButton btnFinish;
 	private JButton btnCancel;
 
-	public InfoOrderWindow(MainWindow mainWindow, JPanel contentPane) {
+	public InfoOrderWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
-		this.contentPane = contentPane;
-		this.contentPane.setLayout(new BorderLayout(0, 0));
-		this.contentPane.add(getPanelNorth(), BorderLayout.NORTH);
-		this.contentPane.add(getScrollPaneOrder(), BorderLayout.CENTER);
-		this.contentPane.add(getPanelSouth(), BorderLayout.SOUTH);
-		contentPane = this.contentPane;
+		setLayout(new BorderLayout(0, 0));
+		add(getPanelNorth(), BorderLayout.NORTH);
+		add(getScrollPaneOrder(), BorderLayout.CENTER);
+		add(getPanelSouth(), BorderLayout.SOUTH);
 	}
 
 	private JPanel getPanelNorth() {
@@ -56,7 +57,7 @@ public class InfoOrderWindow extends JPanel {
 	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("");
-			ResizableImage.setResizeImage(contentPane, lblLogo, "/img/logo.png", 250, 100);
+			ResizableImage.setResizeImage(this, lblLogo, "/img/logo.png", 250, 100);
 		}
 		return lblLogo;
 	}
@@ -92,14 +93,16 @@ public class InfoOrderWindow extends JPanel {
 		return panelButton;
 	}
 
+	@SuppressWarnings("deprecation")
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("info_finish"));
 			btnFinish.setToolTipText(Internationalization.getToolTips("info_finish"));
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String nameFile = "/files/";
-					nameFile = Internationalization.getFormatDate(mainWindow.getDate()) + "-" + mainWindow.getOrder().getDni();
+					String nameFile = "orders/";
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+					nameFile = format.format(mainWindow.getDate()) + "_" + mainWindow.getOrder().getDni();
 					nameFile += ".dat";
 					
 					try {
@@ -109,6 +112,10 @@ public class InfoOrderWindow extends JPanel {
 						e1.printStackTrace();
 					}
 					
+					removeAll();
+					add(new FinishWindow(mainWindow));
+					revalidate();
+					repaint();
 					
 				}
 			});

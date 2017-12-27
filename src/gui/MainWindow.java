@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.util.Date;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -84,7 +85,7 @@ public class MainWindow extends JFrame {
 		// contentPane.repaint();
 		// contentPane.revalidate();
 
-		// info order
+		//contentPane.add(new FinishWindow());
 	}
 	
 	public Order getOrder() {
@@ -116,6 +117,8 @@ public class MainWindow extends JFrame {
 	}
 
 	public Date getDate() {
+		if (date == null)
+			return new Date();
 		return date;
 	}
 

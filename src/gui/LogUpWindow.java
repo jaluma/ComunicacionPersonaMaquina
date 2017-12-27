@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Window.Type;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import event.FocusTextAreaEvent;
 import event.FocusTextFieldEvent;
 
 import java.awt.Component;
@@ -124,9 +125,9 @@ public class LogUpWindow extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText(), txDni.getText(), txObs.getText()));
 					contentPane.removeAll();
-					new InfoOrderWindow(mainWindow, contentPane);
-					revalidate();
-					repaint();
+					contentPane.add(new InfoOrderWindow(mainWindow));
+					contentPane.revalidate();
+					contentPane.repaint();
 				}
 			});
 			btnFinish.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -275,7 +276,7 @@ public class LogUpWindow extends JDialog {
 			txObs.setWrapStyleWord(true);
 			txObs.setLineWrap(true);
 			txObs.setText(Internationalization.getString("log_obs").toLowerCase());
-			txObs.addFocusListener(new FocusTextFieldEvent("log_obs"));
+			txObs.addFocusListener(new FocusTextAreaEvent("log_obs"));
 		}
 		return txObs;
 	}

@@ -410,7 +410,6 @@ public class InitialWindow extends JPanel {
 			panelAdult = new JPanel();
 			panelAdult.setBorder(UIManager.getBorder("Spinner.border"));
 			panelAdult.setBackground(Color.WHITE);
-			panelAdult.setLayout(new GridLayout(0, 2, 0, 0));
 			panelAdult.add(getLblAdult());
 			panelAdult.add(getTxtNumberadult());
 		}
@@ -508,11 +507,11 @@ public class InitialWindow extends JPanel {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_place"),
 								Internationalization.getString("error_place_title"),
 								JOptionPane.WARNING_MESSAGE);
-					else if (txtNumberadult.getText().isEmpty())
+					else if (Integer.parseInt(txtNumberadult.getText()) <= 0)
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_adult"),
 								Internationalization.getString("error_number_adult_title"),
 								JOptionPane.WARNING_MESSAGE);
-					else if (txtNumberchild.getText().isEmpty())
+					else if (Integer.parseInt(txtNumberchild.getText()) <= 0)
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_child"),
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
