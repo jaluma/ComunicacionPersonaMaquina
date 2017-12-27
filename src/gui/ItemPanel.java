@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Scrollbar;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -25,6 +27,7 @@ import internationalization.Internationalization;
 import park.Package;
 import park.Product;
 import park.Ticket;
+import java.awt.Component;
 
 public class ItemPanel extends JPanel {
 	
@@ -54,7 +57,7 @@ public class ItemPanel extends JPanel {
 		this.product = product;
 		setBorder(UIManager.getBorder("Spinner.border"));
 		setMaximumSize(new Dimension( Toolkit.getDefaultToolkit().getScreenSize().width, 230));
-		setPreferredSize(new Dimension(822, 225));
+		setPreferredSize(new Dimension(900, 230));
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelItem());
 	}
@@ -84,7 +87,8 @@ public class ItemPanel extends JPanel {
 	private JPanel getPanelPhoto() {
 		if (panelPhoto == null) {
 			panelPhoto = new JPanel();
-			panelPhoto.setBorder(new LineBorder(new Color(0, 0, 0)));
+			panelPhoto.setAlignmentX(Component.LEFT_ALIGNMENT);
+			panelPhoto.setBorder(new EmptyBorder(5, 5, 5, 15));
 			panelPhoto.setBackground(Color.WHITE);
 			FlowLayout fl_panelPhoto = new FlowLayout(FlowLayout.LEFT, 5, 5);
 			panelPhoto.setLayout(fl_panelPhoto);
@@ -126,10 +130,12 @@ public class ItemPanel extends JPanel {
 	private JTextArea getTxtrInfo() {
 		if (txtrInfo == null) {
 			txtrInfo = new JTextArea();
+			txtrInfo.setWrapStyleWord(true);
 			txtrInfo.setLineWrap(true);
 			txtrInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 			txtrInfo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtrInfo.setEditable(false);
+			txtrInfo.setHighlighter(null);
 			txtrInfo.setText(product.getPark().getDescription());
 		}
 		return txtrInfo;
@@ -165,7 +171,7 @@ public class ItemPanel extends JPanel {
 		if (panelSouth == null) {
 			panelSouth = new JPanel();
 			panelSouth.setBackground(Color.WHITE);
-				panelSouth.setLayout(new GridLayout(1, 2, 0, 0));
+			panelSouth.setLayout(new GridLayout(1, 2, 0, 0));
 			panelSouth.add(getLblPlace());
 			if (product.getPark().isSale())
 				panelSouth.add(getLblSale());
@@ -173,20 +179,12 @@ public class ItemPanel extends JPanel {
 		return panelSouth;
 	}
 
-	private JLabel getLblDays() {
-		if (lblDays == null) {
-			lblDays = new JLabel("days");
-			lblDays.setText(String.valueOf(((Package)product).getDuration()));
-		}
-		return lblDays;
-	}
-
 	private JLabel getLblPlace() {
 		if (lblPlace == null) {
 			lblPlace = new JLabel(Internationalization.getString("location") + product.getPark().getCity() + "-" + product.getPark().getCountry() + " (" + product.getPark().getName() + ")");
 			lblPlace.setBorder(new EmptyBorder(0, 5, 0, 0));
 			lblPlace.setHorizontalAlignment(SwingConstants.LEFT);
-			lblPlace.setFont(new Font("Tahoma", Font.ITALIC, 16));
+			lblPlace.setFont(new Font("Tahoma", Font.ITALIC, 15));
 		}
 		return lblPlace;
 	}
@@ -223,6 +221,10 @@ public class ItemPanel extends JPanel {
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
+			scrollPane.setViewportBorder(new LineBorder(new Color(64, 64, 64), 0, true));
+			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setWheelScrollingEnabled(false);
+			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(getTxtrInfo());
 		}
 		return scrollPane;

@@ -59,7 +59,7 @@ public class CartWindow extends JDialog {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
 			panelNorth.setBackground(Color.WHITE);
-			panelNorth.setLayout(new GridLayout(1, 2, 0, 0));
+			panelNorth.setLayout(new GridLayout(0, 2, 0, 0));
 			panelNorth.add(getLblLogo());
 			panelNorth.add(getPanelAcount());
 		}
@@ -193,7 +193,7 @@ public class CartWindow extends JDialog {
 	}
 	private JLabel getLblSubtotal() {
 		if (lblSubtotal == null) {
-			lblSubtotal = new JLabel(Internationalization.getString("CartWindow.lblSubtotal.text")); //$NON-NLS-1$
+			lblSubtotal = new JLabel(Internationalization.getString("subtotal")); //$NON-NLS-1$
 			lblSubtotal.setFont(new Font("Tahoma", Font.BOLD, 18));
 		}
 		return lblSubtotal;

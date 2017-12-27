@@ -20,7 +20,11 @@ public class FocusTextFieldEvent implements FocusListener {
 		JTextField textField = (JTextField)e.getComponent();
 		if (textField.getText().isEmpty()) {
 			textField.setForeground(Color.DARK_GRAY);
-			textField.setText(Internationalization.getString(code).toLowerCase());
+			String str = Internationalization.getString(code).toLowerCase();
+			if (str.charAt(0) == '!')
+				textField.setText(code);
+			else
+				textField.setText(str);
 		}
 	}
 	

@@ -7,10 +7,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -31,6 +34,8 @@ import event.NumberTextFieldFormatEvent;
 import fileUtil.StringUtil;
 import internationalization.Internationalization;
 import logic.ListProduct;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class InitialWindow extends JPanel {
 
@@ -327,6 +332,16 @@ public class InitialWindow extends JPanel {
 			spinnerDateEditor_1 = new JSpinnerDateEditor();
 			spinnerDateEditor_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 			JDateChooser jdN = new JDateChooser(null, new Date(System.currentTimeMillis() + 86400000), null, spinnerDateEditor_1);
+			jd.getCalendarButton().addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					jdN.setDate(new Date(jd.getDate().getTime()  + 86400000));
+				}
+			});
+			jdN.getCalendarButton().addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					jdN.setMinSelectableDate(new Date(jd.getDate().getTime() + 86400000));
+				}
+			});
 			getLblFinish().setLabelFor(jdN);
 			jdN.setMinSelectableDate(new Date(System.currentTimeMillis()));
 			panelDate.add(jdN);
@@ -395,6 +410,7 @@ public class InitialWindow extends JPanel {
 			panelAdult = new JPanel();
 			panelAdult.setBorder(UIManager.getBorder("Spinner.border"));
 			panelAdult.setBackground(Color.WHITE);
+			panelAdult.setLayout(new GridLayout(0, 2, 0, 0));
 			panelAdult.add(getLblAdult());
 			panelAdult.add(getTxtNumberadult());
 		}
@@ -437,9 +453,20 @@ public class InitialWindow extends JPanel {
 	private JTextField getTxtNumberadult() {
 		if (txtNumberadult == null) {
 			txtNumberadult = new JTextField();
+			txtNumberadult.setHorizontalAlignment(SwingConstants.CENTER);
+			txtNumberadult.setText("0"); //$NON-NLS-1$
+			txtNumberadult.setForeground(Color.DARK_GRAY);
 			txtNumberadult.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtNumberadult.setColumns(10);
 			txtNumberadult.addKeyListener(new NumberTextFieldFormatEvent());
+			txtNumberadult.addFocusListener(new FocusTextFieldEvent("0"));
+			txtNumberadult.addKeyListener(new KeyAdapter() {
+				
+				public void keyTyped(KeyEvent e) { 
+			        if (txtNumberadult.getText().length() >= 3 ) // limit textfield to 3 characters
+			            e.consume(); 
+			    }  
+			});
 		}
 		return txtNumberadult;
 	}
@@ -447,9 +474,22 @@ public class InitialWindow extends JPanel {
 	private JTextField getTxtNumberchild() {
 		if (txtNumberchild == null) {
 			txtNumberchild = new JTextField();
+			txtNumberchild.setHorizontalAlignment(SwingConstants.CENTER);
+			txtNumberchild.setText("0"); //$NON-NLS-1$
+			txtNumberchild.setForeground(Color.DARK_GRAY);
 			txtNumberchild.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtNumberchild.setColumns(10);
 			txtNumberchild.addKeyListener(new NumberTextFieldFormatEvent());
+			txtNumberchild.addFocusListener(new FocusTextFieldEvent("0"));
+			txtNumberchild.addKeyListener(new KeyAdapter() {
+				
+				public void keyTyped(KeyEvent e) { 
+			        if (txtNumberchild.getText().length() >= 3 ) { // limit textfield to 3 characters
+			            e.consume(); 
+			            Toolkit.getDefaultToolkit().beep();
+			        }
+			    }  
+			});
 		}
 		return txtNumberchild;
 	}
