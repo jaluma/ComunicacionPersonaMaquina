@@ -74,7 +74,8 @@ public class MainWindow extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		// inicializamos layout inicial
-		initialPanel = new InitialWindow(this, contentPane);
+		initialPanel = new InitialWindow(this);
+		contentPane.add(initialPanel);
 		//new ProductListWindow(this, contentPane);
 		
 		//JDialog dialog = new LogUpWindow(this);

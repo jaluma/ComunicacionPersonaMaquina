@@ -14,11 +14,21 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,8 +36,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JSpinnerDateEditor;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
@@ -36,6 +48,10 @@ import internationalization.Internationalization;
 import logic.ListProduct;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
 
 public class InitialWindow extends JPanel {
 
@@ -75,30 +91,26 @@ public class InitialWindow extends JPanel {
 	private JPanel panelPeopleCount;
 	private JComboBox<String> comboBox;
 	private MainWindow mainWindow;
-	private JPanel contentPane;
 	private DefaultComboBoxModel<String> modelPlace;
-	JSpinnerDateEditor spinnerDateEditor;
-	JSpinnerDateEditor spinnerDateEditor_1;
-	
+	JDateChooser dateArrive;
+	JDateChooser dateExit;	
 
-	public InitialWindow(MainWindow mainWindow, JPanel contentPane) {
+	public InitialWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
-		this.contentPane = contentPane;
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
-		this.contentPane.setLayout(new BorderLayout(0, 0));
-		this.contentPane.add(getPanelNorth(), BorderLayout.NORTH);
-		this.contentPane.add(getPanelCenter(), BorderLayout.CENTER);
-		this.contentPane.add(getPanelSouth(), BorderLayout.SOUTH);
+		setLayout(new BorderLayout(0, 0));
+		add(getPanelNorth(), BorderLayout.NORTH);
+		add(getPanelCenter(), BorderLayout.CENTER);
+		add(getPanelSouth(), BorderLayout.SOUTH);
 		this.mainWindow.setResizable(false);
-		comboBox.requestFocus();
-		mainWindow.getRootPane().setDefaultButton(btnSearch);
+		this.mainWindow.getRootPane().setDefaultButton(btnSearch);
 	}
 
 	private JPanel getPanelNorth() {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
 			panelNorth.setBackground(Color.WHITE);
-			panelNorth.setLayout(new GridLayout(1, 0, 0, 0));
+			panelNorth.setLayout(new GridLayout(1, 2, 0, 0));
 			panelNorth.add(getLblLogo());
 			panelNorth.add(getPanelLogIn());
 		}
@@ -129,7 +141,7 @@ public class InitialWindow extends JPanel {
 			lblLogo = new JLabel("");
 			lblLogo.setBackground(Color.WHITE);
 			lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
-			ResizableImage.setResizeImage(this, lblLogo, "/img/logo.png", 250, 100);
+			ResizableImage.setResizeImage(this, lblLogo, "/img/logo.png", 300, 150);
 		}
 		return lblLogo;
 	}
@@ -138,7 +150,7 @@ public class InitialWindow extends JPanel {
 		if (panelData == null) {
 			panelData = new JPanel();
 			panelData.setBackground(Color.WHITE);
-			panelData.setLayout(new GridLayout(2, 2, 0, 0));
+			panelData.setLayout(new GridLayout(2, 2, 0, 5));
 			panelData.setBorder(UIManager.getBorder("Spinner.border"));
 			panelData.add(getLblCode());
 			panelData.add(getTxtCode());
@@ -212,7 +224,7 @@ public class InitialWindow extends JPanel {
 		if (panelLogIn == null) {
 			panelLogIn = new JPanel();
 			panelLogIn.setBackground(Color.WHITE);
-			panelLogIn.setLayout(new GridLayout(0, 1, 0, 0));
+			panelLogIn.setLayout(new GridLayout(3, 1, 0, 0));
 			panelLogIn.setBorder(UIManager.getBorder("Spinner.border"));
 			panelLogIn.add(getPanelTextLogIn());
 			panelLogIn.add(getPanelData());
@@ -226,7 +238,7 @@ public class InitialWindow extends JPanel {
 			panelButtonRestoreInfo = new JPanel();
 			panelButtonRestoreInfo.setBackground(Color.WHITE);
 			FlowLayout flowLayout = (FlowLayout) panelButtonRestoreInfo.getLayout();
-			flowLayout.setAlignment(FlowLayout.RIGHT);
+			flowLayout.setAlignment(FlowLayout.CENTER);
 			panelButtonRestoreInfo.add(getBtnRestoreinfo());
 		}
 		return panelButtonRestoreInfo;
@@ -320,33 +332,41 @@ public class InitialWindow extends JPanel {
 			panelDate = new JPanel();
 			panelDate.setBorder(UIManager.getBorder("Spinner.border"));
 			panelDate.setBackground(Color.WHITE);
-			panelDate.setLayout(new GridLayout(0, 2, 10, 0));
+			panelDate.setLayout(new GridLayout(2, 2, 10, 0));
 			panelDate.add(getLblStart());
 			panelDate.add(getLblFinish());
-			spinnerDateEditor = new JSpinnerDateEditor();
-			spinnerDateEditor.setFont(new Font("Tahoma", Font.BOLD, 14));
-			JDateChooser jd = new JDateChooser(null, new Date(), null, spinnerDateEditor);
-			getLblStart().setLabelFor(jd);
-			jd.setMinSelectableDate(new Date(System.currentTimeMillis() - 86400000));
-			panelDate.add(jd);
-			spinnerDateEditor_1 = new JSpinnerDateEditor();
-			spinnerDateEditor_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-			JDateChooser jdN = new JDateChooser(null, new Date(System.currentTimeMillis() + 86400000), null, spinnerDateEditor_1);
-			jd.getCalendarButton().addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					jdN.setDate(new Date(jd.getDate().getTime()  + 86400000));
-				}
-			});
-			jdN.getCalendarButton().addChangeListener(new ChangeListener() {
-				public void stateChanged(ChangeEvent e) {
-					jdN.setMinSelectableDate(new Date(jd.getDate().getTime() + 86400000));
-				}
-			});
-			getLblFinish().setLabelFor(jdN);
-			jdN.setMinSelectableDate(new Date(System.currentTimeMillis()));
-			panelDate.add(jdN);
+			//panelDate.add(getCalendarArrive());
+			//panelDate.add(getCalendarExit());	
+			panelDate.add(getDateArrive());
+			panelDate.add(getDateExit());
 		}
 		return panelDate;
+	}
+	
+	private JDateChooser getDateArrive() {
+		if (dateArrive == null) {
+			dateArrive = new JDateChooser();
+			dateArrive.setToolTipText(lblStart.getToolTipText());
+			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor)dateArrive.getDateEditor();
+			dateEditor.setHorizontalAlignment(JTextField.CENTER);
+			dateArrive.setDate(new Date(System.currentTimeMillis()));
+			dateArrive.setDateFormatString(((SimpleDateFormat)DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate())).toLocalizedPattern());
+		}
+		return dateArrive;
+	}
+	
+	private JDateChooser getDateExit() {
+		if (dateExit == null) {
+			dateExit = new JDateChooser();
+			dateExit.setToolTipText(lblFinish.getToolTipText());
+			dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor)dateExit.getDateEditor();
+			dateEditor.setHorizontalAlignment(JTextField.CENTER);
+			dateExit.setDate(new Date(System.currentTimeMillis()  + 86400000));
+			dateExit.setDateFormatString(((SimpleDateFormat)DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate())).toLocalizedPattern());
+		}
+		return dateExit;
 	}
 
 	private JPanel getPanelPeople() {
@@ -365,6 +385,7 @@ public class InitialWindow extends JPanel {
 		if (lblPlace == null) {
 			lblPlace = new JLabel(Internationalization.getString("place"));
 			lblPlace.setDisplayedMnemonic(Internationalization.getMnemonic("place"));
+			lblPlace.setToolTipText(Internationalization.getToolTips("place"));
 			lblPlace.setLabelFor(getComboBox());
 			lblPlace.setBackground(Color.WHITE);
 			lblPlace.setHorizontalAlignment(SwingConstants.CENTER);
@@ -377,6 +398,7 @@ public class InitialWindow extends JPanel {
 		if (lblStart == null) {
 			lblStart = new JLabel(Internationalization.getString("start"));
 			lblStart.setDisplayedMnemonic(Internationalization.getMnemonic("start"));
+			lblStart.setToolTipText(Internationalization.getToolTips("start"));
 			lblStart.setBackground(UIManager.getColor("Button.background"));
 			lblStart.setHorizontalAlignment(SwingConstants.CENTER);
 			lblStart.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -388,6 +410,7 @@ public class InitialWindow extends JPanel {
 		if (lblFinish == null) {
 			lblFinish = new JLabel(Internationalization.getString("finish"));
 			lblFinish.setDisplayedMnemonic(Internationalization.getMnemonic("finish"));
+			lblFinish.setToolTipText(Internationalization.getToolTips("finish"));
 			lblFinish.setBackground(UIManager.getColor("Button.background"));
 			lblFinish.setHorizontalAlignment(SwingConstants.CENTER);
 			lblFinish.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -432,6 +455,7 @@ public class InitialWindow extends JPanel {
 			lblAdult = new JLabel(Internationalization.getString("number_adult"));
 			lblAdult.setHorizontalAlignment(SwingConstants.CENTER);
 			lblAdult.setDisplayedMnemonic(Internationalization.getMnemonic("number_adult"));
+			lblAdult.setToolTipText(Internationalization.getToolTips("number_adult"));
 			lblAdult.setLabelFor(getTxtNumberadult());
 			lblAdult.setFont(new Font("Tahoma", Font.BOLD, 14));
 		}
@@ -443,6 +467,7 @@ public class InitialWindow extends JPanel {
 			lblChild = new JLabel(Internationalization.getString("number_child"));
 			lblChild.setHorizontalAlignment(SwingConstants.CENTER);
 			lblChild.setDisplayedMnemonic(Internationalization.getMnemonic("number_child"));
+			lblChild.setToolTipText(Internationalization.getToolTips("number_child"));
 			lblChild.setLabelFor(getTxtNumberchild());
 			lblChild.setFont(new Font("Tahoma", Font.BOLD, 14));
 		}
@@ -457,13 +482,16 @@ public class InitialWindow extends JPanel {
 			txtNumberadult.setForeground(Color.DARK_GRAY);
 			txtNumberadult.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtNumberadult.setColumns(10);
+			txtNumberadult.setToolTipText(getLblAdult().getToolTipText());
 			txtNumberadult.addKeyListener(new NumberTextFieldFormatEvent());
 			txtNumberadult.addFocusListener(new FocusTextFieldEvent("0"));
 			txtNumberadult.addKeyListener(new KeyAdapter() {
 				
 				public void keyTyped(KeyEvent e) { 
-			        if (txtNumberadult.getText().length() >= 3 ) // limit textfield to 3 characters
+			        if (txtNumberadult.getText().length() >= 3 ) {// limit textfield to 3 characters
 			            e.consume(); 
+			            Toolkit.getDefaultToolkit().beep();
+			        }
 			    }  
 			});
 		}
@@ -478,6 +506,7 @@ public class InitialWindow extends JPanel {
 			txtNumberchild.setForeground(Color.DARK_GRAY);
 			txtNumberchild.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtNumberchild.setColumns(10);
+			txtNumberchild.setToolTipText(getLblChild().getToolTipText());
 			txtNumberchild.addKeyListener(new NumberTextFieldFormatEvent());
 			txtNumberchild.addFocusListener(new FocusTextFieldEvent("0"));
 			txtNumberchild.addKeyListener(new KeyAdapter() {
@@ -496,6 +525,7 @@ public class InitialWindow extends JPanel {
 	private JButton getBtnSearch() {
 		if (btnSearch == null) {
 			btnSearch = new JButton(Internationalization.getString("search"));
+			btnSearch.setToolTipText(Internationalization.getToolTips("search"));
 			btnSearch.setFont(new Font("Tahoma", Font.BOLD, 36));
 			//btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
 			btnSearch.addActionListener(new ActionListener() {
@@ -517,21 +547,29 @@ public class InitialWindow extends JPanel {
 								JOptionPane.WARNING_MESSAGE);
 					else {	//valores correctos, pasamos a siguiente ventana
 						//update values mainWindow
+						try {
 						mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
 						mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
-						mainWindow.setDate(spinnerDateEditor.getDate());
+						mainWindow.setDate(dateArrive.getDate());
 
-						long diff = Math.abs(spinnerDateEditor_1.getDate().getTime() - spinnerDateEditor.getDate().getTime());
+						long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
 						long diffDays = diff / (24 * 60 * 60 * 1000);
 						mainWindow.setDays((int)diffDays);
 						mainWindow.setMinimumSize(new Dimension(1200, 650));
 						mainWindow.setLocationRelativeTo(null);
-						contentPane.removeAll();
-						mainWindow.setProductListPanel(new ProductListWindow(InitialWindow.this.mainWindow, contentPane));
-						contentPane.repaint();
-						contentPane.revalidate();
+						
+						removeAll();
+						mainWindow.setProductListPanel(new ProductListWindow(InitialWindow.this.mainWindow));
+						add(mainWindow.getProductListPanel());
+						repaint();
+						revalidate();
 						mainWindow.setResizable(true);
 						mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
+						
+						} catch(NullPointerException e) {
+							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
+									Internationalization.getString("error_date_title"),JOptionPane.WARNING_MESSAGE);
+						}
 					}
 					
 				}
@@ -554,6 +592,7 @@ public class InitialWindow extends JPanel {
 		if (comboBox == null) {
 			comboBox = new JComboBox<String>();
 			comboBox.setFont(new Font("Tahoma", Font.BOLD, 13));
+			comboBox.setToolTipText(lblPlace.getToolTipText());
 			comboBox.setEditable(true);
 			comboBox.setBackground(Color.WHITE);
 			comboBox.setModel(modelPlace);

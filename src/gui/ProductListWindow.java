@@ -33,12 +33,13 @@ import internationalization.Internationalization;
 import logic.ListProduct;
 import net.miginfocom.swing.MigLayout;
 import park.Product;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class ProductListWindow extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private MainWindow mainWindow;
-	private JPanel contentPane;
 
 	private JPanel panelNorth;
 	private JLabel lblLogo;
@@ -91,16 +92,14 @@ public class ProductListWindow extends JPanel {
 	private JComboBox<String> comboBox;
 	private DefaultComboBoxModel<String> modelPlace;
 
-	public ProductListWindow(MainWindow mainWindow, JPanel contentPane) {
+	public ProductListWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
-		this.contentPane = contentPane;
 		list = ListProduct.products;
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
-		this.contentPane.setLayout(new BorderLayout(0, 0));
-		this.contentPane.add(getPanelNorth(), BorderLayout.NORTH);
-		this.contentPane.add(getPanelFilter(), BorderLayout.WEST);
-		this.contentPane.add(getPanelCentral(), BorderLayout.CENTER);
-		contentPane = this.contentPane;
+		setLayout(new BorderLayout(0, 0));
+		add(getPanelNorth(), BorderLayout.NORTH);
+		add(getPanelFilter(), BorderLayout.WEST);
+		add(getPanelCentral(), BorderLayout.CENTER);
 	}
 	
 	public List<Product> getListProduct() {
@@ -125,7 +124,7 @@ public class ProductListWindow extends JPanel {
 	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("");
-			ResizableImage.setResizeImage(contentPane, lblLogo, "/img/logo.png", 250, 100);
+			ResizableImage.setResizeImage(this, lblLogo, "/img/logo.png", 300, 150);
 		}
 		return lblLogo;
 	}
@@ -158,7 +157,7 @@ public class ProductListWindow extends JPanel {
 	private JButton getBtnCart() {
 		if (btnCart == null) {
 			btnCart = new JButton("");
-			ResizableImage.setResizeImage(contentPane, btnCart, "/img/cesta.png", 50, 50);
+			ResizableImage.setResizeImage(this, btnCart, "/img/cesta.png", 50, 50);
 			btnCart.setBackground(Color.WHITE);
 			btnCart.addActionListener(new ActionListener() {
 				
@@ -682,6 +681,11 @@ public class ProductListWindow extends JPanel {
 	private JComboBox<String> getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox<String>();
+			comboBox.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent arg0) {
+					
+				}
+			});
 			comboBox.setFont(new Font("Tahoma", Font.BOLD, 13));
 			comboBox.setEditable(true);
 			comboBox.setBackground(Color.WHITE);
@@ -691,8 +695,7 @@ public class ProductListWindow extends JPanel {
 	}
 
 	public void refresh() {
-		scrollPaneItem = null;
-		getScrollPaneItem();
+		
 		scrollPaneItem.revalidate();
 		scrollPaneItem.repaint();
 		

@@ -89,7 +89,7 @@ public class LogUpWindow extends JDialog {
 	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("");
-			ResizableImage.setResizeImage(contentPane, lblLogo, "/img/logo.png", 250, 100);
+			ResizableImage.setResizeImage(contentPane, lblLogo, "/img/logo.png", 300, 150);
 		}
 		return lblLogo;
 	}
@@ -123,7 +123,7 @@ public class LogUpWindow extends JDialog {
 			btnFinish = new JButton(Internationalization.getString("log_next"));
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText(), txDni.getText(), txObs.getText()));
+					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText() + " " + txSurname.getText(), txDni.getText(), txObs.getText()));
 					contentPane.removeAll();
 					contentPane.add(new InfoOrderWindow(mainWindow));
 					contentPane.revalidate();
@@ -218,7 +218,10 @@ public class LogUpWindow extends JDialog {
 			txName = new JTextField();
 			txName.setForeground(Color.DARK_GRAY);
 			txName.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			txName.setText(Internationalization.getString("log_name").toLowerCase());
+			if (mainWindow.getName().equals(""))
+				txName.setText(Internationalization.getString("log_name").toLowerCase());
+			else
+				txName.setText(mainWindow.getOrder().getName().split(" ")[0]);
 			txName.addFocusListener(new FocusTextFieldEvent("log_name"));
 			txName.setColumns(10);
 		}
@@ -231,7 +234,10 @@ public class LogUpWindow extends JDialog {
 			txSurname.setHorizontalAlignment(SwingConstants.LEFT);
 			txSurname.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txSurname.setColumns(10);
-			txSurname.setText(Internationalization.getString("log_surname").toLowerCase());
+			if (mainWindow.getOrder().getName().equals(""))
+				txSurname.setText(Internationalization.getString("log_surname").toLowerCase());
+			else
+				txSurname.setText(mainWindow.getOrder().getName().split(" ")[1]);
 			txSurname.addFocusListener(new FocusTextFieldEvent("log_surname"));
 		}
 		return txSurname;
@@ -243,6 +249,7 @@ public class LogUpWindow extends JDialog {
 			lblDni.setFont(new Font("Tahoma", Font.BOLD, 16));
 			lblDni.setToolTipText(Internationalization.getToolTips("log_dni"));
 			lblDni.setDisplayedMnemonic(Internationalization.getMnemonic("log_dni"));
+			lblDni.setText(Internationalization.getString("log_dni"));
 		}
 		return lblDni;
 	}
@@ -252,7 +259,10 @@ public class LogUpWindow extends JDialog {
 			txDni.setForeground(Color.DARK_GRAY);
 			txDni.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txDni.setColumns(10);
-			txDni.setText(Internationalization.getString("log_dni").toLowerCase());
+			if (mainWindow.getOrder().getDni().equals(""))
+				txDni.setText(Internationalization.getString("log_dni").toLowerCase());
+			else
+				txDni.setText(mainWindow.getOrder().getDni());
 			txDni.addFocusListener(new FocusTextFieldEvent("log_dni"));
 		}
 		return txDni;

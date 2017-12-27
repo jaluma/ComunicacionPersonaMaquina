@@ -39,9 +39,11 @@ public class CartItemPanel extends JPanel {
 	
 	private MainWindow mainWindow;
 	private Product product;
+	private CartWindow cartWindow;
 	
-	public CartItemPanel(MainWindow mainWindow, Product product) {
+	public CartItemPanel(MainWindow mainWindow, CartWindow cartWindow, Product product) {
 		this.mainWindow = mainWindow;
+		this.cartWindow = cartWindow;
 		this.product = product;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(UIManager.getBorder("Spinner.border"));
@@ -121,6 +123,8 @@ public class CartItemPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					mainWindow.getOrder().remove(product.getCode());
 					mainWindow.getProductListPanel().setNumberItemsCart(mainWindow.getOrder().getItems());
+					cartWindow.getLblSubTotal().setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal()));
+					
 					CartItemPanel.this.setVisible(false);
 					repaint();
 				}

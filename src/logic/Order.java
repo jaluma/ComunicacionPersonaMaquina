@@ -27,9 +27,12 @@ public class Order {
 		this();
 		if (order != null)
 			products = order.getProducts();
-		setName(name);
-		setDni(dni);
-		setObs(obs);
+		if (!name.equals(" ") || !name.isEmpty())
+			setName(name);
+		if (!dni.equals(" ") || !dni.isEmpty())
+			setDni(dni);
+		if (!obs.equals(" ") || !obs.isEmpty())
+			setObs(obs);		
 	}
 	
 	public String getObs() {

@@ -39,6 +39,7 @@ public class CartWindow extends JDialog {
 	private JLabel lblSubTotal;
 	private JPanel panelAcount;
 	private JLabel lblSubtotal;
+	private JPanel panel_1;
 
 	public CartWindow(MainWindow mainWindow) {
 		setTitle(Internationalization.getString("CartWindow.this.title")); //$NON-NLS-1$
@@ -59,8 +60,9 @@ public class CartWindow extends JDialog {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
 			panelNorth.setBackground(Color.WHITE);
-			panelNorth.setLayout(new GridLayout(0, 2, 0, 0));
+			panelNorth.setLayout(new GridLayout(1, 3, 0, 0));
 			panelNorth.add(getLblLogo());
+			panelNorth.add(getPanel_1());
 			panelNorth.add(getPanelAcount());
 		}
 		return panelNorth;
@@ -146,12 +148,12 @@ public class CartWindow extends JDialog {
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			JPanel panel = new JPanel();
 			panel.setBorder(UIManager.getBorder("Spinner.border"));
-			panel.setAutoscrolls(true);
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 			scrollPane.setViewportView(panel);
+			scrollPane.getVerticalScrollBar().setValue(0);
 			scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 			for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
-				panel.add(new CartItemPanel(mainWindow, mainWindow.getOrder().getProduct(i)));
+				panel.add(new CartItemPanel(mainWindow, CartWindow.this, mainWindow.getOrder().getProduct(i)));
 			}
 		}
 		return scrollPane;
@@ -163,15 +165,15 @@ public class CartWindow extends JDialog {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		scrollPane.setViewportView(panel);
 		for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
-			panel.add(new CartItemPanel(mainWindow, mainWindow.getOrder().getProduct(i)));
+			panel.add(new CartItemPanel(mainWindow, this, mainWindow.getOrder().getProduct(i)));
 		}
 		scrollPane.repaint();
 		scrollPane.revalidate();
 		
 	}
-	private JLabel getLblSubTotal() {
+	public JLabel getLblSubTotal() {
 		if (lblSubTotal == null) {
-			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal() - mainWindow.getOrder().getDiscount())); //$NON-NLS-1$
+			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal())); //$NON-NLS-1$
 			lblSubTotal.setForeground(Color.DARK_GRAY);
 			lblSubTotal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
 			lblSubTotal.setBackground(Color.WHITE);
@@ -184,8 +186,8 @@ public class CartWindow extends JDialog {
 		if (panelAcount == null) {
 			panelAcount = new JPanel();
 			panelAcount.setBackground(Color.WHITE);
-			panelAcount.setBorder(UIManager.getBorder("Spinner.border"));
-			panelAcount.setLayout(new GridLayout(0, 1, 0, 0));
+			panelAcount.setBorder(new EmptyBorder(5, 5, 5, 5));
+			panelAcount.setLayout(new GridLayout(0, 1, 5, 5));
 			panelAcount.add(getLblSubtotal());
 			panelAcount.add(getLblSubTotal());
 		}
@@ -197,5 +199,14 @@ public class CartWindow extends JDialog {
 			lblSubtotal.setFont(new Font("Tahoma", Font.BOLD, 18));
 		}
 		return lblSubtotal;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			panel_1.setBackground(Color.WHITE);
+			panel_1.setBorder(null);
+			panel_1.setForeground(Color.WHITE);
+		}
+		return panel_1;
 	}
 }

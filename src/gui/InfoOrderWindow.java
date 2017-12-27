@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class InfoOrderWindow extends JPanel {
 
@@ -57,7 +58,7 @@ public class InfoOrderWindow extends JPanel {
 	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("");
-			ResizableImage.setResizeImage(this, lblLogo, "/img/logo.png", 250, 100);
+			ResizableImage.setResizeImage(this, lblLogo, "/img/logo.png", 300, 150);
 		}
 		return lblLogo;
 	}
@@ -66,6 +67,8 @@ public class InfoOrderWindow extends JPanel {
 		if (scrollPaneOrder == null) {
 			scrollPaneOrder = new JScrollPane();
 			scrollPaneOrder.setViewportView(getTxtrInfoOrder());
+			scrollPaneOrder.getVerticalScrollBar().setValue(0);
+			scrollPaneOrder.getVerticalScrollBar().setUnitIncrement(20);
 		}
 		return scrollPaneOrder;
 	}
@@ -73,6 +76,7 @@ public class InfoOrderWindow extends JPanel {
 	private JTextArea getTxtrInfoOrder() {
 		if (txtrInfoOrder == null) {
 			txtrInfoOrder = new JTextArea();
+			txtrInfoOrder.setToolTipText(Internationalization.getToolTips("order_string"));
 			txtrInfoOrder.setWrapStyleWord(true);
 			txtrInfoOrder.setLineWrap(true);
 			txtrInfoOrder.setEditable(false);
