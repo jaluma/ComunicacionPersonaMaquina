@@ -64,7 +64,7 @@ public class ListProduct {
 		}
 		return parkList;
 	}
-	
+
 	public static String[] loadPlaces() {
 		List<String> list = new ArrayList<String>();
 		for (int i = 0; i < parks.size(); i++) {
@@ -102,7 +102,7 @@ public class ListProduct {
 		}
 
 	}
-	
+
 	public static int getMaxPrice() {
 		double max = 0;
 		for (Product e : products) {
@@ -110,16 +110,16 @@ public class ListProduct {
 			if (price > max)
 				max = price;
 		}
-		return (int)max + 1;
+		return (int) max + 1;
 	}
-	
+
 	public static int getMinPrice() {
 		double min = Double.MAX_VALUE;
 		for (Product e : products) {
-			double price =e.getTotal();
+			double price = e.getTotal();
 			if (price < min)
 				min = price;
 		}
-		return (int)min;
+		return (int) min;
 	}
 }

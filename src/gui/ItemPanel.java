@@ -2,11 +2,11 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Scrollbar;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,10 +27,9 @@ import internationalization.Internationalization;
 import park.Package;
 import park.Product;
 import park.Ticket;
-import java.awt.Component;
 
 public class ItemPanel extends JPanel {
-	
+
 	private JPanel panelItem;
 	private JPanel panel;
 	private JPanel panelPhoto;
@@ -43,20 +42,20 @@ public class ItemPanel extends JPanel {
 	private JLabel lblDateinitial;
 	private JLabel lblDays;
 	private JLabel lblPlace;
-	
+
 	private MainWindow mainWindow;
 	private Product product;
 	private JLabel lblSale;
 	private JPanel panelPrice;
 	private JLabel lblPrice;
 	private JScrollPane scrollPane;
-	
+
 	public ItemPanel(MainWindow mainWindow, Product product) {
 		setBackground(Color.WHITE);
 		this.mainWindow = mainWindow;
 		this.product = product;
 		setBorder(UIManager.getBorder("Spinner.border"));
-		setMaximumSize(new Dimension( Toolkit.getDefaultToolkit().getScreenSize().width, 230));
+		setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 230));
 		setPreferredSize(new Dimension(900, 230));
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelItem());
@@ -118,10 +117,10 @@ public class ItemPanel extends JPanel {
 			if (product instanceof Ticket)
 				path = "/img/" + product.getPark().getCode() + ".jpg";
 			else if (product instanceof Package)
-				path = "/img/" + ((Package)product).getAccom().getCode() + ".jpg";
-			else 
+				path = "/img/" + ((Package) product).getAccom().getCode() + ".jpg";
+			else
 				path = "/img/" + product.getCode() + ".jpg";
-			
+
 			ResizableImage.setResizeImage(this, lblPhoto, path, 300, 200);
 		}
 		return lblPhoto;
@@ -148,7 +147,7 @@ public class ItemPanel extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					mainWindow.getOrder().add(product.getCode());
 					mainWindow.getProductListPanel().setNumberItemsCart(mainWindow.getOrder().getItems());
-					
+
 				}
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.BOLD, 33));
@@ -159,7 +158,8 @@ public class ItemPanel extends JPanel {
 
 	private JLabel getLblNameproduct() {
 		if (lblNameproduct == null) {
-			lblNameproduct = new JLabel(Internationalization.getProduct(product.getCode()) + " (" + product.getDuration() + " " + Internationalization.getString("days") + ")");
+			lblNameproduct = new JLabel(Internationalization.getProduct(product.getCode()) + " ("
+					+ product.getDuration() + " " + Internationalization.getString("days") + ")");
 			lblNameproduct.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNameproduct.setBackground(Color.WHITE);
 			lblNameproduct.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -181,13 +181,15 @@ public class ItemPanel extends JPanel {
 
 	private JLabel getLblPlace() {
 		if (lblPlace == null) {
-			lblPlace = new JLabel(Internationalization.getString("location") + product.getPark().getCity() + "-" + product.getPark().getCountry() + " (" + product.getPark().getName() + ")");
+			lblPlace = new JLabel(Internationalization.getString("location") + product.getPark().getCity() + "-"
+					+ product.getPark().getCountry() + " (" + product.getPark().getName() + ")");
 			lblPlace.setBorder(new EmptyBorder(0, 5, 0, 0));
 			lblPlace.setHorizontalAlignment(SwingConstants.LEFT);
 			lblPlace.setFont(new Font("Tahoma", Font.ITALIC, 15));
 		}
 		return lblPlace;
 	}
+
 	private JLabel getLblSale() {
 		if (lblSale == null) {
 			lblSale = new JLabel(Internationalization.getString("sale"));
@@ -197,6 +199,7 @@ public class ItemPanel extends JPanel {
 		}
 		return lblSale;
 	}
+
 	private JPanel getPanelPrice() {
 		if (panelPrice == null) {
 			panelPrice = new JPanel();
@@ -207,6 +210,7 @@ public class ItemPanel extends JPanel {
 		}
 		return panelPrice;
 	}
+
 	private JLabel getLabel_1() {
 		if (lblPrice == null) {
 			lblPrice = new JLabel(Internationalization.getCurrency(product.getTotal() - product.getDiscount()));
@@ -218,6 +222,7 @@ public class ItemPanel extends JPanel {
 		}
 		return lblPrice;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();

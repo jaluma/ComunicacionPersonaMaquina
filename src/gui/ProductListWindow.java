@@ -11,6 +11,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -33,8 +35,6 @@ import internationalization.Internationalization;
 import logic.ListProduct;
 import net.miginfocom.swing.MigLayout;
 import park.Product;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 public class ProductListWindow extends JPanel {
 
@@ -101,12 +101,12 @@ public class ProductListWindow extends JPanel {
 		add(getPanelFilter(), BorderLayout.WEST);
 		add(getPanelCentral(), BorderLayout.CENTER);
 	}
-	
+
 	public List<Product> getListProduct() {
 		return list;
 	}
-	
-	public void setListProduct(List<Product>list) {
+
+	public void setListProduct(List<Product> list) {
 		this.list = list;
 	}
 
@@ -149,7 +149,7 @@ public class ProductListWindow extends JPanel {
 		}
 		return lblNumberitems;
 	}
-	
+
 	public void setNumberItemsCart(int items) {
 		lblNumberitems.setText(String.format(Internationalization.getString("number_items"), items));
 	}
@@ -160,7 +160,7 @@ public class ProductListWindow extends JPanel {
 			ResizableImage.setResizeImage(this, btnCart, "/img/cesta.png", 50, 50);
 			btnCart.setBackground(Color.WHITE);
 			btnCart.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JDialog dialog = new CartWindow(mainWindow);
@@ -177,10 +177,10 @@ public class ProductListWindow extends JPanel {
 			panelFilter.setBackground(Color.WHITE);
 			panelFilter.setBorder(null);
 			GridBagLayout gbl_panelFilter = new GridBagLayout();
-			gbl_panelFilter.columnWidths = new int[]{207, 0, 0, 0};
-			gbl_panelFilter.rowHeights = new int[]{46, 74, 50, 76, 64, 32, 0, 0};
-			gbl_panelFilter.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gbl_panelFilter.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_panelFilter.columnWidths = new int[] { 207, 0, 0, 0 };
+			gbl_panelFilter.rowHeights = new int[] { 46, 74, 50, 76, 64, 32, 0, 0 };
+			gbl_panelFilter.columnWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
+			gbl_panelFilter.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			panelFilter.setLayout(gbl_panelFilter);
 			GridBagConstraints gbc_panelPlace = new GridBagConstraints();
 			gbc_panelPlace.anchor = GridBagConstraints.NORTH;
@@ -198,7 +198,7 @@ public class ProductListWindow extends JPanel {
 			GridBagConstraints gbc_panelCategory = new GridBagConstraints();
 			gbc_panelCategory.fill = GridBagConstraints.BOTH;
 			gbc_panelCategory.insets = new Insets(0, 0, 5, 5);
-			//gbc_panelCategory.insets = new Insets(0, 0, 15, 0);
+			// gbc_panelCategory.insets = new Insets(0, 0, 15, 0);
 			gbc_panelCategory.gridx = 0;
 			gbc_panelCategory.gridy = 2;
 			panelFilter.add(getPanelCategory(), gbc_panelCategory);
@@ -501,7 +501,8 @@ public class ProductListWindow extends JPanel {
 	}
 
 	private String updateLblPrice() {
-		String str = Internationalization.getString("person_adult") + mainWindow.getNumberAdult() + " | " + Internationalization.getString("person_child") + mainWindow.getNumberChild();
+		String str = Internationalization.getString("person_adult") + mainWindow.getNumberAdult() + " | "
+				+ Internationalization.getString("person_child") + mainWindow.getNumberChild();
 		return str;
 	}
 
@@ -550,7 +551,7 @@ public class ProductListWindow extends JPanel {
 	private JComboBox<Integer> getComboBoxNumElement() {
 		if (comboBoxNumElement == null) {
 			comboBoxNumElement = new JComboBox<Integer>();
-			comboBoxNumElement.setModel(new DefaultComboBoxModel<>(new Integer[] {10, 20, 30, 40}));
+			comboBoxNumElement.setModel(new DefaultComboBoxModel<>(new Integer[] { 10, 20, 30, 40 }));
 		}
 		return comboBoxNumElement;
 	}
@@ -589,7 +590,10 @@ public class ProductListWindow extends JPanel {
 	private JComboBox<String> getComboBoxSort() {
 		if (comboBoxSort == null) {
 			comboBoxSort = new JComboBox<String>();
-			modelSort = new DefaultComboBoxModel<String>(new String[] {Internationalization.getString("box_combo_relevance"), Internationalization.getString("box_combo_price_down"), Internationalization.getString("box_combo_price_up")});
+			modelSort = new DefaultComboBoxModel<String>(
+					new String[] { Internationalization.getString("box_combo_relevance"),
+							Internationalization.getString("box_combo_price_down"),
+							Internationalization.getString("box_combo_price_up") });
 			comboBoxSort.setModel(modelSort);
 			comboBoxSort.addItemListener(new ComboBoxSortEvent(mainWindow, this));
 		}
@@ -603,7 +607,7 @@ public class ProductListWindow extends JPanel {
 			scrollPaneItem.getVerticalScrollBar().setValue(0);
 			scrollPaneItem.getVerticalScrollBar().setUnitIncrement(20);
 		}
-		
+
 		return scrollPaneItem;
 	}
 
@@ -633,6 +637,7 @@ public class ProductListWindow extends JPanel {
 		}
 		return panelTypeLabel;
 	}
+
 	private JSlider getSliderChild() {
 		if (sliderChild == null) {
 			sliderChild = new JSlider();
@@ -657,6 +662,7 @@ public class ProductListWindow extends JPanel {
 		}
 		return panelPlace;
 	}
+
 	private JLabel getLblPlace() {
 		if (lblPlace == null) {
 			lblPlace = new JLabel(Internationalization.getString("place"));
@@ -668,6 +674,7 @@ public class ProductListWindow extends JPanel {
 		}
 		return lblPlace;
 	}
+
 	private JPanel getPanel_1_1() {
 		if (panelCombo == null) {
 			panelCombo = new JPanel();
@@ -677,13 +684,13 @@ public class ProductListWindow extends JPanel {
 		}
 		return panelCombo;
 	}
-	
+
 	private JComboBox<String> getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox<String>();
 			comboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
-					
+
 				}
 			});
 			comboBox.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -695,9 +702,9 @@ public class ProductListWindow extends JPanel {
 	}
 
 	public void refresh() {
-		
+
 		scrollPaneItem.revalidate();
 		scrollPaneItem.repaint();
-		
+
 	}
 }

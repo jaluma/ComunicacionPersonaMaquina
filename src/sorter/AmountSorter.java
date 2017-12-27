@@ -11,5 +11,4 @@ public class AmountSorter implements Comparator<Product> {
 		return Double.compare(arg0.getTotal(), arg0.getTotal());
 	}
 
-
 }

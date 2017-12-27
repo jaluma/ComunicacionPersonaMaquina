@@ -9,15 +9,16 @@ import javax.swing.JTextField;
 import internationalization.Internationalization;
 
 public class NoChracterTextFieldEvent implements FocusListener {
-	
+
 	private String code;
+
 	public NoChracterTextFieldEvent(String code) {
 		this.code = code;
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		JTextField textField = (JTextField)e.getComponent();
+		JTextField textField = (JTextField) e.getComponent();
 		if (textField.getText().isEmpty()) {
 			textField.setForeground(Color.DARK_GRAY);
 			String str = Internationalization.getString(code).toLowerCase();
@@ -27,10 +28,10 @@ public class NoChracterTextFieldEvent implements FocusListener {
 				textField.setText(str);
 		}
 	}
-	
+
 	@Override
 	public void focusGained(FocusEvent e) {
-		JTextField textField = (JTextField)e.getComponent();
+		JTextField textField = (JTextField) e.getComponent();
 		textField.setForeground(Color.BLACK);
 		textField.selectAll();
 		if (Internationalization.getString(code).toLowerCase().equals(textField.getText().toLowerCase()))

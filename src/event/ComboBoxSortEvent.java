@@ -12,10 +12,10 @@ import sorter.AmountSorter;
 import sorter.NameSorter;
 
 public class ComboBoxSortEvent implements ItemListener {
-	
+
 	private ProductListWindow productWindow;
 	private MainWindow mainWindow;
-	
+
 	public ComboBoxSortEvent(MainWindow main, ProductListWindow productWindow) {
 		this.mainWindow = main;
 		this.productWindow = productWindow;
@@ -24,7 +24,7 @@ public class ComboBoxSortEvent implements ItemListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		JComboBox<String> cb = (JComboBox<String>)e.getSource();
+		JComboBox<String> cb = (JComboBox<String>) e.getSource();
 		switch (cb.getSelectedIndex()) {
 		case 0:
 			Collections.sort(productWindow.getListProduct(), new NameSorter());

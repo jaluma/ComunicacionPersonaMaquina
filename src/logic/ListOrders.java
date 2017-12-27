@@ -10,7 +10,7 @@ import parser.ParserOrder;
 public class ListOrders {
 
 	private List<Order> orders;
-	
+
 	public static Order search(Date date, String dni) throws IncorrectOrderException {
 		String nameFile = dni + "-" + Internationalization.getFormatDate(date);
 		return new ParserOrder().parser(nameFile);

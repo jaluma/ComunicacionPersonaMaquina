@@ -23,7 +23,7 @@ import park.Product;
 import park.Ticket;
 
 public class CartItemPanel extends JPanel {
-	
+
 	/**
 	 * 
 	 */
@@ -36,18 +36,18 @@ public class CartItemPanel extends JPanel {
 	private JButton btnRemove;
 	private JButton btnEdit;
 	private JTextArea txtrDescription;
-	
+
 	private MainWindow mainWindow;
 	private Product product;
 	private CartWindow cartWindow;
-	
+
 	public CartItemPanel(MainWindow mainWindow, CartWindow cartWindow, Product product) {
 		this.mainWindow = mainWindow;
 		this.cartWindow = cartWindow;
 		this.product = product;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(UIManager.getBorder("Spinner.border"));
-		setMaximumSize(new Dimension( Toolkit.getDefaultToolkit().getScreenSize().width, 230));
+		setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 230));
 		setPreferredSize(new Dimension(822, 225));
 		add(getPanel());
 	}
@@ -80,10 +80,10 @@ public class CartItemPanel extends JPanel {
 			if (product instanceof Ticket)
 				path = "/img/" + product.getPark().getCode() + ".jpg";
 			else if (product instanceof Package)
-				path = "/img/" + ((Package)product).getAccom().getCode() + ".jpg";
-			else 
+				path = "/img/" + ((Package) product).getAccom().getCode() + ".jpg";
+			else
 				path = "/img/" + product.getCode() + ".jpg";
-			
+
 			ResizableImage.setResizeImage(this, lblPhoto, path, 300, 200);
 		}
 		return lblPhoto;
@@ -118,13 +118,14 @@ public class CartItemPanel extends JPanel {
 			btnRemove = new JButton(Internationalization.getString("cart_remove"));
 			btnRemove.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			btnRemove.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					mainWindow.getOrder().remove(product.getCode());
 					mainWindow.getProductListPanel().setNumberItemsCart(mainWindow.getOrder().getItems());
-					cartWindow.getLblSubTotal().setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal()));
-					
+					cartWindow.getLblSubTotal()
+							.setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal()));
+
 					CartItemPanel.this.setVisible(false);
 					repaint();
 				}

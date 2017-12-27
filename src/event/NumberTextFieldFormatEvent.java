@@ -9,10 +9,10 @@ public class NumberTextFieldFormatEvent extends KeyAdapter {
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		try {// if is number
-		    Integer.parseInt(String.valueOf(arg0.getKeyChar()));
+			Integer.parseInt(String.valueOf(arg0.getKeyChar()));
 		} catch (NumberFormatException e) {
-		    arg0.consume();
-		    Toolkit.getDefaultToolkit().beep();
+			arg0.consume();
+			Toolkit.getDefaultToolkit().beep();
 		}
 
 	}

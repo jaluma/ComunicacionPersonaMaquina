@@ -37,26 +37,27 @@ public class FileUtil {
 
 		bw.close();
 	}
-	
-	public static int find(String path, String searchString) {				//Devuelve el numero de la linea
-        int result = -1;
-        Scanner in = null;
-        int count = 0;
-        try {
-            in = new Scanner(new FileReader(new File(path)));
-            while(in.hasNextLine()) {
-                result = in.nextLine().indexOf(searchString);
-                if (result != -1)
-                	break;
-                count++;
-            }
-        }
-        catch(IOException e) {
-            e.printStackTrace();      
-        }
-        finally {
-            try { in.close() ; } catch(Exception e) { /* ignore */ }  
-        }
-        return count;
-    }
+
+	public static int find(String path, String searchString) { // Devuelve el numero de la linea
+		int result = -1;
+		Scanner in = null;
+		int count = 0;
+		try {
+			in = new Scanner(new FileReader(new File(path)));
+			while (in.hasNextLine()) {
+				result = in.nextLine().indexOf(searchString);
+				if (result != -1)
+					break;
+				count++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				in.close();
+			} catch (Exception e) {
+				/* ignore */ }
+		}
+		return count;
+	}
 }

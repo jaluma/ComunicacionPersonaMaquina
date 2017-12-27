@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,13 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 
 import internationalization.Internationalization;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.GridLayout;
-import javax.swing.border.EmptyBorder;
-import javax.swing.UIManager;
 
 public class CartWindow extends JDialog {
 
@@ -52,7 +52,7 @@ public class CartWindow extends JDialog {
 		contentPane.add(getBottomPanel(), BorderLayout.SOUTH);
 		setContentPane(contentPane);
 		setModal(true);
-		setBounds(0,0,900, 589);
+		setBounds(0, 0, 900, 589);
 		setLocationRelativeTo(mainWindow);
 	}
 
@@ -107,7 +107,9 @@ public class CartWindow extends JDialog {
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (mainWindow.getOrder().getItems() == 0)
-						JOptionPane.showMessageDialog(CartWindow.this, Internationalization.getString("error_cart_emptry"), Internationalization.getString("error_cart_emptry_title"), JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(CartWindow.this,
+								Internationalization.getString("error_cart_emptry"),
+								Internationalization.getString("error_cart_emptry_title"), JOptionPane.WARNING_MESSAGE);
 					else {
 						CartWindow.this.dispose();
 						System.out.println(mainWindow.getOrder().toString());
@@ -120,7 +122,7 @@ public class CartWindow extends JDialog {
 		}
 		return btnFinish;
 	}
-	
+
 	private JPanel getPanelCenter() {
 		if (panelCenter == null) {
 			panelCenter = new JPanel();
@@ -141,7 +143,7 @@ public class CartWindow extends JDialog {
 		}
 		return lblOrder;
 	}
-	
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -169,11 +171,12 @@ public class CartWindow extends JDialog {
 		}
 		scrollPane.repaint();
 		scrollPane.revalidate();
-		
+
 	}
+
 	public JLabel getLblSubTotal() {
 		if (lblSubTotal == null) {
-			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal())); //$NON-NLS-1$
+			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal())); // $NON-NLS-1$
 			lblSubTotal.setForeground(Color.DARK_GRAY);
 			lblSubTotal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
 			lblSubTotal.setBackground(Color.WHITE);
@@ -182,6 +185,7 @@ public class CartWindow extends JDialog {
 		}
 		return lblSubTotal;
 	}
+
 	private JPanel getPanelAcount() {
 		if (panelAcount == null) {
 			panelAcount = new JPanel();
@@ -193,6 +197,7 @@ public class CartWindow extends JDialog {
 		}
 		return panelAcount;
 	}
+
 	private JLabel getLblSubtotal() {
 		if (lblSubtotal == null) {
 			lblSubtotal = new JLabel(Internationalization.getString("subtotal")); //$NON-NLS-1$
@@ -200,6 +205,7 @@ public class CartWindow extends JDialog {
 		}
 		return lblSubtotal;
 	}
+
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();

@@ -11,5 +11,4 @@ public class NameSorter implements Comparator<Product> {
 		return arg0.getName().compareTo(arg1.getName());
 	}
 
-
 }

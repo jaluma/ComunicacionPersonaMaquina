@@ -4,6 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,14 +19,6 @@ import javax.swing.SwingUtilities;
 
 import fileUtil.FileUtil;
 import internationalization.Internationalization;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.awt.event.ActionEvent;
-import java.awt.Font;
 
 public class InfoOrderWindow extends JPanel {
 
@@ -108,19 +105,19 @@ public class InfoOrderWindow extends JPanel {
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
 					nameFile = format.format(mainWindow.getDate()) + "_" + mainWindow.getOrder().getDni();
 					nameFile += ".dat";
-					
+
 					try {
 						FileUtil.saveToFile(nameFile, Arrays.asList(mainWindow.getOrder().toString()));
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 					removeAll();
 					add(new FinishWindow(mainWindow));
 					revalidate();
 					repaint();
-					
+
 				}
 			});
 		}
@@ -134,7 +131,7 @@ public class InfoOrderWindow extends JPanel {
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Window w = SwingUtilities.getWindowAncestor(InfoOrderWindow.this);
-			        w.dispose();
+					w.dispose();
 				}
 			});
 		}

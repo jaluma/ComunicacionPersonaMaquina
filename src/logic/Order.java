@@ -22,8 +22,8 @@ public class Order {
 		setObs("");
 		products = new ArrayList<Product>();
 	}
-	
-	public Order(Order order, String name, String dni,String obs) {
+
+	public Order(Order order, String name, String dni, String obs) {
 		this();
 		if (order != null)
 			products = order.getProducts();
@@ -32,9 +32,9 @@ public class Order {
 		if (!dni.equals(" ") || !dni.isEmpty())
 			setDni(dni);
 		if (!obs.equals(" ") || !obs.isEmpty())
-			setObs(obs);		
+			setObs(obs);
 	}
-	
+
 	public String getObs() {
 		return obs;
 	}
@@ -50,7 +50,7 @@ public class Order {
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getDni() {
 		return dni;
 	}
@@ -62,11 +62,11 @@ public class Order {
 	public int getItems() {
 		return products.size();
 	}
-	
+
 	public Product getProduct(int i) {
 		return products.get(i);
 	}
-	
+
 	public List<Product> getProducts() {
 		return products;
 	}
@@ -76,12 +76,12 @@ public class Order {
 		productList.loadData(numberAdult, numberChild, date, days);
 		products.add(productList);
 	}
-	
+
 	public void add(String code) {
 		Product productList = ListProduct.searchProduct(code);
 		products.add(productList);
 	}
-	
+
 	public void add(Product product) {
 		products.add(product);
 	}

@@ -1,45 +1,31 @@
 package gui;
 
-import javax.swing.JPanel;
-
-import internationalization.Internationalization;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
-import event.NumberTextFieldFormatEvent;
-
 import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import java.awt.Font;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import internationalization.Internationalization;
 
 public class FinishWindow extends JPanel {
 
@@ -90,7 +76,7 @@ public class FinishWindow extends JPanel {
 		add(getPanelNorth(), BorderLayout.NORTH);
 		add(getPanelCenter(), BorderLayout.CENTER);
 		add(getPanelSouth(), BorderLayout.SOUTH);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getBtnRestore()}));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getBtnRestore() }));
 	}
 
 	private JPanel getPanelNorth() {
@@ -103,6 +89,7 @@ public class FinishWindow extends JPanel {
 		}
 		return panelNorth;
 	}
+
 	private JPanel getPanelCenter() {
 		if (panelCenter == null) {
 			panelCenter = new JPanel();
@@ -113,6 +100,7 @@ public class FinishWindow extends JPanel {
 		}
 		return panelCenter;
 	}
+
 	private JPanel getPanelSouth() {
 		if (panelSouth == null) {
 			panelSouth = new JPanel();
@@ -121,6 +109,7 @@ public class FinishWindow extends JPanel {
 		}
 		return panelSouth;
 	}
+
 	private JLabel getLblLogo() {
 		if (lblLogo == null) {
 			lblLogo = new JLabel("");
@@ -128,6 +117,7 @@ public class FinishWindow extends JPanel {
 		}
 		return lblLogo;
 	}
+
 	private JLabel getLblThxreserve() {
 		if (lblThxreserve == null) {
 			lblThxreserve = new JLabel("<html><center>" + Internationalization.getString("thx_reserve"));
@@ -137,6 +127,7 @@ public class FinishWindow extends JPanel {
 		}
 		return lblThxreserve;
 	}
+
 	private JPanel getPanelLabel() {
 		if (panelLabel == null) {
 			panelLabel = new JPanel();
@@ -147,6 +138,7 @@ public class FinishWindow extends JPanel {
 		}
 		return panelLabel;
 	}
+
 	private JPanel getPanelRestore() {
 		if (panelRestore == null) {
 			panelRestore = new JPanel();
@@ -159,6 +151,7 @@ public class FinishWindow extends JPanel {
 		}
 		return panelRestore;
 	}
+
 	private JLabel getLblRestore() {
 		if (lblRestore == null) {
 			lblRestore = new JLabel(String.format(Internationalization.getString("restore_reserve"), DEFAULT_TIME));
@@ -169,16 +162,17 @@ public class FinishWindow extends JPanel {
 		}
 		return lblRestore;
 	}
+
 	private JButton getBtnRestore() {
 		if (btnRestore == null) {
 			btnRestore = new JButton(Internationalization.getString("restore_now")); //$NON-NLS-1$
 			btnRestore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					Window w = SwingUtilities.getWindowAncestor(FinishWindow.this);
-			        w.dispose();
-			        main.dispose();
-			        JFrame frame = new MainWindow();
-			        frame.setVisible(true);
+					w.dispose();
+					main.dispose();
+					JFrame frame = new MainWindow();
+					frame.setVisible(true);
 				}
 			});
 			btnRestore.setBackground(Color.WHITE);

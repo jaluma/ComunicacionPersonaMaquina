@@ -10,25 +10,15 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,9 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JSpinnerDateEditor;
 import com.toedter.calendar.JTextFieldDateEditor;
 
 import event.FocusTextFieldEvent;
@@ -46,12 +34,6 @@ import event.NumberTextFieldFormatEvent;
 import fileUtil.StringUtil;
 import internationalization.Internationalization;
 import logic.ListProduct;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ContainerAdapter;
-import java.awt.event.ContainerEvent;
 
 public class InitialWindow extends JPanel {
 
@@ -93,7 +75,7 @@ public class InitialWindow extends JPanel {
 	private MainWindow mainWindow;
 	private DefaultComboBoxModel<String> modelPlace;
 	JDateChooser dateArrive;
-	JDateChooser dateExit;	
+	JDateChooser dateExit;
 
 	public InitialWindow(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
@@ -180,7 +162,7 @@ public class InitialWindow extends JPanel {
 			lblDni.setLabelFor(txtDni);
 			lblDni.setDisplayedMnemonic(Internationalization.getMnemonic("date"));
 			lblDni.setHorizontalAlignment(SwingConstants.CENTER);
-			
+
 		}
 		return lblDni;
 	}
@@ -251,32 +233,34 @@ public class InitialWindow extends JPanel {
 			btnRestoreinfo.setHorizontalAlignment(SwingConstants.RIGHT);
 			btnRestoreinfo.setFont(new Font("Tahoma", Font.BOLD, 16));
 			btnRestoreinfo.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//check dnio
+					// check dnio
 					String text = txtDni.getText();
 					try {
-					// no dni length
-					if (text.length() != 9)
-						throw new NumberFormatException();
-					// first 8 chracters no Digit
-					Integer.parseInt(text.substring(0, text.length() - 1));
-					} catch(NumberFormatException exc) {
+						// no dni length
+						if (text.length() != 9)
+							throw new NumberFormatException();
+						// first 8 chracters no Digit
+						Integer.parseInt(text.substring(0, text.length() - 1));
+					} catch (NumberFormatException exc) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
 								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
 					}
-					
-//					Order order = ListOrders.search(new Date(txtCode.getText()), txtDni.getText());
-//					if (order != null) {
-//						JDialog dialog = new CartWindow(InitialWindow.this.mainWindow);
-//						dialog.setVisible(true);
-//					} else {
-//						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_search_order"),
-//								Internationalization.getString("error_search_order_title"),
-//								JOptionPane.WARNING_MESSAGE);
-//					}
-					
+
+					// Order order = ListOrders.search(new Date(txtCode.getText()),
+					// txtDni.getText());
+					// if (order != null) {
+					// JDialog dialog = new CartWindow(InitialWindow.this.mainWindow);
+					// dialog.setVisible(true);
+					// } else {
+					// JOptionPane.showMessageDialog(mainWindow,
+					// Internationalization.getString("error_search_order"),
+					// Internationalization.getString("error_search_order_title"),
+					// JOptionPane.WARNING_MESSAGE);
+					// }
+
 				}
 			});
 		}
@@ -335,36 +319,40 @@ public class InitialWindow extends JPanel {
 			panelDate.setLayout(new GridLayout(2, 2, 10, 0));
 			panelDate.add(getLblStart());
 			panelDate.add(getLblFinish());
-			//panelDate.add(getCalendarArrive());
-			//panelDate.add(getCalendarExit());	
+			// panelDate.add(getCalendarArrive());
+			// panelDate.add(getCalendarExit());
 			panelDate.add(getDateArrive());
 			panelDate.add(getDateExit());
 		}
 		return panelDate;
 	}
-	
+
 	private JDateChooser getDateArrive() {
 		if (dateArrive == null) {
 			dateArrive = new JDateChooser();
 			dateArrive.setToolTipText(lblStart.getToolTipText());
 			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
-			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor)dateArrive.getDateEditor();
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
 			dateArrive.setDate(new Date(System.currentTimeMillis()));
-			dateArrive.setDateFormatString(((SimpleDateFormat)DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate())).toLocalizedPattern());
+			dateArrive.setDateFormatString(
+					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
+							.toLocalizedPattern());
 		}
 		return dateArrive;
 	}
-	
+
 	private JDateChooser getDateExit() {
 		if (dateExit == null) {
 			dateExit = new JDateChooser();
 			dateExit.setToolTipText(lblFinish.getToolTipText());
 			dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
-			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor)dateExit.getDateEditor();
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-			dateExit.setDate(new Date(System.currentTimeMillis()  + 86400000));
-			dateExit.setDateFormatString(((SimpleDateFormat)DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate())).toLocalizedPattern());
+			dateExit.setDate(new Date(System.currentTimeMillis() + 86400000));
+			dateExit.setDateFormatString(
+					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
+							.toLocalizedPattern());
 		}
 		return dateExit;
 	}
@@ -486,13 +474,13 @@ public class InitialWindow extends JPanel {
 			txtNumberadult.addKeyListener(new NumberTextFieldFormatEvent());
 			txtNumberadult.addFocusListener(new FocusTextFieldEvent("0"));
 			txtNumberadult.addKeyListener(new KeyAdapter() {
-				
-				public void keyTyped(KeyEvent e) { 
-			        if (txtNumberadult.getText().length() >= 3 ) {// limit textfield to 3 characters
-			            e.consume(); 
-			            Toolkit.getDefaultToolkit().beep();
-			        }
-			    }  
+
+				public void keyTyped(KeyEvent e) {
+					if (txtNumberadult.getText().length() >= 3) {// limit textfield to 3 characters
+						e.consume();
+						Toolkit.getDefaultToolkit().beep();
+					}
+				}
 			});
 		}
 		return txtNumberadult;
@@ -510,13 +498,13 @@ public class InitialWindow extends JPanel {
 			txtNumberchild.addKeyListener(new NumberTextFieldFormatEvent());
 			txtNumberchild.addFocusListener(new FocusTextFieldEvent("0"));
 			txtNumberchild.addKeyListener(new KeyAdapter() {
-				
-				public void keyTyped(KeyEvent e) { 
-			        if (txtNumberchild.getText().length() >= 3 ) { // limit textfield to 3 characters
-			            e.consume(); 
-			            Toolkit.getDefaultToolkit().beep();
-			        }
-			    }  
+
+				public void keyTyped(KeyEvent e) {
+					if (txtNumberchild.getText().length() >= 3) { // limit textfield to 3 characters
+						e.consume();
+						Toolkit.getDefaultToolkit().beep();
+					}
+				}
 			});
 		}
 		return txtNumberchild;
@@ -527,16 +515,15 @@ public class InitialWindow extends JPanel {
 			btnSearch = new JButton(Internationalization.getString("search"));
 			btnSearch.setToolTipText(Internationalization.getToolTips("search"));
 			btnSearch.setFont(new Font("Tahoma", Font.BOLD, 36));
-			//btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
+			// btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
 			btnSearch.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					//algun campo vacio
-					if (modelPlace.getIndexOf(StringUtil.formatSentece((String)comboBox.getSelectedItem())) == -1)
+					// algun campo vacio
+					if (modelPlace.getIndexOf(StringUtil.formatSentece((String) comboBox.getSelectedItem())) == -1)
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_place"),
-								Internationalization.getString("error_place_title"),
-								JOptionPane.WARNING_MESSAGE);
+								Internationalization.getString("error_place_title"), JOptionPane.WARNING_MESSAGE);
 					else if (Integer.parseInt(txtNumberadult.getText()) <= 0)
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_adult"),
 								Internationalization.getString("error_number_adult_title"),
@@ -545,33 +532,33 @@ public class InitialWindow extends JPanel {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_child"),
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
-					else {	//valores correctos, pasamos a siguiente ventana
-						//update values mainWindow
+					else { // valores correctos, pasamos a siguiente ventana
+						// update values mainWindow
 						try {
-						mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
-						mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
-						mainWindow.setDate(dateArrive.getDate());
+							mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
+							mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
+							mainWindow.setDate(dateArrive.getDate());
 
-						long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
-						long diffDays = diff / (24 * 60 * 60 * 1000);
-						mainWindow.setDays((int)diffDays);
-						mainWindow.setMinimumSize(new Dimension(1200, 650));
-						mainWindow.setLocationRelativeTo(null);
-						
-						removeAll();
-						mainWindow.setProductListPanel(new ProductListWindow(InitialWindow.this.mainWindow));
-						add(mainWindow.getProductListPanel());
-						repaint();
-						revalidate();
-						mainWindow.setResizable(true);
-						mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
-						
-						} catch(NullPointerException e) {
+							long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
+							long diffDays = diff / (24 * 60 * 60 * 1000);
+							mainWindow.setDays((int) diffDays);
+							mainWindow.setMinimumSize(new Dimension(1200, 650));
+							mainWindow.setLocationRelativeTo(null);
+
+							removeAll();
+							mainWindow.setProductListPanel(new ProductListWindow(InitialWindow.this.mainWindow));
+							add(mainWindow.getProductListPanel());
+							repaint();
+							revalidate();
+							mainWindow.setResizable(true);
+							mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
+
+						} catch (NullPointerException e) {
 							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-									Internationalization.getString("error_date_title"),JOptionPane.WARNING_MESSAGE);
+									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
 						}
 					}
-					
+
 				}
 			});
 		}
@@ -588,6 +575,7 @@ public class InitialWindow extends JPanel {
 		}
 		return panelPeopleCount;
 	}
+
 	private JComboBox<String> getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox<String>();
@@ -599,7 +587,7 @@ public class InitialWindow extends JPanel {
 		}
 		return comboBox;
 	}
-	
+
 	public String getSelectedItem() {
 		return String.valueOf(comboBox.getSelectedItem());
 	}

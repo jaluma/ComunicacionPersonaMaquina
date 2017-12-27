@@ -2,9 +2,12 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -15,25 +18,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import internationalization.Internationalization;
-import logic.Order;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Window.Type;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import event.FocusTextAreaEvent;
 import event.FocusTextFieldEvent;
-
-import java.awt.Component;
-import java.awt.Dialog.ModalityType;
-import javax.swing.SwingConstants;
+import internationalization.Internationalization;
+import logic.Order;
 
 public class LogUpWindow extends JDialog {
-	
+
 	/**
 	 * 
 	 */
@@ -55,7 +51,6 @@ public class LogUpWindow extends JDialog {
 	private JLabel lblObs;
 	private JTextArea txObs;
 
-	
 	public LogUpWindow(MainWindow mainWindow) {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LogUpWindow.class.getResource("/img/user.png")));
@@ -69,12 +64,12 @@ public class LogUpWindow extends JDialog {
 		contentPane.add(getBottomPanel(), BorderLayout.SOUTH);
 		setContentPane(contentPane);
 		setModal(true);
-		setBounds(0,0,1028, 561);
+		setBounds(0, 0, 1028, 561);
 		setLocationRelativeTo(null);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getTxName(), getTxSurname(), getTxObs(), getBtnCancel(), getBtnFinish()}));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(
+				new Component[] { getTxName(), getTxSurname(), getTxObs(), getBtnCancel(), getBtnFinish() }));
 	}
 
-	
 	private JPanel getPanelNorth() {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
@@ -105,6 +100,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return panelBottom;
 	}
+
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton(Internationalization.getString("log_cancel"));
@@ -118,12 +114,14 @@ public class LogUpWindow extends JDialog {
 		}
 		return btnCancel;
 	}
+
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("log_next"));
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText() + " " + txSurname.getText(), txDni.getText(), txObs.getText()));
+					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText() + " " + txSurname.getText(),
+							txDni.getText(), txObs.getText()));
 					contentPane.removeAll();
 					contentPane.add(new InfoOrderWindow(mainWindow));
 					contentPane.revalidate();
@@ -135,64 +133,55 @@ public class LogUpWindow extends JDialog {
 		}
 		return btnFinish;
 	}
+
 	private JPanel getPanelCenter() {
 		if (panelCenter == null) {
 			panelCenter = new JPanel();
 			panelCenter.setBackground(Color.WHITE);
 			GroupLayout gl_panelCenter = new GroupLayout(panelCenter);
-			gl_panelCenter.setHorizontalGroup(
-				gl_panelCenter.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panelCenter.createSequentialGroup()
-						.addGap(217)
-						.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
-							.addComponent(getLblName())
-							.addComponent(getLblDni())
-							.addComponent(getLblSurname())
-							.addComponent(getLblObs()))
-						.addGap(57)
-						.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
-							.addComponent(getTxObs(), GroupLayout.PREFERRED_SIZE, 412, Short.MAX_VALUE)
-							.addComponent(getTxSurname(), GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-							.addComponent(getTxDNI(), GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-							.addComponent(getTxName(), GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
-						.addGap(209))
-			);
-			gl_panelCenter.setVerticalGroup(
-				gl_panelCenter.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panelCenter.createSequentialGroup()
-						.addGap(58)
-						.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING, false)
-							.addGroup(gl_panelCenter.createSequentialGroup()
-								.addGap(3)
-								.addComponent(getLblName()))
-							.addComponent(getTxName(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelCenter.createSequentialGroup()
-								.addGap(35)
-								.addComponent(getLblSurname()))
-							.addGroup(gl_panelCenter.createSequentialGroup()
-								.addGap(32)
-								.addComponent(getTxSurname(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panelCenter.createSequentialGroup()
-								.addGap(42)
-								.addComponent(getLblDni()))
-							.addGroup(gl_panelCenter.createSequentialGroup()
-								.addGap(39)
-								.addComponent(getTxDNI(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGap(35)
-						.addGroup(gl_panelCenter.createParallelGroup(Alignment.BASELINE)
-							.addComponent(getLblObs())
-							.addComponent(getTxObs(), GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(150, Short.MAX_VALUE))
-			);
+			gl_panelCenter.setHorizontalGroup(gl_panelCenter.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelCenter.createSequentialGroup().addGap(217)
+							.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING).addComponent(getLblName())
+									.addComponent(getLblDni()).addComponent(getLblSurname()).addComponent(getLblObs()))
+							.addGap(57)
+							.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
+									.addComponent(getTxObs(), GroupLayout.PREFERRED_SIZE, 412, Short.MAX_VALUE)
+									.addComponent(getTxSurname(), GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+									.addComponent(getTxDNI(), GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+									.addComponent(getTxName(), GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
+							.addGap(209)));
+			gl_panelCenter.setVerticalGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panelCenter.createSequentialGroup().addGap(58)
+							.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING, false)
+									.addGroup(
+											gl_panelCenter.createSequentialGroup().addGap(3).addComponent(getLblName()))
+									.addComponent(getTxName(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+											GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_panelCenter.createSequentialGroup().addGap(35)
+											.addComponent(getLblSurname()))
+									.addGroup(gl_panelCenter.createSequentialGroup().addGap(32)
+											.addComponent(getTxSurname(), GroupLayout.PREFERRED_SIZE,
+													GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panelCenter.createParallelGroup(Alignment.LEADING)
+									.addGroup(
+											gl_panelCenter.createSequentialGroup().addGap(42).addComponent(getLblDni()))
+									.addGroup(gl_panelCenter.createSequentialGroup().addGap(39).addComponent(getTxDNI(),
+											GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+											GroupLayout.PREFERRED_SIZE)))
+							.addGap(35)
+							.addGroup(gl_panelCenter.createParallelGroup(Alignment.BASELINE).addComponent(getLblObs())
+									.addComponent(getTxObs(), GroupLayout.PREFERRED_SIZE, 94,
+											GroupLayout.PREFERRED_SIZE))
+							.addContainerGap(150, Short.MAX_VALUE)));
 			gl_panelCenter.setAutoCreateContainerGaps(true);
 			gl_panelCenter.setAutoCreateGaps(true);
 			panelCenter.setLayout(gl_panelCenter);
 		}
 		return panelCenter;
 	}
+
 	private JLabel getLblName() {
 		if (lblName == null) {
 			lblName = new JLabel(Internationalization.getString("log_name"));
@@ -203,6 +192,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return lblName;
 	}
+
 	private JLabel getLblSurname() {
 		if (lblSurname == null) {
 			lblSurname = new JLabel(Internationalization.getString("log_surname"));
@@ -213,6 +203,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return lblSurname;
 	}
+
 	private JTextField getTxName() {
 		if (txName == null) {
 			txName = new JTextField();
@@ -227,6 +218,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return txName;
 	}
+
 	private JTextField getTxSurname() {
 		if (txSurname == null) {
 			txSurname = new JTextField();
@@ -242,6 +234,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return txSurname;
 	}
+
 	private JLabel getLblDni() {
 		if (lblDni == null) {
 			lblDni = new JLabel(Internationalization.getString("log_dni"));
@@ -253,6 +246,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return lblDni;
 	}
+
 	private JTextField getTxDNI() {
 		if (txDni == null) {
 			txDni = new JTextField();
@@ -267,6 +261,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return txDni;
 	}
+
 	private JLabel getLblObs() {
 		if (lblObs == null) {
 			lblObs = new JLabel(Internationalization.getString("log_obs"));
@@ -277,6 +272,7 @@ public class LogUpWindow extends JDialog {
 		}
 		return lblObs;
 	}
+
 	private JTextArea getTxObs() {
 		if (txObs == null) {
 			txObs = new JTextArea();
@@ -290,5 +286,5 @@ public class LogUpWindow extends JDialog {
 		}
 		return txObs;
 	}
-	
+
 }

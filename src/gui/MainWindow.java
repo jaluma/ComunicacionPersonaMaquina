@@ -7,7 +7,6 @@ import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.util.Date;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -26,12 +25,13 @@ public class MainWindow extends JFrame {
 	private InitialWindow initialPanel;
 	private ProductListWindow productListPanel;
 	private CartWindow cartWindow;
-	
+
 	private Order order;
 	private int numberChild;
 	private int numberAdult;
 	private Date date;
 	private int days;
+
 	/**
 	 * Launch the application.
 	 */
@@ -76,19 +76,19 @@ public class MainWindow extends JFrame {
 		// inicializamos layout inicial
 		initialPanel = new InitialWindow(this);
 		contentPane.add(initialPanel);
-		//new ProductListWindow(this, contentPane);
-		
-		//JDialog dialog = new LogUpWindow(this);
-		//dialog.setVisible(true);
+		// new ProductListWindow(this, contentPane);
+
+		// JDialog dialog = new LogUpWindow(this);
+		// dialog.setVisible(true);
 
 		// contentPane.removeAll();
 		// new InfoOrderWindow(this, contentPane);
 		// contentPane.repaint();
 		// contentPane.revalidate();
 
-		//contentPane.add(new FinishWindow());
+		// contentPane.add(new FinishWindow());
 	}
-	
+
 	public Order getOrder() {
 		return order;
 	}
@@ -126,7 +126,7 @@ public class MainWindow extends JFrame {
 	public int getDays() {
 		return days;
 	}
-	
+
 	public InitialWindow getInitialPanel() {
 		return initialPanel;
 	}
@@ -150,6 +150,5 @@ public class MainWindow extends JFrame {
 	public void setOrder(Order order2) {
 		this.order = order2;
 	}
-	
-	
+
 }
