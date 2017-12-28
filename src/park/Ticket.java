@@ -18,13 +18,6 @@ public class Ticket extends Product {
 		setPriceChild(priceChild);
 	}
 
-	public void loadData(int numberAdult, int numberChild, Date date, int days) {
-		setNumberAdult(numberAdult);
-		setNumberChild(numberChild);
-		setDate(date);
-		setDuration(days);
-	}
-
 	public String getCodeTicket() {
 		return codeTicket;
 	}

@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import logic.ListProduct;
 
 public class Internationalization {
+	public static final Locale[] locationSupported = new Locale[] {Locale.forLanguageTag("es-ES"), Locale.forLanguageTag("en-US")};
+	
 	private static final String BUNDLE_NAME = "resources.values";
 
 	private static final String DEFAULT_LANGUAGE = Locale.getDefault().getLanguage();
@@ -36,6 +38,7 @@ public class Internationalization {
 
 	public static void changeLocation(String language, String country) {
 		locale = new Locale(language, country);
+		Locale.setDefault(locale);
 		RESOURCE_BUNDLE = inicialiceBundle();
 		ResourceBundle.clearCache();
 	}

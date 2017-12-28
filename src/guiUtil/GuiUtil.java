@@ -1,5 +1,7 @@
-package gui;
+package guiUtil;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.text.NumberFormat;
 
 import javax.swing.text.NumberFormatter;
@@ -20,4 +22,19 @@ public class GuiUtil {
 		formatter.setAllowsInvalid(false);
 		return formatter;
 	}
+	
+	 public static int getVisibleChildrenCount(Component c) {
+		    if (c == null || !(c instanceof Container))
+		      return 0;
+
+		    int count = 0;
+		    Container container = (Container) c;
+
+		    for (int i = 0; i < container.getComponentCount(); i++)
+		      if (container.getComponent(i).isVisible())
+		        count++;
+
+		    return count;
+		  }
+
 }

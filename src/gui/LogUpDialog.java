@@ -25,10 +25,11 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import event.FocusTextAreaEvent;
 import event.FocusTextFieldEvent;
+import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 import logic.Order;
 
-public class LogUpWindow extends JDialog {
+public class LogUpDialog extends JDialog {
 
 	/**
 	 * 
@@ -51,9 +52,9 @@ public class LogUpWindow extends JDialog {
 	private JLabel lblObs;
 	private JTextArea txObs;
 
-	public LogUpWindow(MainWindow mainWindow) {
+	public LogUpDialog(MainWindow mainWindow) {
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(LogUpWindow.class.getResource("/img/user.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(LogUpDialog.class.getResource("/img/user.png")));
 		setTitle(Internationalization.getString("LogUpWindow.this.title")); //$NON-NLS-1$
 		setResizable(false);
 		this.mainWindow = mainWindow;
@@ -68,6 +69,7 @@ public class LogUpWindow extends JDialog {
 		setLocationRelativeTo(null);
 		setFocusTraversalPolicy(new FocusTraversalOnArray(
 				new Component[] { getTxName(), getTxSurname(), getTxObs(), getBtnCancel(), getBtnFinish() }));
+		this.getRootPane().setDefaultButton(getBtnFinish());
 	}
 
 	private JPanel getPanelNorth() {
@@ -106,7 +108,7 @@ public class LogUpWindow extends JDialog {
 			btnCancel = new JButton(Internationalization.getString("log_cancel"));
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					LogUpWindow.this.dispose();
+					LogUpDialog.this.dispose();
 				}
 			});
 			btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -123,7 +125,7 @@ public class LogUpWindow extends JDialog {
 					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText() + " " + txSurname.getText(),
 							txDni.getText(), txObs.getText()));
 					contentPane.removeAll();
-					contentPane.add(new InfoOrderWindow(mainWindow));
+					contentPane.add(new InfoOrderPanel(mainWindow));
 					contentPane.revalidate();
 					contentPane.repaint();
 				}

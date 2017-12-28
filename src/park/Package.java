@@ -21,13 +21,6 @@ public class Package extends Product {
 		setPriceChild(priceChild);
 	}
 
-	// no se usa days
-	public void loadData(int numberAdult, int numberChild, Date date, int days) {
-		setNumberAdult(numberAdult);
-		setNumberChild(numberChild);
-		setDate(date);
-	}
-
 	public String getCode() {
 		return code;
 	}

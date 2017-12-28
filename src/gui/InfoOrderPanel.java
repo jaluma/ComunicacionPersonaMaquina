@@ -18,13 +18,14 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import fileUtil.FileUtil;
+import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import java.awt.Font;
 
-public class InfoOrderWindow extends JPanel {
+public class InfoOrderPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private MainWindow mainWindow;
-	private JPanel contentPane;
 	private JPanel panelNorth;
 	private JLabel lblLogo;
 	private JScrollPane scrollPaneOrder;
@@ -32,8 +33,9 @@ public class InfoOrderWindow extends JPanel {
 	private JPanel panelButton;
 	private JButton btnFinish;
 	private JButton btnCancel;
+	private JButton btnBack;
 
-	public InfoOrderWindow(MainWindow mainWindow) {
+	public InfoOrderPanel(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelNorth(), BorderLayout.NORTH);
@@ -88,6 +90,7 @@ public class InfoOrderWindow extends JPanel {
 			FlowLayout flowLayout = (FlowLayout) panelButton.getLayout();
 			flowLayout.setAlignment(FlowLayout.RIGHT);
 			panelButton.setBackground(Color.WHITE);
+			panelButton.add(getBtnBack());
 			panelButton.add(getBtnCancel());
 			panelButton.add(getBtnFinish());
 		}
@@ -98,6 +101,7 @@ public class InfoOrderWindow extends JPanel {
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("info_finish"));
+			btnFinish.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			btnFinish.setToolTipText(Internationalization.getToolTips("info_finish"));
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -114,7 +118,7 @@ public class InfoOrderWindow extends JPanel {
 					}
 
 					removeAll();
-					add(new FinishWindow(mainWindow));
+					add(new FinishPanel(mainWindow));
 					revalidate();
 					repaint();
 
@@ -127,10 +131,11 @@ public class InfoOrderWindow extends JPanel {
 	private JButton getBtnCancel() {
 		if (btnCancel == null) {
 			btnCancel = new JButton(Internationalization.getString("info_cancel"));
+			btnCancel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			btnCancel.setToolTipText(Internationalization.getToolTips("info_cancel"));
 			btnCancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Window w = SwingUtilities.getWindowAncestor(InfoOrderWindow.this);
+					Window w = SwingUtilities.getWindowAncestor(InfoOrderPanel.this);
 					w.dispose();
 				}
 			});
@@ -138,4 +143,19 @@ public class InfoOrderWindow extends JPanel {
 		return btnCancel;
 	}
 
+	private JButton getBtnBack() {
+		if (btnBack == null) {
+			btnBack = new JButton(Internationalization.getString("back")); //$NON-NLS-1$
+			btnBack.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			btnBack.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					removeAll();
+					add(new LogUpDialog(mainWindow).getContentPane());
+					revalidate();
+					repaint();
+				}
+			});
+		}
+		return btnBack;
+	}
 }

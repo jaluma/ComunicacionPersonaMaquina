@@ -24,13 +24,22 @@ public abstract class Product {
 		setPark(ListProduct.searchPark(codePark));
 	}
 
-	public abstract void loadData(int numberAdult, int numberChild, Date date, int days);
+	public void loadData(int numberAdult, int numberChild, Date date, int days) {
+		if (numberAdult > 0)
+			setNumberAdult(numberAdult);
+		if (numberChild >= 0)
+			setNumberChild(numberChild);
+		if (date != null)
+			setDate(date);
+		if (days >= 0)
+			setDuration(days);
+	}
 
-	protected void setNumberChild(int i) {
+	public void setNumberChild(int i) {
 		this.numberAdult = i;
 	}
 
-	protected void setNumberAdult(int i) {
+	public void setNumberAdult(int i) {
 		this.numberChild = i;
 	}
 

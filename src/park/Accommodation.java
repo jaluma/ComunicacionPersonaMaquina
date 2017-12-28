@@ -21,13 +21,6 @@ public class Accommodation extends Product {
 		setPrice(price);
 	}
 
-	public void loadData(int numberAdult, int numberChild, Date date, int days) {
-		setNumberAdult(numberAdult);
-		setNumberChild(numberChild);
-		setDate(date);
-		setDuration(days);
-	}
-
 	public void setBreakfast() {
 		breakfast = true;
 	}
@@ -68,7 +61,7 @@ public class Accommodation extends Product {
 	public String toString() {
 		String str = "";
 		str += Internationalization.getString("accom_subtitle") + ": " + code + " / " + type + " / " + name + " / "
-				+ stars + " " + Internationalization.getString("stars") + " / " + park.getName() + "\n";
+				+ stars + " " + Internationalization.getString("stars").toLowerCase() + " / " + park.getName() + "\n";
 		str += Internationalization.getString("initial_date") + ": " + Internationalization.getFormatDate(date) + " / "
 				+ Internationalization.getString("number_days") + ": " + duration + printBreakfast() + "\n";
 		str += Internationalization.getString("number_people") + ": " + (numberAdult + numberChild) + "\n";

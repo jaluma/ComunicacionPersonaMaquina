@@ -21,9 +21,10 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 
-public class CartWindow extends JDialog {
+public class CartDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel panelNorth;
@@ -41,9 +42,9 @@ public class CartWindow extends JDialog {
 	private JLabel lblSubtotal;
 	private JPanel panel_1;
 
-	public CartWindow(MainWindow mainWindow) {
+	public CartDialog(MainWindow mainWindow) {
 		setTitle(Internationalization.getString("CartWindow.this.title")); //$NON-NLS-1$
-		setIconImage(Toolkit.getDefaultToolkit().getImage(CartWindow.class.getResource("/img/cesta.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CartDialog.class.getResource("/img/cesta.png")));
 		this.mainWindow = mainWindow;
 		this.contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -93,7 +94,7 @@ public class CartWindow extends JDialog {
 			btnAddmore = new JButton(Internationalization.getString("cart_add_more"));
 			btnAddmore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					CartWindow.this.dispose();
+					CartDialog.this.dispose();
 				}
 			});
 			btnAddmore.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -107,13 +108,13 @@ public class CartWindow extends JDialog {
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (mainWindow.getOrder().getItems() == 0)
-						JOptionPane.showMessageDialog(CartWindow.this,
+						JOptionPane.showMessageDialog(CartDialog.this,
 								Internationalization.getString("error_cart_emptry"),
 								Internationalization.getString("error_cart_emptry_title"), JOptionPane.WARNING_MESSAGE);
 					else {
-						CartWindow.this.dispose();
+						CartDialog.this.dispose();
 						System.out.println(mainWindow.getOrder().toString());
-						JDialog dialog = new LogUpWindow(mainWindow);
+						JDialog dialog = new LogUpDialog(mainWindow);
 						dialog.setVisible(true);
 					}
 				}
@@ -155,7 +156,7 @@ public class CartWindow extends JDialog {
 			scrollPane.getVerticalScrollBar().setValue(0);
 			scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 			for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
-				panel.add(new CartItemPanel(mainWindow, CartWindow.this, mainWindow.getOrder().getProduct(i)));
+				panel.add(new CartItemPanel(mainWindow, CartDialog.this, mainWindow.getOrder().getProduct(i)));
 			}
 		}
 		return scrollPane;

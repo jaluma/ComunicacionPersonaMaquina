@@ -23,6 +23,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 import park.Package;
 import park.Product;
@@ -49,6 +50,7 @@ public class ItemPanel extends JPanel {
 	private JPanel panelPrice;
 	private JLabel lblPrice;
 	private JScrollPane scrollPane;
+	private boolean image;
 
 	public ItemPanel(MainWindow mainWindow, Product product) {
 		setBackground(Color.WHITE);
@@ -59,6 +61,15 @@ public class ItemPanel extends JPanel {
 		setPreferredSize(new Dimension(900, 230));
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelItem());
+		setVisible(true);
+	}
+	
+	public Product getProduct() {
+		return product;
+	}
+	
+	public boolean getImage() {
+		return image;
 	}
 
 	private JPanel getPanelItem() {
@@ -110,7 +121,7 @@ public class ItemPanel extends JPanel {
 		return panelInfo;
 	}
 
-	private JLabel getLblPhoto() {
+	protected JLabel getLblPhoto() {
 		if (lblPhoto == null) {
 			lblPhoto = new JLabel("");
 			String path = "";
@@ -121,7 +132,7 @@ public class ItemPanel extends JPanel {
 			else
 				path = "/img/" + product.getCode() + ".jpg";
 
-			ResizableImage.setResizeImage(this, lblPhoto, path, 300, 200);
+			image = ResizableImage.setResizeImage(this, lblPhoto, path, 300, 200);
 		}
 		return lblPhoto;
 	}
@@ -205,22 +216,27 @@ public class ItemPanel extends JPanel {
 			panelPrice = new JPanel();
 			panelPrice.setBackground(Color.WHITE);
 			panelPrice.setLayout(new BorderLayout(5, 5));
-			panelPrice.add(getLabel_1(), BorderLayout.NORTH);
+			panelPrice.add(getLblPrice(), BorderLayout.NORTH);
 			panelPrice.add(getBtnAdd(), BorderLayout.CENTER);
 		}
 		return panelPrice;
 	}
 
-	private JLabel getLabel_1() {
+	protected JLabel getLblPrice() {
 		if (lblPrice == null) {
-			lblPrice = new JLabel(Internationalization.getCurrency(product.getTotal() - product.getDiscount()));
+			lblPrice = new JLabel();
 			lblPrice.setBorder(new EmptyBorder(0, 0, 0, 10));
 			lblPrice.setBackground(Color.WHITE);
+			updatePrice();
 			lblPrice.setForeground(Color.DARK_GRAY);
 			lblPrice.setFont(new Font("Tahoma", Font.ITALIC, 30));
 			lblPrice.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblPrice;
+	}
+
+	public void updatePrice() {
+		lblPrice.setText(Internationalization.getCurrency(product.getTotal() - product.getDiscount()));
 	}
 
 	private JScrollPane getScrollPane() {

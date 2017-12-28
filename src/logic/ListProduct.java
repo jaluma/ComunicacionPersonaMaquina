@@ -21,6 +21,7 @@ public class ListProduct {
 
 	public static List<Park> parks = loadPark();
 	public static List<Product> products = loadProducts();
+	public static List<String> places = Arrays.asList(loadPlaces());
 
 	private static List<Product> loadProducts() {
 		List<Product> productsList = new ArrayList<Product>();

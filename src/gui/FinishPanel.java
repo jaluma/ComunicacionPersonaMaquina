@@ -25,9 +25,10 @@ import javax.swing.border.EmptyBorder;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 
-public class FinishWindow extends JPanel {
+public class FinishPanel extends JPanel {
 
 	/**
 	 * 
@@ -48,7 +49,7 @@ public class FinishWindow extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public FinishWindow(MainWindow main) {
+	public FinishPanel(MainWindow main) {
 		this.main = main;
 		addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
@@ -76,7 +77,6 @@ public class FinishWindow extends JPanel {
 		add(getPanelNorth(), BorderLayout.NORTH);
 		add(getPanelCenter(), BorderLayout.CENTER);
 		add(getPanelSouth(), BorderLayout.SOUTH);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getBtnRestore() }));
 	}
 
 	private JPanel getPanelNorth() {
@@ -168,7 +168,7 @@ public class FinishWindow extends JPanel {
 			btnRestore = new JButton(Internationalization.getString("restore_now")); //$NON-NLS-1$
 			btnRestore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					Window w = SwingUtilities.getWindowAncestor(FinishWindow.this);
+					Window w = SwingUtilities.getWindowAncestor(FinishPanel.this);
 					w.dispose();
 					main.dispose();
 					JFrame frame = new MainWindow();

@@ -7,16 +7,16 @@ import java.util.Collections;
 import javax.swing.JComboBox;
 
 import gui.MainWindow;
-import gui.ProductListWindow;
+import gui.ProductListPanel;
 import sorter.AmountSorter;
 import sorter.NameSorter;
 
 public class ComboBoxSortEvent implements ItemListener {
 
-	private ProductListWindow productWindow;
+	private ProductListPanel productWindow;
 	private MainWindow mainWindow;
 
-	public ComboBoxSortEvent(MainWindow main, ProductListWindow productWindow) {
+	public ComboBoxSortEvent(MainWindow main, ProductListPanel productWindow) {
 		this.mainWindow = main;
 		this.productWindow = productWindow;
 	}

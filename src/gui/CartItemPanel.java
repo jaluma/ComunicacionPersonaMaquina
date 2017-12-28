@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 import park.Package;
 import park.Product;
@@ -39,9 +40,9 @@ public class CartItemPanel extends JPanel {
 
 	private MainWindow mainWindow;
 	private Product product;
-	private CartWindow cartWindow;
+	private CartDialog cartWindow;
 
-	public CartItemPanel(MainWindow mainWindow, CartWindow cartWindow, Product product) {
+	public CartItemPanel(MainWindow mainWindow, CartDialog cartWindow, Product product) {
 		this.mainWindow = mainWindow;
 		this.cartWindow = cartWindow;
 		this.product = product;

@@ -32,10 +32,11 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
 import fileUtil.StringUtil;
+import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 import logic.ListProduct;
 
-public class InitialWindow extends JPanel {
+public class InitialPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -77,7 +78,7 @@ public class InitialWindow extends JPanel {
 	JDateChooser dateArrive;
 	JDateChooser dateExit;
 
-	public InitialWindow(MainWindow mainWindow) {
+	public InitialPanel(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
 		setLayout(new BorderLayout(0, 0));
@@ -132,7 +133,7 @@ public class InitialWindow extends JPanel {
 		if (panelData == null) {
 			panelData = new JPanel();
 			panelData.setBackground(Color.WHITE);
-			panelData.setLayout(new GridLayout(2, 2, 0, 5));
+			panelData.setLayout(new GridLayout(2, 2, 0, 2));
 			panelData.setBorder(UIManager.getBorder("Spinner.border"));
 			panelData.add(getLblCode());
 			panelData.add(getTxtCode());
@@ -528,25 +529,27 @@ public class InitialWindow extends JPanel {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_adult"),
 								Internationalization.getString("error_number_adult_title"),
 								JOptionPane.WARNING_MESSAGE);
-					else if (Integer.parseInt(txtNumberchild.getText()) <= 0)
+					else if (Integer.parseInt(txtNumberadult.getText()) <= 0 && Integer.parseInt(txtNumberchild.getText()) <= 0)
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_child"),
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
 					else { // valores correctos, pasamos a siguiente ventana
 						// update values mainWindow
 						try {
-							mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
-							mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
-							mainWindow.setDate(dateArrive.getDate());
-
-							long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
-							long diffDays = diff / (24 * 60 * 60 * 1000);
-							mainWindow.setDays((int) diffDays);
-							mainWindow.setMinimumSize(new Dimension(1200, 650));
-							mainWindow.setLocationRelativeTo(null);
+							btnSearch.setText(Internationalization.getString("loading"));
+							updateOrder();
+							mainWindow.mntmFullscreen.setEnabled(true);
+							mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
+							mainWindow.mnSort.setEnabled(true);
+							mainWindow.mntmPeople.setEnabled(true);
+							mainWindow.mntmPlace.setEnabled(true);
+							mainWindow.mntmPrice.setEnabled(true);
+							mainWindow.mntmStars.setEnabled(true);
+							mainWindow.mntmOnlyphotos.setEnabled(true);
+							mainWindow.mntmCart.setEnabled(true);
 
 							removeAll();
-							mainWindow.setProductListPanel(new ProductListWindow(InitialWindow.this.mainWindow));
+							mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow));
 							add(mainWindow.getProductListPanel());
 							repaint();
 							revalidate();
@@ -556,9 +559,20 @@ public class InitialWindow extends JPanel {
 						} catch (NullPointerException e) {
 							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
 									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+							e.printStackTrace();
 						}
 					}
 
+				}
+
+				private void updateOrder() {
+					mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
+					mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
+					mainWindow.setDate(dateArrive.getDate());
+
+					long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
+					long diffDays = diff / (24 * 60 * 60 * 1000);
+					mainWindow.setDays((int) diffDays);
 				}
 			});
 		}
@@ -576,7 +590,7 @@ public class InitialWindow extends JPanel {
 		return panelPeopleCount;
 	}
 
-	private JComboBox<String> getComboBox() {
+	protected JComboBox<String> getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox<String>();
 			comboBox.setFont(new Font("Tahoma", Font.BOLD, 13));
