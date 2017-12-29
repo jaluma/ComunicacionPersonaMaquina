@@ -35,7 +35,6 @@ public class CartItemPanel extends JPanel {
 	private JPanel panelCenterOrder;
 	private JPanel panelToolsOrder;
 	private JButton btnRemove;
-	private JButton btnEdit;
 	private JTextArea txtrDescription;
 
 	private MainWindow mainWindow;
@@ -108,7 +107,6 @@ public class CartItemPanel extends JPanel {
 			panelToolsOrder.setBackground(Color.WHITE);
 			FlowLayout fl_panelToolsOrder = (FlowLayout) panelToolsOrder.getLayout();
 			fl_panelToolsOrder.setAlignment(FlowLayout.RIGHT);
-			panelToolsOrder.add(getBtnEdit());
 			panelToolsOrder.add(getBtnRemove());
 		}
 		return panelToolsOrder;
@@ -135,14 +133,6 @@ public class CartItemPanel extends JPanel {
 			});
 		}
 		return btnRemove;
-	}
-
-	private JButton getBtnEdit() {
-		if (btnEdit == null) {
-			btnEdit = new JButton(Internationalization.getString("cart_edit"));
-			btnEdit.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		}
-		return btnEdit;
 	}
 
 	private JTextArea getTxtrDescription() {

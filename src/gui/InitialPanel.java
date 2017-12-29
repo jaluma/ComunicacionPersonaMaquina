@@ -40,6 +40,10 @@ import internationalization.Internationalization;
 import order.ListOrders;
 import order.Order;
 import product.ListProduct;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class InitialPanel extends JPanel {
 
@@ -79,7 +83,8 @@ public class InitialPanel extends JPanel {
 	private JComboBox<String> comboBox;
 	private MainWindow mainWindow;
 	private DefaultComboBoxModel<String> modelPlace;
-	JDateChooser dateArrive;
+	private JDateChooser dateArrive;
+	private 
 	JDateChooser dateExit;
 
 	private JDateChooser dateChooser;
@@ -101,6 +106,14 @@ public class InitialPanel extends JPanel {
 		add(getPanelSouth(), BorderLayout.SOUTH);
 		this.mainWindow.setResizable(false);
 		this.mainWindow.getRootPane().setDefaultButton(btnSearch);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getDateChooser(), getTxtDni(), getBtnRestoreinfo(), getComboBox(), getTxtNumberadult(), getTxtNumberchild(), getDateArrive(), getDateExit()}));
+		addPropertyChangeListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				getComboBox().grabFocus();					
+			}
+		});
 	}
 
 	private JPanel getPanelNorth() {
@@ -160,10 +173,10 @@ public class InitialPanel extends JPanel {
 	private JLabel getLblCode() {
 		if (lblCode == null) {
 			lblCode = new JLabel(Internationalization.getString("date"));
+			lblCode.setLabelFor(getDateChooser());
 			lblCode.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCode.setBackground(Color.WHITE);
-			lblCode.setLabelFor(getDateChooser());
-			lblCode.setDisplayedMnemonic(Internationalization.getMnemonic("code"));
+			lblCode.setDisplayedMnemonic(Internationalization.getMnemonic("date"));
 			lblCode.setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		return lblCode;
@@ -172,10 +185,10 @@ public class InitialPanel extends JPanel {
 	private JLabel getLblDni() {
 		if (lblDni == null) {
 			lblDni = new JLabel(Internationalization.getString("dni"));
+			lblDni.setLabelFor(getTxtDni());
 			lblDni.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblDni.setBackground(Color.WHITE);
-			lblDni.setLabelFor(txtDni);
-			lblDni.setDisplayedMnemonic(Internationalization.getMnemonic("date"));
+			lblDni.setDisplayedMnemonic(Internationalization.getMnemonic("dni"));
 			lblDni.setHorizontalAlignment(SwingConstants.CENTER);
 
 		}
@@ -301,8 +314,8 @@ public class InitialPanel extends JPanel {
 			panelSearch.setBackground(Color.WHITE);
 			panelSearch.setLayout(new GridLayout(3, 1, 95, 10));
 			panelSearch.add(getPanelPlace());
-			panelSearch.add(getPanelDate());
 			panelSearch.add(getPanelPeople());
+			panelSearch.add(getPanelDate());
 		}
 		return panelSearch;
 	}
@@ -342,10 +355,28 @@ public class InitialPanel extends JPanel {
 			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-			dateArrive.setDate(new Date(System.currentTimeMillis()));
+//			dateArrive.getCalendarButton().addChangeListener(new ChangeListener() {
+//				@Override
+//				public void stateChanged(ChangeEvent e) {
+//					getDateExit().setDate(new Date(dateArrive.getDate().getTime()  + 86400000));
+//					getDateExit().setMinSelectableDate(new Date(dateArrive.getDate().getTime() + 86400000));
+//				}
+//			});
+			Date date = new Date(System.currentTimeMillis());
+			dateArrive.setDate(date);
+			dateArrive.setMinSelectableDate(date);
 			dateArrive.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
+			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
+						Date date2 = new Date(dateArrive.getDate().getTime()  + 86400000);
+						getDateExit().setDate(date2);
+						getDateExit().setMinSelectableDate(date2);
+					}
+				}
+			});
 		}
 		return dateArrive;
 	}
@@ -353,11 +384,13 @@ public class InitialPanel extends JPanel {
 	private JDateChooser getDateExit() {
 		if (dateExit == null) {
 			dateExit = new JDateChooser();
-			dateExit.setToolTipText(lblFinish.getToolTipText());
+			dateExit.setToolTipText(getLblFinish().getToolTipText());
 			dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-			dateExit.setDate(new Date(System.currentTimeMillis() + 86400000));
+			Date date = new Date(dateArrive.getDate().getTime()  + 86400000);
+			dateExit.setDate(date);
+			dateExit.setMinSelectableDate(date);
 			dateExit.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
@@ -393,6 +426,7 @@ public class InitialPanel extends JPanel {
 	private JLabel getLblStart() {
 		if (lblStart == null) {
 			lblStart = new JLabel(Internationalization.getString("start"));
+			lblStart.setLabelFor(getDateArrive());
 			lblStart.setDisplayedMnemonic(Internationalization.getMnemonic("start"));
 			lblStart.setToolTipText(Internationalization.getToolTips("start"));
 			lblStart.setBackground(UIManager.getColor("Button.background"));
@@ -405,6 +439,7 @@ public class InitialPanel extends JPanel {
 	private JLabel getLblFinish() {
 		if (lblFinish == null) {
 			lblFinish = new JLabel(Internationalization.getString("finish"));
+			lblFinish.setLabelFor(getDateExit());
 			lblFinish.setDisplayedMnemonic(Internationalization.getMnemonic("finish"));
 			lblFinish.setToolTipText(Internationalization.getToolTips("finish"));
 			lblFinish.setBackground(UIManager.getColor("Button.background"));
@@ -526,7 +561,6 @@ public class InitialPanel extends JPanel {
 			btnSearch.setText(Internationalization.getString("search"));
 			btnSearch.setToolTipText(Internationalization.getToolTips("search"));
 			btnSearch.setFont(new Font("Tahoma", Font.BOLD, 36));
-			// btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
 			btnSearch.addActionListener(new ActionListener() {
 
 				@Override
@@ -545,10 +579,30 @@ public class InitialPanel extends JPanel {
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
 					else { // valores correctos, pasamos a siguiente ventana
+						try {
+							checkDate(dateArrive);
+							checkDate(dateExit);
 							// update values mainWindow
-						loadListProduct();
+							btnSearch.setEnabled(false);
+							loadListProduct();
+						} catch (NullPointerException e) {
+							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
+							Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+						}
 					}
 
+				}
+
+				protected void checkDate(JDateChooser date) {
+					long time1 =date.getDate().getTime();
+					String timeA = String.valueOf(time1).substring(0, 5) + "000000";
+					time1 = Long.valueOf(timeA);
+					long time2 =date.getMinSelectableDate().getTime();
+					String timeB = String.valueOf(time2).substring(0, 5) + "000000";
+					time2 = Long.valueOf(timeB);
+					
+					if (time1 < time2)
+						throw new NullPointerException();
 				}
 
 			});
@@ -561,37 +615,32 @@ public class InitialPanel extends JPanel {
 		mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
 		mainWindow.setDate(dateArrive.getDate());
 
-		long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
+		long diff = Math.abs(getDateExit().getDate().getTime() - getDateArrive().getDate().getTime());
 		long diffDays = diff / (24 * 60 * 60 * 1000);
 		mainWindow.setDays((int) diffDays);
 	}
 
 	protected void loadListProduct() {
-		try {
-			btnSearch.setText(Internationalization.getString("loading"));
-			updateOrder();
-			mainWindow.mntmFullscreen.setEnabled(true);
-			mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
-			mainWindow.mnSort.setEnabled(true);
-			mainWindow.mntmPeople.setEnabled(true);
-			mainWindow.mntmPlace.setEnabled(true);
-			mainWindow.mntmPrice.setEnabled(true);
-			mainWindow.mntmStars.setEnabled(true);
-			mainWindow.mntmOnlyphotos.setEnabled(true);
-			mainWindow.mntmCart.setEnabled(true);
+		btnSearch.revalidate();
+		btnSearch.repaint();
+		updateOrder();
+		mainWindow.mntmFullscreen.setEnabled(true);
+		mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
+		mainWindow.mnSort.setEnabled(true);
+		mainWindow.mntmPeople.setEnabled(true);
+		mainWindow.mntmPlace.setEnabled(true);
+		mainWindow.mntmPrice.setEnabled(true);
+		mainWindow.mntmStars.setEnabled(true);
+		mainWindow.mntmOnlyphotos.setEnabled(true);
+		mainWindow.mntmCart.setEnabled(true);
 
-			removeAll();
-			mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow));
-			add(mainWindow.getProductListPanel());
-			repaint();
-			revalidate();
-			mainWindow.setResizable(true);
-			mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
-
-		} catch (NullPointerException e) {
-			JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-					Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
-		}
+		removeAll();
+		mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow));
+		add(mainWindow.getProductListPanel());
+		repaint();
+		revalidate();
+		mainWindow.setResizable(true);
+		mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
 
 	private JPanel getPanelPeopleCount() {

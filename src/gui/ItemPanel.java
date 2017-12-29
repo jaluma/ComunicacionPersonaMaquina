@@ -132,6 +132,7 @@ public class ItemPanel extends JPanel {
 				path = "/img/" + product.getCode() + ".jpg";
 
 			image = ResizableImage.setResizeImage(this, lblPhoto, path, 300, 200);
+			lblPhoto.setToolTipText(product.getName());
 		}
 		return lblPhoto;
 	}
@@ -153,6 +154,7 @@ public class ItemPanel extends JPanel {
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton(Internationalization.getString("item_add").toUpperCase());
+			btnAdd.setToolTipText(Internationalization.getToolTips("add"));
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					mainWindow.getOrder().add(product.getCode());

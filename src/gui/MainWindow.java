@@ -134,7 +134,7 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		setCartWindow(new CartDialog(this));
 		contentPane.setLayout(new BorderLayout(0, 0));
-		cargaAyuda();
+		loadHelp();
 
 		// inicializamos layout inicial
 		initialPanel = new InitialPanel(this);
@@ -534,7 +534,7 @@ public class MainWindow extends JFrame {
 		repaint();
 	}
 
-	private void cargaAyuda() {
+	private void loadHelp() {
 
 		URL hsURL;
 		HelpSet hs;
@@ -546,7 +546,6 @@ public class MainWindow extends JFrame {
 		}
 
 		catch (Exception e) {
-			System.out.println("Ayuda no encontrada");
 			return;
 		}
 

@@ -109,6 +109,8 @@ public class ProductListPanel extends JPanel {
 	private JPanel panelTxFPrice;
 	private JPanel panelTypeFlow;
 	private JButton btnPricereset;
+	private JPanel panelLoading;
+	private JLabel lblLoading;
 
 	public ProductListPanel(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
@@ -178,6 +180,7 @@ public class ProductListPanel extends JPanel {
 	protected JButton getBtnCart() {
 		if (btnCart == null) {
 			btnCart = new JButton("");
+			btnCart.setToolTipText(Internationalization.getToolTips("cart"));
 			btnCart.setPreferredSize(new Dimension(400, 200));
 			ResizableImage.setResizeImage(this, btnCart, "/img/cesta.png", 100, 100);
 			btnCart.setBackground(Color.WHITE);
@@ -388,11 +391,15 @@ public class ProductListPanel extends JPanel {
 	}
 
 	private JButton getBtnStar(int index) {
-		JButton btnStar1 = new JButton("\u2606");
-		btnStar1.setMinimumSize(new Dimension(45, 25));
-		btnStar1.setPreferredSize(new Dimension(45, 25));
-		btnStar1.setMaximumSize(new Dimension(45, 25));
-		btnStar1.addActionListener(new ActionListener() {
+		JButton btnStar = new JButton("\u2606");
+		btnStar.setMinimumSize(new Dimension(45, 25));
+		btnStar.setPreferredSize(new Dimension(45, 25));
+		btnStar.setMaximumSize(new Dimension(45, 25));
+		btnStar.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnStar.setActionCommand(String.valueOf(index));
+		btnStar.setBackground(Color.WHITE);
+		btnStar.setToolTipText(String.format(Internationalization.getToolTips("star_number"), btnStar.getActionCommand()));
+		btnStar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JButton buttonPressed = (JButton) e.getSource();
 				numberStars = Integer.parseInt(buttonPressed.getActionCommand());
@@ -421,10 +428,7 @@ public class ProductListPanel extends JPanel {
 				filtersReset();
 			}
 		});
-		btnStar1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnStar1.setActionCommand(String.valueOf(index));
-		btnStar1.setBackground(Color.WHITE);
-		return btnStar1;
+		return btnStar;
 	}
 
 	protected JPanel getPanelRadioButtonType() {
@@ -457,6 +461,7 @@ public class ProductListPanel extends JPanel {
 			sliderPerson.setAlignmentY(Component.TOP_ALIGNMENT);
 			sliderPerson.setBackground(Color.WHITE);
 			sliderPerson.setPaintLabels(true);
+			sliderPerson.setToolTipText(Internationalization.getToolTips("slider_adult"));
 			sliderPerson.setValue(mainWindow.getNumberAdult());
 			sliderPerson.setMinimum(1);
 			int valueMax = setMaxSlider(mainWindow.getNumberAdult());
@@ -495,6 +500,7 @@ public class ProductListPanel extends JPanel {
 			int valueMax = setMaxSlider(mainWindow.getNumberChild());
 			sliderChild.setMaximum(valueMax);
 			sliderChild.setValue(mainWindow.getNumberChild());
+			sliderChild.setToolTipText(Internationalization.getToolTips("slider_child"));
 			sliderChild.setBackground(Color.WHITE);
 			sliderChild.setAlignmentY(0.0f);
 			sliderChild.addChangeListener(new ChangeListener() {
@@ -658,6 +664,7 @@ public class ProductListPanel extends JPanel {
 	protected JComboBox<String> getComboBoxSort() {
 		if (comboBoxSort == null) {
 			comboBoxSort = new JComboBox<String>();
+			comboBoxSort.setToolTipText(Internationalization.getToolTips("place"));
 			comboBoxSort.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			modelSort = new DefaultComboBoxModel<String>(
 					new String[] { Internationalization.getString("box_combo_relevance"),
@@ -684,8 +691,17 @@ public class ProductListPanel extends JPanel {
 		if (panelItem == null) {
 			panelItem = new JPanel();
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
-			loadItems();
-			filterPlaceChange();
+			panelItem.add(getPanelLoading());
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					loadItems();
+					filterPlaceChange();
+					getPanelLoading().setVisible(false);
+					getRbAll().doClick();
+				}
+			}).start();
 		}
 		return panelItem;
 	}
@@ -747,15 +763,12 @@ public class ProductListPanel extends JPanel {
 	protected JComboBox<String> getComboBox() {
 		if (comboBox == null) {
 			comboBox = new JComboBox<String>();
+			comboBox.setToolTipText(Internationalization.getToolTips("place"));
 			comboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
-					for (int i = 0; i < panelItem.getComponentCount(); i++) {
-						filterPlaceChange();
-						rbOnlyTicket.setSelected(false);
-						rbOnlyAccom.setSelected(false);
-						rbOnlyPackage.setSelected(false);
-					}
-					lblLblnumberelem.setText(String.valueOf(GuiUtil.getVisibleChildrenCount(getPanelItem())));
+					getRbAll().setSelected(true);
+					filterPlaceChange();
+					getLblLblnumberelem().setText(String.valueOf(GuiUtil.getVisibleChildrenCount(getPanelItem())));
 				}
 			});
 			comboBox.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -797,6 +810,7 @@ public class ProductListPanel extends JPanel {
 			txtMinprice = new JTextField();
 			txtMinprice.setHorizontalAlignment(SwingConstants.CENTER);
 			txtMinprice.setForeground(Color.DARK_GRAY);
+			txtMinprice.setToolTipText(Internationalization.getToolTips("price_min"));
 			txtMinprice.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txtMinprice.setText(Internationalization.getString("min_price")); //$NON-NLS-1$
 			txtMinprice.setColumns(10);
@@ -811,6 +825,7 @@ public class ProductListPanel extends JPanel {
 			txtMaxprice = new JTextField();
 			txtMaxprice.setHorizontalAlignment(SwingConstants.CENTER);
 			txtMaxprice.setForeground(Color.DARK_GRAY);
+			txtMaxprice.setToolTipText(Internationalization.getToolTips("price_max"));
 			txtMaxprice.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			txtMaxprice.setText(Internationalization.getString("max_price")); //$NON-NLS-1$
 			txtMaxprice.setColumns(10);
@@ -824,9 +839,26 @@ public class ProductListPanel extends JPanel {
 		if (btnGopricefilter == null) {
 			btnGopricefilter = new JButton(Internationalization.getString("filter_price_btn")); //$NON-NLS-1$
 			btnGopricefilter.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			btnGopricefilter.setToolTipText(Internationalization.getToolTips("filter_price_btn"));
 			btnGopricefilter.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (Integer.parseInt(txtMinprice.getText()) > Integer.parseInt(txtMaxprice.getText())) {
+					int min = 0;
+					try {
+						min = Integer.parseInt(txtMinprice.getText());
+					
+					} catch (NumberFormatException ex) {
+						txtMinprice.setText("0");
+					}
+					
+					int max = 0;
+					try {
+						max = Integer.parseInt(txtMaxprice.getText());
+					
+					} catch (NumberFormatException ex) {
+						txtMaxprice.setText(getTxtMinprice().getText());
+					}
+					
+					if (min > max) {
 						txtMinprice.setText("0");
 					}
 
@@ -883,6 +915,7 @@ public class ProductListPanel extends JPanel {
 	private JButton getBtnPricereset() {
 		if (btnPricereset == null) {
 			btnPricereset = new JButton(Internationalization.getString("filter_price_reset")); //$NON-NLS-1$
+			btnPricereset.setToolTipText(Internationalization.getToolTips("filter_price_reset"));
 			btnPricereset.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnPricereset.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -901,18 +934,6 @@ public class ProductListPanel extends JPanel {
 		panelItem.removeAll();
 		panelItem.revalidate();
 		panelItem.repaint();
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				loadItems();
-				filtersReset();
-				panelItem.revalidate();
-				panelItem.repaint();
-
-			}
-		}).start();
-
 	}
 
 	// <----------------------------FILTERS---------------------------------->
@@ -929,7 +950,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyAccomCh() {
 		if (rbOnlyAccom.isSelected()) {
-			for (int i = 0; i < panelItem.getComponentCount(); i++) {
+			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Accommodation) {
@@ -944,7 +965,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyTicketCh() {
 		if (rbOnlyTicket.isSelected()) {
-			for (int i = 0; i < panelItem.getComponentCount(); i++) {
+			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Ticket) {
@@ -959,7 +980,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyPackageCh() {
 		if (rbOnlyPackage.isSelected()) {
-			for (int i = 0; i < panelItem.getComponentCount(); i++) {
+			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Package) {
@@ -973,7 +994,7 @@ public class ProductListPanel extends JPanel {
 	}
 
 	private void filterPlaceChange() {
-		for (int i = 0; i < panelItem.getComponentCount(); i++) {
+		for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 			if (panelItem.getComponent(i) instanceof ItemPanel) {
 				Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 				String aux = String.valueOf(getComboBox().getSelectedItem());
@@ -990,7 +1011,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterStars() {
 		if (rbOnlyAccom.isSelected()) {
-			for (int i = 0; i < panelItem.getComponentCount(); i++) {
+			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Accommodation
@@ -1006,7 +1027,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyPhostosCh() {
 		if (chOnlyPhotos.isSelected()) {
-			for (int i = 0; i < panelItem.getComponentCount(); i++) {
+			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					boolean value = ((ItemPanel) panelItem.getComponent(i)).getImage();
 					if (panelItem.getComponent(i).isVisible() && value) {
@@ -1024,7 +1045,7 @@ public class ProductListPanel extends JPanel {
 		try {
 			double maxPrice = Double.parseDouble(txtMaxprice.getText());
 			double minPrice = Double.parseDouble(txtMinprice.getText());
-			for (int i = 0; i < panelItem.getComponentCount(); i++) {
+			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible()
@@ -1040,5 +1061,20 @@ public class ProductListPanel extends JPanel {
 
 		}
 
+	}
+	private JPanel getPanelLoading() {
+		if (panelLoading == null) {
+			panelLoading = new JPanel();
+			panelLoading.setLayout(new BoxLayout(panelLoading, BoxLayout.X_AXIS));
+			panelLoading.add(getLblLoading());
+		}
+		return panelLoading;
+	}
+	private JLabel getLblLoading() {
+		if (lblLoading == null) {
+			lblLoading = new JLabel(Internationalization.getString("loading")); //$NON-NLS-1$
+			lblLoading.setFont(new Font("Tahoma", Font.BOLD, 36));
+		}
+		return lblLoading;
 	}
 }

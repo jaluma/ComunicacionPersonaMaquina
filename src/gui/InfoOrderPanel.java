@@ -21,6 +21,8 @@ import javax.swing.SwingUtilities;
 import fileUtil.FileUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class InfoOrderPanel extends JPanel {
 
@@ -41,6 +43,7 @@ public class InfoOrderPanel extends JPanel {
 		add(getPanelNorth(), BorderLayout.NORTH);
 		add(getScrollPaneOrder(), BorderLayout.CENTER);
 		add(getPanelSouth(), BorderLayout.SOUTH);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getBtnBack(), getBtnCancel(), getBtnFinish()}));
 	}
 
 	private JPanel getPanelNorth() {

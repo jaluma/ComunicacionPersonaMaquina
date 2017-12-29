@@ -68,9 +68,8 @@ public class LogUpDialog extends JDialog {
 		setModal(true);
 		setBounds(0, 0, 1028, 561);
 		setLocationRelativeTo(null);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(
-				new Component[] { getTxName(), getTxSurname(), getTxObs(), getBtnCancel(), getBtnFinish() }));
 		this.getRootPane().setDefaultButton(getBtnFinish());
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getTxName(), getTxSurname(), getTxDNI(), getTxObs(), getBtnCancel(), getBtnFinish()}));
 	}
 
 	private JPanel getPanelNorth() {
@@ -224,7 +223,7 @@ public class LogUpDialog extends JDialog {
 		if (txName == null) {
 			txName = new JTextField();
 			txName.setForeground(Color.DARK_GRAY);
-			txName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txName.setFont(new Font("Tahoma", Font.BOLD, 14));
 			if (mainWindow.getName().equals(""))
 				txName.setText(Internationalization.getString("log_name").toLowerCase());
 			else
@@ -240,7 +239,7 @@ public class LogUpDialog extends JDialog {
 			txSurname = new JTextField();
 			txSurname.setForeground(Color.DARK_GRAY);
 			txSurname.setHorizontalAlignment(SwingConstants.LEFT);
-			txSurname.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txSurname.setFont(new Font("Tahoma", Font.BOLD, 14));
 			txSurname.setColumns(10);
 			if (mainWindow.getOrder().getName().equals(""))
 				txSurname.setText(Internationalization.getString("log_surname").toLowerCase());
@@ -267,7 +266,7 @@ public class LogUpDialog extends JDialog {
 		if (txDni == null) {
 			txDni = new JTextField();
 			txDni.setForeground(Color.DARK_GRAY);
-			txDni.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txDni.setFont(new Font("Tahoma", Font.BOLD, 14));
 			txDni.setColumns(10);
 			if (mainWindow.getOrder().getDni().equals(""))
 				txDni.setText(Internationalization.getString("log_dni").toLowerCase());
@@ -294,7 +293,7 @@ public class LogUpDialog extends JDialog {
 			txObs = new JTextArea();
 			txObs.setForeground(Color.DARK_GRAY);
 			txObs.setBorder(UIManager.getBorder("TextField.border"));
-			txObs.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txObs.setFont(new Font("Tahoma", Font.BOLD, 14));
 			txObs.setWrapStyleWord(true);
 			txObs.setLineWrap(true);
 			txObs.setText(Internationalization.getString("log_obs").toLowerCase());
