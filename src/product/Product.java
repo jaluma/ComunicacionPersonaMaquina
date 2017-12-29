@@ -78,6 +78,18 @@ public abstract class Product {
 	public Park getPark() {
 		return park;
 	}
+	
+	public Date getDate() {
+		return date;
+	}
+	
+	public int getNumberAdult() {
+		return numberAdult;
+	}
+	
+	public int getNumberChild() {
+		return numberChild;
+	}
 
 	public double getDiscount() {
 		if (isSale())

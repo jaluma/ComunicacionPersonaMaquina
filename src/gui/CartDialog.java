@@ -23,6 +23,7 @@ import javax.swing.border.EmptyBorder;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import java.awt.Dimension;
 
 public class CartDialog extends JDialog {
 
@@ -48,6 +49,7 @@ public class CartDialog extends JDialog {
 	 * @wbp.parser.constructor
 	 */
 	public CartDialog(MainWindow mainWindow) {
+		setMinimumSize(new Dimension(950, 0));
 		setTitle(Internationalization.getString("CartWindow.this.title")); //$NON-NLS-1$
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CartDialog.class.getResource("/img/cesta.png")));
 		this.mainWindow = mainWindow;

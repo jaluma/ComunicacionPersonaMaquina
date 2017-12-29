@@ -180,7 +180,7 @@ public class ItemPanel extends JPanel {
 
 	private JLabel getLblNameproduct() {
 		if (lblNameproduct == null) {
-			String str = product.toString2() + " (" + product.getDuration() + " " + Internationalization.getString("days") + ")";
+			String str = product.toString2();
 			lblNameproduct = new JLabel(str);
 			lblNameproduct.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNameproduct.setBackground(Color.WHITE);

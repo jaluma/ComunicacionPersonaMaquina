@@ -1089,7 +1089,7 @@ private JDateChooser getDateArrive() {
 		dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
-					Date date2 = new Date(dateArrive.getDate().getTime()  + 86400000);
+					Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
 					getDateExit().setDate(date2);
 					getDateExit().setMinSelectableDate(date2);
 				}
