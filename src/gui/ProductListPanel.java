@@ -12,10 +12,12 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -37,8 +39,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
@@ -57,12 +57,6 @@ import product.ListProduct;
 import product.Package;
 import product.Product;
 import product.Ticket;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
-import java.beans.PropertyChangeListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.beans.PropertyChangeEvent;
 
 public class ProductListPanel extends JPanel {
 
@@ -133,7 +127,6 @@ public class ProductListPanel extends JPanel {
 	private JPanel panelTxChild;
 	private JPanel panelFilterDate;
 	private JLabel label;
-	private JComboBox comboBox_1;
 	private JPanel panelDate;
 	private JDateChooser dateArrive;
 	private JDateChooser dateExit;
@@ -431,7 +424,8 @@ public class ProductListPanel extends JPanel {
 		btnStar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnStar.setActionCommand(String.valueOf(index));
 		btnStar.setBackground(Color.WHITE);
-		btnStar.setToolTipText(String.format(Internationalization.getToolTips("star_number"), btnStar.getActionCommand()));
+		btnStar.setToolTipText(
+				String.format(Internationalization.getToolTips("star_number"), btnStar.getActionCommand()));
 		btnStar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JButton buttonPressed = (JButton) e.getSource();
@@ -718,7 +712,7 @@ public class ProductListPanel extends JPanel {
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
 			panelItem.add(getPanelLoading());
 			new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					loadItems();
@@ -737,7 +731,7 @@ public class ProductListPanel extends JPanel {
 			int numberAdult = mainWindow.getNumberAdult();
 			int numberChild = mainWindow.getNumberChild();
 			Date date = mainWindow.getDate();
-			int  days = mainWindow.getDays();
+			int days = mainWindow.getDays();
 			product.loadData(numberAdult, numberChild, date, days);
 			panelItem.add(new ItemPanel(mainWindow, product));
 		}
@@ -873,19 +867,19 @@ public class ProductListPanel extends JPanel {
 					int min = 0;
 					try {
 						min = Integer.parseInt(txtMinprice.getText());
-					
+
 					} catch (NumberFormatException ex) {
 						txtMinprice.setText("0");
 					}
-					
+
 					int max = 0;
 					try {
 						max = Integer.parseInt(txtMaxprice.getText());
-					
+
 					} catch (NumberFormatException ex) {
 						txtMaxprice.setText(getTxtMinprice().getText());
 					}
-					
+
 					if (min > max) {
 						txtMinprice.setText("0");
 					}
@@ -963,7 +957,7 @@ public class ProductListPanel extends JPanel {
 		panelItem.revalidate();
 		panelItem.repaint();
 	}
-	
+
 	private JPanel getPanelLoading() {
 		if (panelLoading == null) {
 			panelLoading = new JPanel();
@@ -972,6 +966,7 @@ public class ProductListPanel extends JPanel {
 		}
 		return panelLoading;
 	}
+
 	private JLabel getLblLoading() {
 		if (lblLoading == null) {
 			lblLoading = new JLabel(Internationalization.getString("loading")); //$NON-NLS-1$
@@ -979,13 +974,14 @@ public class ProductListPanel extends JPanel {
 		}
 		return lblLoading;
 	}
+
 	private JTextField getTxAdult() {
 		if (txAdult == null) {
 			txAdult = new JTextField();
 			txAdult.setHorizontalAlignment(SwingConstants.CENTER);
 			txAdult.setForeground(Color.DARK_GRAY);
 			txAdult.setFont(new Font("Tahoma", Font.BOLD, 13));
-			txAdult.setText(String.valueOf(getSliderPerson().getValue())); //$NON-NLS-1$
+			txAdult.setText(String.valueOf(getSliderPerson().getValue())); // $NON-NLS-1$
 			txAdult.setColumns(10);
 			txAdult.addKeyListener(new NumberTextFieldFormatEvent());
 			txAdult.addFocusListener(new FocusTextFieldEvent(String.valueOf(getSliderPerson().getValue())));
@@ -993,7 +989,7 @@ public class ProductListPanel extends JPanel {
 		}
 		return txAdult;
 	}
-	
+
 	private JPanel getPanelAdult() {
 		if (panelAdult == null) {
 			panelAdult = new JPanel();
@@ -1002,6 +998,7 @@ public class ProductListPanel extends JPanel {
 		}
 		return panelAdult;
 	}
+
 	private JPanel getPanelChild() {
 		if (panelChild == null) {
 			panelChild = new JPanel();
@@ -1011,13 +1008,14 @@ public class ProductListPanel extends JPanel {
 		}
 		return panelChild;
 	}
+
 	private JTextField getTxChild() {
 		if (txChild == null) {
 			txChild = new JTextField();
 			txChild.setHorizontalAlignment(SwingConstants.CENTER);
 			txChild.setForeground(Color.DARK_GRAY);
 			txChild.setFont(new Font("Tahoma", Font.BOLD, 13));
-			txChild.setText(String.valueOf(getSliderChild().getValue())); //$NON-NLS-1$
+			txChild.setText(String.valueOf(getSliderChild().getValue())); // $NON-NLS-1$
 			txChild.setColumns(10);
 			txChild.addKeyListener(new NumberTextFieldFormatEvent());
 			txChild.addFocusListener(new FocusTextFieldEvent(String.valueOf(getSliderChild().getValue())));
@@ -1025,6 +1023,7 @@ public class ProductListPanel extends JPanel {
 		}
 		return txChild;
 	}
+
 	private JPanel getPanelTxChild() {
 		if (panelTxChild == null) {
 			panelTxChild = new JPanel();
@@ -1037,6 +1036,7 @@ public class ProductListPanel extends JPanel {
 		}
 		return panelTxChild;
 	}
+
 	private JPanel getPanelFilterDate() {
 		if (panelFilterDate == null) {
 			panelFilterDate = new JPanel();
@@ -1048,6 +1048,7 @@ public class ProductListPanel extends JPanel {
 		}
 		return panelFilterDate;
 	}
+
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel(Internationalization.getString("date"));
@@ -1059,85 +1060,85 @@ public class ProductListPanel extends JPanel {
 		}
 		return label;
 	}
-	
+
 	private JPanel getPanelDate() {
-	if (panelDate == null) {
-		panelDate = new JPanel();
-		panelDate.setBorder(UIManager.getBorder("Spinner.border"));
-		panelDate.setBackground(Color.WHITE);
-		panelDate.setLayout(new GridLayout(0, 2, 2, 2));
-		// panelDate.add(getCalendarArrive());
-		// panelDate.add(getCalendarExit());
-		panelDate.add(getDateArrive());
-		panelDate.add(getDateExit());
+		if (panelDate == null) {
+			panelDate = new JPanel();
+			panelDate.setBorder(UIManager.getBorder("Spinner.border"));
+			panelDate.setBackground(Color.WHITE);
+			panelDate.setLayout(new GridLayout(0, 2, 2, 2));
+			// panelDate.add(getCalendarArrive());
+			// panelDate.add(getCalendarExit());
+			panelDate.add(getDateArrive());
+			panelDate.add(getDateExit());
+		}
+		return panelDate;
 	}
-	return panelDate;
-}
 
-private JDateChooser getDateArrive() {
-	if (dateArrive == null) {
-		dateArrive = new JDateChooser();
-		dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
-		JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
-		dateEditor.setHorizontalAlignment(JTextField.CENTER);
-		Date date = mainWindow.getDate();
-		dateArrive.setDate(date);
-		dateArrive.setMinSelectableDate(date);
-		dateArrive.setDateFormatString(
-				((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
-						.toLocalizedPattern());
-		dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent arg0) {
-				if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
-					Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
-					getDateExit().setDate(date2);
-					getDateExit().setMinSelectableDate(date2);
+	private JDateChooser getDateArrive() {
+		if (dateArrive == null) {
+			dateArrive = new JDateChooser();
+			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
+			dateEditor.setHorizontalAlignment(JTextField.CENTER);
+			Date date = mainWindow.getDate();
+			dateArrive.setDate(date);
+			dateArrive.setMinSelectableDate(date);
+			dateArrive.setDateFormatString(
+					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
+							.toLocalizedPattern());
+			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
+						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
+						getDateExit().setDate(date2);
+						getDateExit().setMinSelectableDate(date2);
+					}
+					mainWindow.setDateFinish(dateArrive.getDate());
+					// for (int i = 0; i < panelItem.getComponentCount(); i++) {
+					// JPanel panel = (JPanel) panelItem.getComponent(i);
+					// if (panel instanceof ItemPanel) {
+					// Product product = ((ItemPanel) panel).getProduct();
+					// product.setDate(dateExit.getDate());
+					// product.setDuration(mainWindow.getDays());
+					// ((ItemPanel) panelItem.getComponent(i)).updatePrice();
+					// }
+					// }
 				}
-				mainWindow.setDateFinish(dateArrive.getDate());
-//				for (int i = 0; i < panelItem.getComponentCount(); i++) {
-//					JPanel panel = (JPanel) panelItem.getComponent(i);
-//					if (panel instanceof ItemPanel) {
-//						Product product = ((ItemPanel) panel).getProduct();
-//						product.setDate(dateExit.getDate());
-//						product.setDuration(mainWindow.getDays());
-//						((ItemPanel) panelItem.getComponent(i)).updatePrice();
-//					}
-//				}
-			}
-		});
+			});
+		}
+		return dateArrive;
 	}
-	return dateArrive;
-}
 
-private JDateChooser getDateExit() {
-	if (dateExit == null) {
-		dateExit = new JDateChooser();
-		dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
-		JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
-		dateEditor.setHorizontalAlignment(JTextField.CENTER);
-		Date date =  mainWindow.getDateFinish();
-		dateExit.setDate(date);
-		dateExit.setMinSelectableDate(date);
-		dateExit.setDateFormatString(
-				((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
-						.toLocalizedPattern());
-		dateExit.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent arg0) {
-				mainWindow.setDateFinish(dateExit.getDate());
-				for (int i = 0; i < panelItem.getComponentCount(); i++) {
-					JPanel panel = (JPanel) panelItem.getComponent(i);
-					if (panel instanceof ItemPanel) {
-						Product product = ((ItemPanel) panel).getProduct();
-						product.setDate(dateExit.getDate());
-						product.setDuration(mainWindow.getDays());
-						((ItemPanel) panelItem.getComponent(i)).updatePrice();
+	private JDateChooser getDateExit() {
+		if (dateExit == null) {
+			dateExit = new JDateChooser();
+			dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
+			dateEditor.setHorizontalAlignment(JTextField.CENTER);
+			Date date = mainWindow.getDateFinish();
+			dateExit.setDate(date);
+			dateExit.setMinSelectableDate(date);
+			dateExit.setDateFormatString(
+					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
+							.toLocalizedPattern());
+			dateExit.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					mainWindow.setDateFinish(dateExit.getDate());
+					for (int i = 0; i < panelItem.getComponentCount(); i++) {
+						JPanel panel = (JPanel) panelItem.getComponent(i);
+						if (panel instanceof ItemPanel) {
+							Product product = ((ItemPanel) panel).getProduct();
+							product.setDate(dateExit.getDate());
+							product.setDuration(mainWindow.getDays());
+							((ItemPanel) panelItem.getComponent(i)).updatePrice();
+						}
 					}
 				}
-			}
-		});
+			});
+		}
+		return dateExit;
 	}
-	return dateExit;
-}
 
 	// <----------------------------FILTERS---------------------------------->
 	protected void filtersReset() {
@@ -1265,5 +1266,5 @@ private JDateChooser getDateExit() {
 		}
 
 	}
-	
+
 }

@@ -45,7 +45,6 @@ public class ItemPanel extends JPanel {
 	private JButton btnAdd;
 	private JLabel lblNameproduct;
 	private JPanel panelSouth;
-	private JLabel lblPlace;
 
 	private MainWindow mainWindow;
 	private Product product;
@@ -193,10 +192,10 @@ public class ItemPanel extends JPanel {
 		if (panelSouth == null) {
 			panelSouth = new JPanel();
 			panelSouth.setBackground(Color.WHITE);
-				panelSouth.setLayout(new BorderLayout(0, 0));
-				if (product.isSale())
-					panelSouth.add(getLblSale(), BorderLayout.EAST);
-				panelSouth.add(getPanelServices(), BorderLayout.WEST);
+			panelSouth.setLayout(new BorderLayout(0, 0));
+			if (product.isSale())
+				panelSouth.add(getLblSale(), BorderLayout.EAST);
+			panelSouth.add(getPanelServices(), BorderLayout.WEST);
 		}
 		return panelSouth;
 	}
@@ -249,46 +248,50 @@ public class ItemPanel extends JPanel {
 		}
 		return scrollPane;
 	}
+
 	private JCheckBox getChckbxChbreakfast() {
 		if (chckbxChbreakfast == null) {
 			chckbxChbreakfast = new JCheckBox(Internationalization.getString("breakfast"));
 			chckbxChbreakfast.setBackground(Color.WHITE);
 			chckbxChbreakfast.addChangeListener(new ChangeListener() {
-				
+
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					((Accommodation)product).setBreakfast(chckbxChbreakfast.isSelected());
-					
+					((Accommodation) product).setBreakfast(chckbxChbreakfast.isSelected());
+
 				}
 			});
 		}
 		return chckbxChbreakfast;
 	}
+
 	private JPanel getPanelServices() {
 		if (panelServices == null) {
 			panelServices = new JPanel();
 			panelServices.setBackground(Color.WHITE);
 			panelServices.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			
+
 			if (product instanceof Ticket) {
 				panelServices.add(getLblPark());
 				panelServices.add(getLblTicket());
-			} 
-			
-			if (product instanceof Accommodation && ((Accommodation)product).getType().equals(TypeHotel.HO.toString())) {
+			}
+
+			if (product instanceof Accommodation
+					&& ((Accommodation) product).getType().equals(TypeHotel.HO.toString())) {
 				panelServices.add(getLblHotel());
 				panelServices.add(getChckbxChbreakfast());
-			} else if (product instanceof Accommodation && ((Accommodation)product).getType().equals(TypeHotel.AP.toString()))
+			} else if (product instanceof Accommodation
+					&& ((Accommodation) product).getType().equals(TypeHotel.AP.toString()))
 				panelServices.add(getLblApartament());
-			else if (product instanceof Accommodation){
+			else if (product instanceof Accommodation) {
 				panelServices.add(getLblHotel());
 				panelServices.add(getLblApartament());
 			}
-			
+
 			if (product instanceof Package) {
 				panelServices.add(getLblPark());
 				panelServices.add(getLblTicket());
-				String type = ((Package)product).getAccom().getType();
+				String type = ((Package) product).getAccom().getType();
 				if (type.equals(TypeHotel.HO.toString())) {
 					panelServices.add(getLblHotel());
 				} else if (type.equals(TypeHotel.AP.toString())) {
@@ -297,37 +300,40 @@ public class ItemPanel extends JPanel {
 					panelServices.add(getLblHotel());
 					panelServices.add(getLblApartament());
 				}
-					
-					
+
 			}
 		}
 		return panelServices;
 	}
+
 	private JLabel getLblPark() {
 		if (lblPark == null) {
-			lblPark = new JLabel(); //$NON-NLS-1$
+			lblPark = new JLabel(); // $NON-NLS-1$
 			ResizableImage.setResizeImage(this, lblPark, "/img/park.png", 50, 50);
 		}
 		return lblPark;
 	}
+
 	private JLabel getLblHotel() {
 		if (lblHotel == null) {
-			lblHotel = new JLabel(); //$NON-NLS-1$
+			lblHotel = new JLabel(); // $NON-NLS-1$
 			ResizableImage.setResizeImage(this, lblHotel, "/img/hotel.png", 50, 50);
 		}
 		return lblHotel;
 	}
+
 	private JLabel getLblTicket() {
 		if (lblTicket == null) {
-			lblTicket = new JLabel(); //$NON-NLS-1$
+			lblTicket = new JLabel(); // $NON-NLS-1$
 			ResizableImage.setResizeImage(this, lblTicket, "/img/ticket.png", 50, 50);
 		}
 		return lblTicket;
 	}
+
 	private JLabel getLblApartament() {
 		if (lblApartament == null) {
-			lblApartament = new JLabel(); //$NON-NLS-1$
-			ResizableImage.setResizeImage(this, lblApartament, "/img/apartament.png", 50, 50); 
+			lblApartament = new JLabel(); // $NON-NLS-1$
+			ResizableImage.setResizeImage(this, lblApartament, "/img/apartament.png", 50, 50);
 		}
 		return lblApartament;
 	}

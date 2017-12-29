@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -12,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +31,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
@@ -40,10 +45,6 @@ import internationalization.Internationalization;
 import order.ListOrders;
 import order.Order;
 import product.ListProduct;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
 public class InitialPanel extends JPanel {
 
@@ -105,12 +106,14 @@ public class InitialPanel extends JPanel {
 		add(getPanelSouth(), BorderLayout.SOUTH);
 		this.mainWindow.setResizable(false);
 		this.mainWindow.getRootPane().setDefaultButton(btnSearch);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getDateChooser(), getTxtDni(), getBtnRestoreinfo(), getComboBox(), getTxtNumberadult(), getTxtNumberchild(), getDateArrive(), getDateExit()}));
+		setFocusTraversalPolicy(
+				new FocusTraversalOnArray(new Component[] { getDateChooser(), getTxtDni(), getBtnRestoreinfo(),
+						getComboBox(), getTxtNumberadult(), getTxtNumberchild(), getDateArrive(), getDateExit() }));
 		addPropertyChangeListener(new PropertyChangeListener() {
-			
+
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				getComboBox().grabFocus();					
+				getComboBox().grabFocus();
 			}
 		});
 	}
@@ -354,13 +357,14 @@ public class InitialPanel extends JPanel {
 			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-//			dateArrive.getCalendarButton().addChangeListener(new ChangeListener() {
-//				@Override
-//				public void stateChanged(ChangeEvent e) {
-//					getDateExit().setDate(new Date(dateArrive.getDate().getTime()  + 86400000));
-//					getDateExit().setMinSelectableDate(new Date(dateArrive.getDate().getTime() + 86400000));
-//				}
-//			});
+			// dateArrive.getCalendarButton().addChangeListener(new ChangeListener() {
+			// @Override
+			// public void stateChanged(ChangeEvent e) {
+			// getDateExit().setDate(new Date(dateArrive.getDate().getTime() + 86400000));
+			// getDateExit().setMinSelectableDate(new Date(dateArrive.getDate().getTime() +
+			// 86400000));
+			// }
+			// });
 			Date date = new Date(System.currentTimeMillis());
 			dateArrive.setDate(date);
 			dateArrive.setMinSelectableDate(date);
@@ -370,7 +374,7 @@ public class InitialPanel extends JPanel {
 			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
 					if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
-						Date date2 = new Date(dateArrive.getDate().getTime()  + 86400000);
+						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
 						getDateExit().setDate(date2);
 						getDateExit().setMinSelectableDate(date2);
 					}
@@ -387,7 +391,7 @@ public class InitialPanel extends JPanel {
 			dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-			Date date = new Date(dateArrive.getDate().getTime()  + 86400000);
+			Date date = new Date(dateArrive.getDate().getTime() + 86400000);
 			dateExit.setDate(date);
 			dateExit.setMinSelectableDate(date);
 			dateExit.setDateFormatString(
@@ -586,20 +590,20 @@ public class InitialPanel extends JPanel {
 							loadListProduct();
 						} catch (NullPointerException e) {
 							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-							Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
 						}
 					}
 
 				}
 
 				protected void checkDate(JDateChooser date) {
-					long time1 =date.getDate().getTime();
+					long time1 = date.getDate().getTime();
 					String timeA = String.valueOf(time1).substring(0, 5) + "000000";
 					time1 = Long.valueOf(timeA);
-					long time2 =date.getMinSelectableDate().getTime();
+					long time2 = date.getMinSelectableDate().getTime();
 					String timeB = String.valueOf(time2).substring(0, 5) + "000000";
 					time2 = Long.valueOf(timeB);
-					
+
 					if (time1 < time2)
 						throw new NullPointerException();
 				}
@@ -621,7 +625,7 @@ public class InitialPanel extends JPanel {
 		mainWindow.mntmStars.setEnabled(true);
 		mainWindow.mntmOnlyphotos.setEnabled(true);
 		mainWindow.mntmCart.setEnabled(true);
-		
+
 		mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
 		mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
 		mainWindow.setDate(dateArrive.getDate());

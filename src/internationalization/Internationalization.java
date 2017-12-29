@@ -97,7 +97,7 @@ public class Internationalization {
 		char letter = aux.charAt(0);
 		return letter == '!' ? ListProduct.searchProduct(code).getName() : aux;
 	}
-	
+
 	public static String getDescription(String code) {
 		String str = code + "_description";
 		String aux = Internationalization.getString(str);

@@ -171,7 +171,7 @@ public class MainWindow extends JFrame {
 	public void setDate(Date date) {
 		this.dateStart = date;
 	}
-	
+
 	public void setDateFinish(Date date) {
 		this.dateFinish = date;
 	}
@@ -189,7 +189,7 @@ public class MainWindow extends JFrame {
 			return new Date();
 		return dateStart;
 	}
-	
+
 	public Date getDateFinish() {
 		if (dateFinish == null)
 			return new Date();

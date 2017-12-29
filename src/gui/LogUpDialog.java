@@ -69,7 +69,8 @@ public class LogUpDialog extends JDialog {
 		setBounds(0, 0, 1028, 561);
 		setLocationRelativeTo(null);
 		this.getRootPane().setDefaultButton(getBtnFinish());
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getTxName(), getTxSurname(), getTxDNI(), getTxObs(), getBtnCancel(), getBtnFinish()}));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getTxName(), getTxSurname(), getTxDNI(),
+				getTxObs(), getBtnCancel(), getBtnFinish() }));
 	}
 
 	private JPanel getPanelNorth() {

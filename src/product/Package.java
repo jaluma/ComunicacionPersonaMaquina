@@ -68,16 +68,18 @@ public class Package extends Product {
 	public boolean isSale() {
 		return park.isSale();
 	}
-	
+
 	public String toString2() {
 		return Internationalization.getString("package").toUpperCase() + ": " + getName();
 	}
-	
+
 	public String toString3() {
 		String str = super.toString3();
-		str += String.format("<b>%s</b>: %s<br>", Internationalization.getString("name_accom").toUpperCase(), accom.getName());
+		str += String.format("<b>%s</b>: %s<br>", Internationalization.getString("name_accom").toUpperCase(),
+				accom.getName());
 		if (accom.getType() == TypeHotel.HO.toString())
-			str += String.format("<b>%s</b>: %s<br>", Internationalization.getString("stars").toUpperCase(), accom.getType());
+			str += String.format("<b>%s</b>: %s<br>", Internationalization.getString("stars").toUpperCase(),
+					accom.getType());
 		str += String.format("<b>%s</b>: %d", Internationalization.getString("duration").toUpperCase(), duration);
 		return str;
 	}

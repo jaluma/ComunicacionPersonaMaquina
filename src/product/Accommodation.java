@@ -54,7 +54,7 @@ public class Accommodation extends Product {
 	public int getNum() {
 		return num;
 	}
-	
+
 	public boolean isBreakfast() {
 		return breakfast;
 	}
@@ -99,11 +99,11 @@ public class Accommodation extends Product {
 	public boolean isSale() {
 		return park.isSale();
 	}
-	
+
 	public String toString2() {
 		return Internationalization.getString("accom").toUpperCase() + ": " + getName();
 	}
-	
+
 	public String toString3() {
 		String str = super.toString3();
 		if (type == TypeHotel.HO)

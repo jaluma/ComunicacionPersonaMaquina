@@ -78,15 +78,15 @@ public abstract class Product {
 	public Park getPark() {
 		return park;
 	}
-	
+
 	public Date getDate() {
 		return date;
 	}
-	
+
 	public int getNumberAdult() {
 		return numberAdult;
 	}
-	
+
 	public int getNumberChild() {
 		return numberChild;
 	}
@@ -102,12 +102,15 @@ public abstract class Product {
 	public abstract boolean isSale();
 
 	public abstract String toString();
-	
+
 	public abstract String toString2();
 
 	public String toString3() {
-		String str = String.format("<b>%s</b>: %s<br>", Internationalization.getString("description_park").toUpperCase(), Internationalization.getDescription(this.getPark().getCode()));
-		str += String.format("<b>%s</b> %s<br>", Internationalization.getString("location").toUpperCase(), getPark().getCity() + "-" + getPark().getCountry() + " (" + getPark().getName() + ")");
+		String str = String.format("<b>%s</b>: %s<br>",
+				Internationalization.getString("description_park").toUpperCase(),
+				Internationalization.getDescription(this.getPark().getCode()));
+		str += String.format("<b>%s</b> %s<br>", Internationalization.getString("location").toUpperCase(),
+				getPark().getCity() + "-" + getPark().getCountry() + " (" + getPark().getName() + ")");
 		return str;
 	}
 

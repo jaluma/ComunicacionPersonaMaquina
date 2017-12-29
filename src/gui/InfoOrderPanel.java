@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Window;
@@ -19,11 +20,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import fileUtil.FileUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
 public class InfoOrderPanel extends JPanel {
 
@@ -44,7 +45,8 @@ public class InfoOrderPanel extends JPanel {
 		add(getPanelNorth(), BorderLayout.NORTH);
 		add(getScrollPaneOrder(), BorderLayout.CENTER);
 		add(getPanelSouth(), BorderLayout.SOUTH);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getBtnBack(), getBtnCancel(), getBtnFinish()}));
+		setFocusTraversalPolicy(
+				new FocusTraversalOnArray(new Component[] { getBtnBack(), getBtnCancel(), getBtnFinish() }));
 	}
 
 	private JPanel getPanelNorth() {
@@ -110,7 +112,8 @@ public class InfoOrderPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					String nameFile = "orders/";
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					nameFile = format.format(new Date(System.currentTimeMillis())) + "_" + mainWindow.getOrder().getDni();
+					nameFile = format.format(new Date(System.currentTimeMillis())) + "_"
+							+ mainWindow.getOrder().getDni();
 					nameFile += ".dat";
 
 					try {

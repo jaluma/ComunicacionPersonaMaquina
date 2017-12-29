@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,11 +18,17 @@ import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+
+import com.toedter.calendar.JDateChooser;
 
 import guiUtil.DateUtil;
 import guiUtil.ResizableImage;
@@ -28,18 +38,6 @@ import product.Package;
 import product.Product;
 import product.Ticket;
 import product.TypeHotel;
-
-import javax.swing.JEditorPane;
-import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
-
-import com.toedter.calendar.JDateChooser;
-import javax.swing.JTextField;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JCheckBox;
-import javax.swing.JToggleButton;
 
 public class CartItemPanel extends JPanel {
 
@@ -179,6 +177,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return editorPane;
 	}
+
 	private JPanel getPanelEdit() {
 		if (panelEdit == null) {
 			panelEdit = new JPanel();
@@ -186,10 +185,10 @@ public class CartItemPanel extends JPanel {
 			panelEdit.setBackground(Color.WHITE);
 			panelEdit.setVisible(getTglbtnEdit().isSelected());
 			GridBagLayout gbl_panelEdit = new GridBagLayout();
-			gbl_panelEdit.columnWidths = new int[]{250, 0};
-			gbl_panelEdit.rowHeights = new int[]{90, 90, 0, 0};
-			gbl_panelEdit.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-			gbl_panelEdit.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gbl_panelEdit.columnWidths = new int[] { 250, 0 };
+			gbl_panelEdit.rowHeights = new int[] { 90, 90, 0, 0 };
+			gbl_panelEdit.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+			gbl_panelEdit.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			panelEdit.setLayout(gbl_panelEdit);
 			GridBagConstraints gbc_panelNumber = new GridBagConstraints();
 			gbc_panelNumber.insets = new Insets(0, 0, 5, 5);
@@ -205,11 +204,12 @@ public class CartItemPanel extends JPanel {
 			gbc_chckbxBreakfast.insets = new Insets(0, 0, 0, 5);
 			gbc_chckbxBreakfast.gridx = 0;
 			gbc_chckbxBreakfast.gridy = 2;
-			if (product instanceof Accommodation && ((Accommodation)product).getType() == TypeHotel.HO.toString())
+			if (product instanceof Accommodation && ((Accommodation) product).getType() == TypeHotel.HO.toString())
 				panelEdit.add(getChckbxBreakfast(), gbc_chckbxBreakfast);
 		}
 		return panelEdit;
 	}
+
 	private JPanel getPanel_2_1() {
 		if (panelNumber == null) {
 			panelNumber = new JPanel();
@@ -222,6 +222,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return panelNumber;
 	}
+
 	private JDateChooser getDateChooser() {
 		if (dateChooser == null) {
 			dateChooser = new JDateChooser();
@@ -234,6 +235,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return dateChooser;
 	}
+
 	private JDateChooser getDateChooser_1() {
 		if (dateChooser_1 == null) {
 			dateChooser_1 = new JDateChooser();
@@ -246,6 +248,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return dateChooser_1;
 	}
+
 	private JPanel getPanelDate() {
 		if (panelDate == null) {
 			panelDate = new JPanel();
@@ -258,6 +261,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return panelDate;
 	}
+
 	private JTextField getTextField() {
 		if (textField == null) {
 			textField = new JTextField();
@@ -269,6 +273,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return textField;
 	}
+
 	private JTextField getTextField_1() {
 		if (textField_1 == null) {
 			textField_1 = new JTextField();
@@ -280,15 +285,17 @@ public class CartItemPanel extends JPanel {
 		}
 		return textField_1;
 	}
+
 	private JCheckBox getChckbxBreakfast() {
 		if (chckbxBreakfast == null) {
 			chckbxBreakfast = new JCheckBox(Internationalization.getString("breakfast")); //$NON-NLS-1$
 			chckbxBreakfast.setHorizontalAlignment(SwingConstants.RIGHT);
-			chckbxBreakfast.setSelected(((Accommodation)product).isBreakfast());
+			chckbxBreakfast.setSelected(((Accommodation) product).isBreakfast());
 			chckbxBreakfast.setBackground(Color.WHITE);
 		}
 		return chckbxBreakfast;
 	}
+
 	private JPanel getPanelCentrar() {
 		if (panelCentrar == null) {
 			panelCentrar = new JPanel();
@@ -299,6 +306,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return panelCentrar;
 	}
+
 	private JLabel getLblNumber() {
 		if (lblNumber == null) {
 			lblNumber = new JLabel(Internationalization.getString("number_person"));
@@ -309,6 +317,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return lblNumber;
 	}
+
 	private JLabel getLblDate() {
 		if (lblDate == null) {
 			lblDate = new JLabel(Internationalization.getString("date"));
@@ -320,6 +329,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return lblDate;
 	}
+
 	private JToggleButton getTglbtnEdit() {
 		if (tglbtnEdit == null) {
 			tglbtnEdit = new JToggleButton(Internationalization.getString("cart_edit")); //$NON-NLS-1$
@@ -333,6 +343,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return tglbtnEdit;
 	}
+
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
