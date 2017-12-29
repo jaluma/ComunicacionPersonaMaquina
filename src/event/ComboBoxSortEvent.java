@@ -28,11 +28,14 @@ public class ComboBoxSortEvent implements ItemListener {
 		switch (cb.getSelectedIndex()) {
 		case 0:
 			Collections.sort(productWindow.getListProduct(), new NameSorter());
+			break;
 		case 1:
 			Collections.sort(productWindow.getListProduct(), new AmountSorter());
+			break;
 		case 2:
 			Collections.sort(productWindow.getListProduct(), new AmountSorter());
 			Collections.reverse(productWindow.getListProduct());
+			break;
 		}
 		productWindow.refresh();
 	}

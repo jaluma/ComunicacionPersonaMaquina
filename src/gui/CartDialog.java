@@ -23,6 +23,8 @@ import javax.swing.border.EmptyBorder;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CartDialog extends JDialog {
 
@@ -41,7 +43,12 @@ public class CartDialog extends JDialog {
 	private JPanel panelAcount;
 	private JLabel lblSubtotal;
 	private JPanel panel_1;
+	private JPanel panelItem;
+	private boolean restoreBool;
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public CartDialog(MainWindow mainWindow) {
 		setTitle(Internationalization.getString("CartWindow.this.title")); //$NON-NLS-1$
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CartDialog.class.getResource("/img/cesta.png")));
@@ -55,6 +62,11 @@ public class CartDialog extends JDialog {
 		setModal(true);
 		setBounds(0, 0, 900, 589);
 		setLocationRelativeTo(mainWindow);
+	}
+
+	public CartDialog(MainWindow mainWindow2, boolean b) {
+		this(mainWindow2);
+		restoreBool = b;
 	}
 
 	private JPanel getPanelNorth() {
@@ -94,6 +106,10 @@ public class CartDialog extends JDialog {
 			btnAddmore = new JButton(Internationalization.getString("cart_add_more"));
 			btnAddmore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					if (restoreBool) {
+						mainWindow.getInitialPanel().loadListProduct();
+						btnFinish.setEnabled(true);
+					}
 					CartDialog.this.dispose();
 				}
 			});
@@ -102,9 +118,11 @@ public class CartDialog extends JDialog {
 		return btnAddmore;
 	}
 
-	private JButton getBtnFinish() {
+	protected JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("cart_finish"));
+			if (restoreBool)
+				btnFinish.setEnabled(false);
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (mainWindow.getOrder().getItems() == 0)
@@ -113,7 +131,6 @@ public class CartDialog extends JDialog {
 								Internationalization.getString("error_cart_emptry_title"), JOptionPane.WARNING_MESSAGE);
 					else {
 						CartDialog.this.dispose();
-						System.out.println(mainWindow.getOrder().toString());
 						JDialog dialog = new LogUpDialog(mainWindow);
 						dialog.setVisible(true);
 					}
@@ -145,21 +162,28 @@ public class CartDialog extends JDialog {
 		return lblOrder;
 	}
 
-	private JScrollPane getScrollPane() {
+	protected JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			JPanel panel = new JPanel();
-			panel.setBorder(UIManager.getBorder("Spinner.border"));
-			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-			scrollPane.setViewportView(panel);
+			scrollPane.setViewportView(getItemPanel());
 			scrollPane.getVerticalScrollBar().setValue(0);
 			scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 			for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
-				panel.add(new CartItemPanel(mainWindow, CartDialog.this, mainWindow.getOrder().getProduct(i)));
+				panelItem.add(new CartItemPanel(mainWindow, CartDialog.this, mainWindow.getOrder().getProduct(i)));
 			}
 		}
 		return scrollPane;
+	}
+
+	protected JPanel getItemPanel() {
+		if (panelItem == null) {
+			panelItem = new JPanel();
+			panelItem.setBorder(UIManager.getBorder("Spinner.border"));
+			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
+		}
+
+		return panelItem;
 	}
 
 	public void refresh() {

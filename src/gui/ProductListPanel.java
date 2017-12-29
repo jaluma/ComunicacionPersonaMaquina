@@ -169,7 +169,7 @@ public class ProductListPanel extends JPanel {
 			lblNumberitems = new JLabel();
 			lblNumberitems.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNumberitems.setHorizontalAlignment(SwingConstants.RIGHT);
-			setNumberItemsCart(0);
+			setNumberItemsCart(mainWindow.getOrder().getItems());
 		}
 		return lblNumberitems;
 	}
@@ -825,6 +825,10 @@ public class ProductListPanel extends JPanel {
 			btnGopricefilter.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnGopricefilter.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					if( Integer.parseInt(txtMinprice.getText()) > Integer.parseInt(txtMaxprice.getText())) {
+						txtMinprice.setText("0");
+					}
+					
 					filtersReset();
 				}
 			});

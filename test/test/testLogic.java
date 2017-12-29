@@ -13,7 +13,7 @@ class testLogic {
 	void test() {
 		Order o = new Order(null, "javi", "71456789", "jejejej");
 		// para accom
-		o.add("AL002", 5, 9, new Date(1998, 02, 17), 4);
+		o.add("AL001", 5, 9, new Date(1998, 02, 17), 4);
 		// para package
 		o.add("PV001", 9, 5, new Date(1998, 02, 17), -1);
 		// para ticket

@@ -2,6 +2,7 @@ package internationalization;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -9,25 +10,24 @@ import java.util.ResourceBundle;
 
 import logic.ListProduct;
 
-public class Internationalization {
-	public static final Locale[] locationSupported = new Locale[] {Locale.forLanguageTag("es-ES"), Locale.forLanguageTag("en-US")};
-	
+public class Internationalization {	
 	private static final String BUNDLE_NAME = "resources.values";
 
 	private static final String DEFAULT_LANGUAGE = Locale.getDefault().getLanguage();
 	private static final String DEFAULT_COUNTRY = Locale.getDefault().getCountry();
 
-	public static String language = DEFAULT_LANGUAGE;
-	public static String country = DEFAULT_COUNTRY;;
-	public static Locale locale = new Locale(language, country);
+	public static Locale locale = new Locale(DEFAULT_LANGUAGE, DEFAULT_COUNTRY);
 
 	private static ResourceBundle RESOURCE_BUNDLE = inicialiceBundle();
+	
+	public static final Locale[] LOCATION_SUPPORTED = new Locale[] {Locale.forLanguageTag("es-ES"), Locale.forLanguageTag("en-US")};
 
 	private Internationalization() {
 	}
 
 	private static ResourceBundle inicialiceBundle() {
 		ResourceBundle rb;
+		Locale.setDefault(locale);
 		try {
 			rb = ResourceBundle.getBundle(BUNDLE_NAME, locale);
 		} catch (MissingResourceException e) {
@@ -38,7 +38,6 @@ public class Internationalization {
 
 	public static void changeLocation(String language, String country) {
 		locale = new Locale(language, country);
-		Locale.setDefault(locale);
 		RESOURCE_BUNDLE = inicialiceBundle();
 		ResourceBundle.clearCache();
 	}
@@ -64,6 +63,17 @@ public class Internationalization {
 	public static String getFormatDate(Date date) {
 		DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		return formatter.format(date);
+	}
+	
+	public static Date getDate(String formatDate) {
+		DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+		try {
+			return formatter.parse(formatDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static String getCurrency(double amount) {

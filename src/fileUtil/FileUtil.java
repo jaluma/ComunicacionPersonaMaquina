@@ -58,6 +58,6 @@ public class FileUtil {
 			} catch (Exception e) {
 				/* ignore */ }
 		}
-		return count;
+		return result != -1 ? count : -1;
 	}
 }

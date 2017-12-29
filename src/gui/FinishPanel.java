@@ -70,6 +70,7 @@ public class FinishPanel extends JPanel {
 						btnRestore.doClick();
 					}
 				}).start();
+				removePropertyChangeListener(this);
 			}
 		});
 		setBackground(Color.WHITE);

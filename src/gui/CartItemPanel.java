@@ -129,6 +129,8 @@ public class CartItemPanel extends JPanel {
 
 					CartItemPanel.this.setVisible(false);
 					repaint();
+					
+					mainWindow.getCartWindow().getBtnFinish().setEnabled(true);
 				}
 			});
 		}

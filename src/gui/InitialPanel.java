@@ -13,12 +13,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,10 +34,14 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
+import fileUtil.IncorrectOrderException;
 import fileUtil.StringUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import logic.ListOrders;
 import logic.ListProduct;
+import logic.Order;
+import javax.swing.BoxLayout;
 
 public class InitialPanel extends JPanel {
 
@@ -46,7 +53,6 @@ public class InitialPanel extends JPanel {
 	private JPanel panelData;
 	private JLabel lblCode;
 	private JLabel lblDni;
-	private JTextField txtCode;
 	private JTextField txtDni;
 
 	private JLabel lblLogUp;
@@ -78,6 +84,17 @@ public class InitialPanel extends JPanel {
 	JDateChooser dateArrive;
 	JDateChooser dateExit;
 
+	private JDateChooser dateRestore;
+	private JDateChooser dateChooser;
+	private JPanel panelLblDate;
+	private JPanel paneltxDate;
+	private JPanel panelLblDni;
+	private JPanel panelTxDni;
+	private JPanel panelLblAdult;
+	private JPanel panelTxNumberAdult;
+	private JPanel paneLblNumberChild;
+	private JPanel panelTxNumberChild;
+
 	public InitialPanel(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
@@ -93,9 +110,9 @@ public class InitialPanel extends JPanel {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
 			panelNorth.setBackground(Color.WHITE);
-			panelNorth.setLayout(new GridLayout(1, 2, 0, 0));
-			panelNorth.add(getLblLogo());
-			panelNorth.add(getPanelLogIn());
+			panelNorth.setLayout(new BorderLayout(0, 0));
+			panelNorth.add(getLblLogo(), BorderLayout.WEST);
+			panelNorth.add(getPanelLogIn(), BorderLayout.EAST);
 		}
 		return panelNorth;
 	}
@@ -133,12 +150,12 @@ public class InitialPanel extends JPanel {
 		if (panelData == null) {
 			panelData = new JPanel();
 			panelData.setBackground(Color.WHITE);
-			panelData.setLayout(new GridLayout(2, 2, 0, 2));
 			panelData.setBorder(UIManager.getBorder("Spinner.border"));
-			panelData.add(getLblCode());
-			panelData.add(getTxtCode());
-			panelData.add(getLblDni());
-			panelData.add(getTxtDni());
+			panelData.setLayout(new GridLayout(2, 2, 2, 2));
+			panelData.add(getPanelLblDni());
+			panelData.add(getPanelTxDni());
+			panelData.add(getPanelLblDate());
+			panelData.add(getPaneltxDate());
 		}
 		return panelData;
 	}
@@ -148,7 +165,7 @@ public class InitialPanel extends JPanel {
 			lblCode = new JLabel(Internationalization.getString("date"));
 			lblCode.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblCode.setBackground(Color.WHITE);
-			lblCode.setLabelFor(txtCode);
+			lblCode.setLabelFor(getDateChooser());
 			lblCode.setDisplayedMnemonic(Internationalization.getMnemonic("code"));
 			lblCode.setHorizontalAlignment(SwingConstants.CENTER);
 		}
@@ -168,25 +185,15 @@ public class InitialPanel extends JPanel {
 		return lblDni;
 	}
 
-	private JTextField getTxtCode() {
-		if (txtCode == null) {
-			txtCode = new JTextField();
-			txtCode.setBackground(Color.WHITE);
-			txtCode.setHorizontalAlignment(SwingConstants.CENTER);
-			txtCode.setForeground(Color.DARK_GRAY);
-			txtCode.setText(Internationalization.getString("date").toLowerCase());
-			txtCode.setColumns(10);
-			txtCode.addFocusListener(new FocusTextFieldEvent("date"));
-		}
-		return txtCode;
-	}
-
 	private JTextField getTxtDni() {
 		if (txtDni == null) {
 			txtDni = new JTextField();
+			txtDni.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtDni.setBackground(Color.WHITE);
 			txtDni.setHorizontalAlignment(SwingConstants.CENTER);
 			txtDni.setForeground(Color.DARK_GRAY);
+			txtDni.setMaximumSize(new Dimension(500, 20));
+			txtDni.setPreferredSize(new Dimension(500, 20));
 			txtDni.setText(Internationalization.getString("dni").toLowerCase());
 			txtDni.setColumns(10);
 			txtDni.addFocusListener(new FocusTextFieldEvent("dni"));
@@ -207,8 +214,8 @@ public class InitialPanel extends JPanel {
 		if (panelLogIn == null) {
 			panelLogIn = new JPanel();
 			panelLogIn.setBackground(Color.WHITE);
-			panelLogIn.setLayout(new GridLayout(3, 1, 0, 0));
 			panelLogIn.setBorder(UIManager.getBorder("Spinner.border"));
+			panelLogIn.setLayout(new BoxLayout(panelLogIn, BoxLayout.Y_AXIS));
 			panelLogIn.add(getPanelTextLogIn());
 			panelLogIn.add(getPanelData());
 			panelLogIn.add(getPanelButtonRestoreInfo());
@@ -245,23 +252,28 @@ public class InitialPanel extends JPanel {
 							throw new NumberFormatException();
 						// first 8 chracters no Digit
 						Integer.parseInt(text.substring(0, text.length() - 1));
+						
+						
+						Order order = ListOrders.search(getDateChooser().getDate(), txtDni.getText());
+						
+						mainWindow.setOrder(order);
+						
+						CartDialog dialog = new CartDialog(mainWindow, true);
+						dialog.setVisible(true);
+						mainWindow.setCartWindow(dialog);
+						
 					} catch (NumberFormatException exc) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
 								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
-					}
-
-					// Order order = ListOrders.search(new Date(txtCode.getText()),
-					// txtDni.getText());
-					// if (order != null) {
-					// JDialog dialog = new CartWindow(InitialWindow.this.mainWindow);
-					// dialog.setVisible(true);
-					// } else {
-					// JOptionPane.showMessageDialog(mainWindow,
-					// Internationalization.getString("error_search_order"),
-					// Internationalization.getString("error_search_order_title"),
-					// JOptionPane.WARNING_MESSAGE);
-					// }
-
+					} catch (IncorrectOrderException exc1) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_search_order"),
+								Internationalization.getString("error_search_order_title"),
+								JOptionPane.WARNING_MESSAGE);
+					} catch (DataFormatException e1) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
+								Internationalization.getString("error_date_title"),
+								JOptionPane.WARNING_MESSAGE);
+					} 
 				}
 			});
 		}
@@ -422,8 +434,9 @@ public class InitialPanel extends JPanel {
 			panelAdult = new JPanel();
 			panelAdult.setBorder(UIManager.getBorder("Spinner.border"));
 			panelAdult.setBackground(Color.WHITE);
-			panelAdult.add(getLblAdult());
-			panelAdult.add(getTxtNumberadult());
+			panelAdult.setLayout(new BoxLayout(panelAdult, BoxLayout.X_AXIS));
+			panelAdult.add(getPanelLblAdult());
+			panelAdult.add(getPanelTxNumberAdult());
 		}
 		return panelAdult;
 	}
@@ -433,8 +446,9 @@ public class InitialPanel extends JPanel {
 			panelChild = new JPanel();
 			panelChild.setBorder(UIManager.getBorder("Spinner.border"));
 			panelChild.setBackground(Color.WHITE);
-			panelChild.add(getLblChild());
-			panelChild.add(getTxtNumberchild());
+			panelChild.setLayout(new BoxLayout(panelChild, BoxLayout.X_AXIS));
+			panelChild.add(getPaneLblNumberChild());
+			panelChild.add(getPanelTxNumberChild());
 		}
 		return panelChild;
 	}
@@ -513,7 +527,8 @@ public class InitialPanel extends JPanel {
 
 	private JButton getBtnSearch() {
 		if (btnSearch == null) {
-			btnSearch = new JButton(Internationalization.getString("search"));
+			btnSearch = new JButton();
+			btnSearch.setText(Internationalization.getString("search"));
 			btnSearch.setToolTipText(Internationalization.getToolTips("search"));
 			btnSearch.setFont(new Font("Tahoma", Font.BOLD, 36));
 			// btnSearch.setMnemonic(Internationalization.getMnemonic("search"));
@@ -535,55 +550,59 @@ public class InitialPanel extends JPanel {
 								JOptionPane.WARNING_MESSAGE);
 					else { // valores correctos, pasamos a siguiente ventana
 						// update values mainWindow
-						try {
-							btnSearch.setText(Internationalization.getString("loading"));
-							updateOrder();
-							mainWindow.mntmFullscreen.setEnabled(true);
-							mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
-							mainWindow.mnSort.setEnabled(true);
-							mainWindow.mntmPeople.setEnabled(true);
-							mainWindow.mntmPlace.setEnabled(true);
-							mainWindow.mntmPrice.setEnabled(true);
-							mainWindow.mntmStars.setEnabled(true);
-							mainWindow.mntmOnlyphotos.setEnabled(true);
-							mainWindow.mntmCart.setEnabled(true);
-
-							removeAll();
-							mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow));
-							add(mainWindow.getProductListPanel());
-							repaint();
-							revalidate();
-							mainWindow.setResizable(true);
-							mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
-
-						} catch (NullPointerException e) {
-							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
-							e.printStackTrace();
-						}
+						loadListProduct();
 					}
 
 				}
 
-				private void updateOrder() {
-					mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
-					mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
-					mainWindow.setDate(dateArrive.getDate());
-
-					long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
-					long diffDays = diff / (24 * 60 * 60 * 1000);
-					mainWindow.setDays((int) diffDays);
-				}
 			});
 		}
 		return btnSearch;
+	}
+	
+	private void updateOrder() {
+		mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
+		mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
+		mainWindow.setDate(dateArrive.getDate());
+
+		long diff = Math.abs(dateExit.getDate().getTime() - dateArrive.getDate().getTime());
+		long diffDays = diff / (24 * 60 * 60 * 1000);
+		mainWindow.setDays((int) diffDays);
+	}
+	
+	protected void loadListProduct() {
+		try {
+			btnSearch.setText(Internationalization.getString("loading"));
+			updateOrder();
+			mainWindow.mntmFullscreen.setEnabled(true);
+			mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
+			mainWindow.mnSort.setEnabled(true);
+			mainWindow.mntmPeople.setEnabled(true);
+			mainWindow.mntmPlace.setEnabled(true);
+			mainWindow.mntmPrice.setEnabled(true);
+			mainWindow.mntmStars.setEnabled(true);
+			mainWindow.mntmOnlyphotos.setEnabled(true);
+			mainWindow.mntmCart.setEnabled(true);
+
+			removeAll();
+			mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow));
+			add(mainWindow.getProductListPanel());
+			repaint();
+			revalidate();
+			mainWindow.setResizable(true);
+			mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
+
+		} catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
+					Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	private JPanel getPanelPeopleCount() {
 		if (panelPeopleCount == null) {
 			panelPeopleCount = new JPanel();
 			panelPeopleCount.setBackground(Color.WHITE);
-			panelPeopleCount.setLayout(new GridLayout(0, 2, 0, 0));
+			panelPeopleCount.setLayout(new GridLayout(0, 2, 10, 0));
 			panelPeopleCount.add(getPanelAdult());
 			panelPeopleCount.add(getPanelChild());
 		}
@@ -604,5 +623,94 @@ public class InitialPanel extends JPanel {
 
 	public String getSelectedItem() {
 		return String.valueOf(comboBox.getSelectedItem());
+	}
+	private JDateChooser getDateChooser() {
+		if (dateChooser == null) {
+			dateChooser = new JDateChooser(new Date());
+			dateChooser.setMaxSelectableDate(new Date(System.currentTimeMillis()));
+			dateChooser.setToolTipText("Fecha de llegada al destino.");
+			dateChooser.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateChooser.getDateEditor();
+			dateEditor.setHorizontalAlignment(JTextField.CENTER);
+			dateChooser.setDateFormatString(
+					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
+							.toLocalizedPattern());
+		}
+		return dateChooser;
+	}
+	private JPanel getPanelLblDate() {
+		if (panelLblDate == null) {
+			panelLblDate = new JPanel();
+			panelLblDate.setBackground(Color.WHITE);
+			panelLblDate.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+			panelLblDate.add(getLblCode());
+		}
+		return panelLblDate;
+	}
+	private JPanel getPaneltxDate() {
+		if (paneltxDate == null) {
+			paneltxDate = new JPanel();
+			paneltxDate.setBackground(Color.WHITE);
+			paneltxDate.setLayout(new GridLayout(0, 1, 0, 0));
+			paneltxDate.add(getDateChooser());
+		}
+		return paneltxDate;
+	}
+	private JPanel getPanelLblDni() {
+		if (panelLblDni == null) {
+			panelLblDni = new JPanel();
+			panelLblDni.setBackground(Color.WHITE);
+			panelLblDni.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+			panelLblDni.add(getLblDni());
+		}
+		return panelLblDni;
+	}
+	private JPanel getPanelTxDni() {
+		if (panelTxDni == null) {
+			panelTxDni = new JPanel();
+			panelTxDni.setBackground(Color.WHITE);
+			panelTxDni.setLayout(new GridLayout(0, 1, 25, 0));
+			panelTxDni.add(getTxtDni());
+		}
+		return panelTxDni;
+	}
+	private JPanel getPanelLblAdult() {
+		if (panelLblAdult == null) {
+			panelLblAdult = new JPanel();
+			panelLblAdult.setBorder(null);
+			panelLblAdult.setBackground(Color.WHITE);
+			panelLblAdult.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			panelLblAdult.add(getLblAdult());
+		}
+		return panelLblAdult;
+	}
+	private JPanel getPanelTxNumberAdult() {
+		if (panelTxNumberAdult == null) {
+			panelTxNumberAdult = new JPanel();
+			panelTxNumberAdult.setBorder(null);
+			panelTxNumberAdult.setBackground(Color.WHITE);
+			panelTxNumberAdult.setLayout(new BoxLayout(panelTxNumberAdult, BoxLayout.X_AXIS));
+			panelTxNumberAdult.add(getTxtNumberadult());
+		}
+		return panelTxNumberAdult;
+	}
+	private JPanel getPaneLblNumberChild() {
+		if (paneLblNumberChild == null) {
+			paneLblNumberChild = new JPanel();
+			paneLblNumberChild.setBorder(null);
+			paneLblNumberChild.setBackground(Color.WHITE);
+			paneLblNumberChild.add(getLblChild());
+		}
+		return paneLblNumberChild;
+	}
+	private JPanel getPanelTxNumberChild() {
+		if (panelTxNumberChild == null) {
+			panelTxNumberChild = new JPanel();
+			panelTxNumberChild.setBorder(null);
+			panelTxNumberChild.setBackground(Color.WHITE);
+			panelTxNumberChild.setLayout(new BoxLayout(panelTxNumberChild, BoxLayout.X_AXIS));
+			panelTxNumberChild.add(getTxtNumberchild());
+		}
+		return panelTxNumberChild;
 	}
 }

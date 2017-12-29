@@ -132,6 +132,7 @@ public class MainWindow extends JFrame {
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		setCartWindow(new CartDialog(this));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		cargaAyuda();
 
@@ -428,9 +429,24 @@ public class MainWindow extends JFrame {
 			mntmLanguage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					
-					Locale value = (Locale) JOptionPane.showInputDialog(null, Internationalization.getString("select_language"), Internationalization.getString("select_language_title"), JOptionPane.DEFAULT_OPTION, new ImageIcon("/img/lang.png"), Internationalization.locationSupported, 0);
-					if (value != null)
-						Internationalization.changeLocation(value.getLanguage(), value.getCountry());
+					String[] localeString = new String[Internationalization.LOCATION_SUPPORTED.length];
+					
+					for (int i = 0; i < localeString.length; i++) {
+						localeString[i] = Internationalization.LOCATION_SUPPORTED[i].getDisplayName();
+					}
+					
+					String value = (String) JOptionPane.showInputDialog(null, "<html>" + Internationalization.getString("select_language"), Internationalization.getString("select_language_title"), JOptionPane.OK_CANCEL_OPTION, new ImageIcon("/img/lang.png"), localeString, 0);
+					if (value != null) {
+						for (int i = 0; i < localeString.length; i++) {
+							if (localeString[i].equals(value)) {
+								Locale locale = Internationalization.LOCATION_SUPPORTED[i];
+								Internationalization.changeLocation(locale.getLanguage(), locale.getCountry());
+								MainWindow.this.dispose();
+								main(null);
+								break;
+							}
+						}
+					}
 				}
 			});
 			mntmLanguage.setFont(new Font("Segoe UI", Font.PLAIN, 14));

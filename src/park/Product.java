@@ -31,7 +31,7 @@ public abstract class Product {
 			setNumberChild(numberChild);
 		if (date != null)
 			setDate(date);
-		if (days >= 0)
+		if (days >= 0 && ! (this instanceof Package))
 			setDuration(days);
 	}
 

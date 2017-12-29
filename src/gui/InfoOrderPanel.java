@@ -106,7 +106,7 @@ public class InfoOrderPanel extends JPanel {
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String nameFile = "orders/";
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					nameFile = format.format(mainWindow.getDate()) + "_" + mainWindow.getOrder().getDni();
 					nameFile += ".dat";
 

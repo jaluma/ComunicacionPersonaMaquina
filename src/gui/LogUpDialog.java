@@ -14,6 +14,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -122,12 +123,25 @@ public class LogUpDialog extends JDialog {
 			btnFinish = new JButton(Internationalization.getString("log_next"));
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText() + " " + txSurname.getText(),
-							txDni.getText(), txObs.getText()));
-					contentPane.removeAll();
-					contentPane.add(new InfoOrderPanel(mainWindow));
-					contentPane.revalidate();
-					contentPane.repaint();
+					String text = txDni.getText();
+					try {
+						// no dni length
+						if (text.length() != 9)
+							throw new NumberFormatException();
+						// first 8 chracters no Digit
+						Integer.parseInt(text.substring(0, text.length() - 1));
+						
+						mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText() + " " + txSurname.getText(),
+								txDni.getText(), txObs.getText()));
+						contentPane.removeAll();
+						contentPane.add(new InfoOrderPanel(mainWindow));
+						contentPane.revalidate();
+						contentPane.repaint();
+						
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
+								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			});
 			btnFinish.setFont(new Font("Tahoma", Font.PLAIN, 14));
