@@ -1,5 +1,7 @@
 package product;
 
+import internationalization.Internationalization;
+
 public enum TypeHotel {
 	HO("Hotel"), AH("ApartHotel"), AP("Apartment");
 
@@ -10,7 +12,7 @@ public enum TypeHotel {
 	}
 
 	public String toString() {
-		return this.type;
+		return Internationalization.getString(type);
 	}
 
 	// public static TypeHotel getType(String type) {

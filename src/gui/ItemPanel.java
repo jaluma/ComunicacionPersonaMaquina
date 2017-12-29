@@ -6,28 +6,32 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import product.Accommodation;
 import product.Package;
 import product.Product;
 import product.Ticket;
+import product.TypeHotel;
 
 public class ItemPanel extends JPanel {
 
@@ -37,7 +41,7 @@ public class ItemPanel extends JPanel {
 	private JPanel panelPhoto;
 	private JPanel panelInfo;
 	private JLabel lblPhoto;
-	private JTextArea txtrInfo;
+	private JEditorPane txtrInfo;
 	private JButton btnAdd;
 	private JLabel lblNameproduct;
 	private JPanel panelSouth;
@@ -50,6 +54,12 @@ public class ItemPanel extends JPanel {
 	private JLabel lblPrice;
 	private JScrollPane scrollPane;
 	private boolean image;
+	private JCheckBox chckbxChbreakfast;
+	private JPanel panelServices;
+	private JLabel lblPark;
+	private JLabel lblHotel;
+	private JLabel lblTicket;
+	private JLabel lblApartament;
 
 	public ItemPanel(MainWindow mainWindow, Product product) {
 		setBackground(Color.WHITE);
@@ -137,16 +147,15 @@ public class ItemPanel extends JPanel {
 		return lblPhoto;
 	}
 
-	private JTextArea getTxtrInfo() {
+	private JEditorPane getTxtrInfo() {
 		if (txtrInfo == null) {
-			txtrInfo = new JTextArea();
-			txtrInfo.setWrapStyleWord(true);
-			txtrInfo.setLineWrap(true);
+			txtrInfo = new JEditorPane();
 			txtrInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
+			txtrInfo.setContentType("text/html");
 			txtrInfo.setFont(new Font("Tahoma", Font.PLAIN, 13));
 			txtrInfo.setEditable(false);
 			txtrInfo.setHighlighter(null);
-			txtrInfo.setText(product.getPark().getDescription());
+			txtrInfo.setText("<font face=\"Tahoma\">" + product.toString3() + "</font>");
 		}
 		return txtrInfo;
 	}
@@ -157,7 +166,8 @@ public class ItemPanel extends JPanel {
 			btnAdd.setToolTipText(Internationalization.getToolTips("add"));
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					mainWindow.getOrder().add(product.getCode());
+					mainWindow.getOrder().add(product);
+					System.out.println(mainWindow.getOrder().toString());
 					mainWindow.getProductListPanel().setNumberItemsCart(mainWindow.getOrder().getItems());
 
 				}
@@ -170,8 +180,8 @@ public class ItemPanel extends JPanel {
 
 	private JLabel getLblNameproduct() {
 		if (lblNameproduct == null) {
-			lblNameproduct = new JLabel(Internationalization.getProduct(product.getCode()) + " ("
-					+ product.getDuration() + " " + Internationalization.getString("days") + ")");
+			String str = product.toString2() + " (" + product.getDuration() + " " + Internationalization.getString("days") + ")";
+			lblNameproduct = new JLabel(str);
 			lblNameproduct.setHorizontalAlignment(SwingConstants.CENTER);
 			lblNameproduct.setBackground(Color.WHITE);
 			lblNameproduct.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -183,23 +193,12 @@ public class ItemPanel extends JPanel {
 		if (panelSouth == null) {
 			panelSouth = new JPanel();
 			panelSouth.setBackground(Color.WHITE);
-			panelSouth.setLayout(new GridLayout(1, 2, 0, 0));
-			panelSouth.add(getLblPlace());
-			if (product.getPark().isSale())
-				panelSouth.add(getLblSale());
+				panelSouth.setLayout(new BorderLayout(0, 0));
+				if (product.isSale())
+					panelSouth.add(getLblSale(), BorderLayout.EAST);
+				panelSouth.add(getPanelServices(), BorderLayout.WEST);
 		}
 		return panelSouth;
-	}
-
-	private JLabel getLblPlace() {
-		if (lblPlace == null) {
-			lblPlace = new JLabel(Internationalization.getString("location") + product.getPark().getCity() + "-"
-					+ product.getPark().getCountry() + " (" + product.getPark().getName() + ")");
-			lblPlace.setBorder(new EmptyBorder(0, 5, 0, 0));
-			lblPlace.setHorizontalAlignment(SwingConstants.LEFT);
-			lblPlace.setFont(new Font("Tahoma", Font.ITALIC, 15));
-		}
-		return lblPlace;
 	}
 
 	private JLabel getLblSale() {
@@ -245,10 +244,91 @@ public class ItemPanel extends JPanel {
 			scrollPane = new JScrollPane();
 			scrollPane.setViewportBorder(new LineBorder(new Color(64, 64, 64), 0, true));
 			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-			scrollPane.setWheelScrollingEnabled(false);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(getTxtrInfo());
 		}
 		return scrollPane;
+	}
+	private JCheckBox getChckbxChbreakfast() {
+		if (chckbxChbreakfast == null) {
+			chckbxChbreakfast = new JCheckBox(Internationalization.getString("breakfast"));
+			chckbxChbreakfast.setBackground(Color.WHITE);
+			chckbxChbreakfast.addChangeListener(new ChangeListener() {
+				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					((Accommodation)product).setBreakfast(chckbxChbreakfast.isSelected());
+					
+				}
+			});
+		}
+		return chckbxChbreakfast;
+	}
+	private JPanel getPanelServices() {
+		if (panelServices == null) {
+			panelServices = new JPanel();
+			panelServices.setBackground(Color.WHITE);
+			panelServices.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			
+			if (product instanceof Ticket) {
+				panelServices.add(getLblPark());
+				panelServices.add(getLblTicket());
+			} 
+			
+			if (product instanceof Accommodation && ((Accommodation)product).getType().equals(TypeHotel.HO.toString())) {
+				panelServices.add(getLblHotel());
+				panelServices.add(getChckbxChbreakfast());
+			} else if (product instanceof Accommodation && ((Accommodation)product).getType().equals(TypeHotel.AP.toString()))
+				panelServices.add(getLblApartament());
+			else if (product instanceof Accommodation){
+				panelServices.add(getLblHotel());
+				panelServices.add(getLblApartament());
+			}
+			
+			if (product instanceof Package) {
+				panelServices.add(getLblPark());
+				panelServices.add(getLblTicket());
+				String type = ((Package)product).getAccom().getType();
+				if (type.equals(TypeHotel.HO.toString())) {
+					panelServices.add(getLblHotel());
+				} else if (type.equals(TypeHotel.AP.toString())) {
+					panelServices.add(getLblApartament());
+				} else if (type.equals(TypeHotel.AH.toString())) {
+					panelServices.add(getLblHotel());
+					panelServices.add(getLblApartament());
+				}
+					
+					
+			}
+		}
+		return panelServices;
+	}
+	private JLabel getLblPark() {
+		if (lblPark == null) {
+			lblPark = new JLabel(); //$NON-NLS-1$
+			ResizableImage.setResizeImage(this, lblPark, "/img/park.png", 50, 50);
+		}
+		return lblPark;
+	}
+	private JLabel getLblHotel() {
+		if (lblHotel == null) {
+			lblHotel = new JLabel(); //$NON-NLS-1$
+			ResizableImage.setResizeImage(this, lblHotel, "/img/hotel.png", 50, 50);
+		}
+		return lblHotel;
+	}
+	private JLabel getLblTicket() {
+		if (lblTicket == null) {
+			lblTicket = new JLabel(); //$NON-NLS-1$
+			ResizableImage.setResizeImage(this, lblTicket, "/img/ticket.png", 50, 50);
+		}
+		return lblTicket;
+	}
+	private JLabel getLblApartament() {
+		if (lblApartament == null) {
+			lblApartament = new JLabel(); //$NON-NLS-1$
+			ResizableImage.setResizeImage(this, lblApartament, "/img/apartament.png", 50, 50); 
+		}
+		return lblApartament;
 	}
 }

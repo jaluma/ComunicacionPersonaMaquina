@@ -19,8 +19,8 @@ public class Accommodation extends Product {
 		setPrice(price);
 	}
 
-	public void setBreakfast() {
-		breakfast = true;
+	public void setBreakfast(boolean bool) {
+		breakfast = bool;
 	}
 
 	private void setNum(int num) {
@@ -53,6 +53,10 @@ public class Accommodation extends Product {
 
 	public int getNum() {
 		return num;
+	}
+	
+	public boolean isBreakfast() {
+		return breakfast;
 	}
 
 	@Override
@@ -94,6 +98,17 @@ public class Accommodation extends Product {
 	@Override
 	public boolean isSale() {
 		return park.isSale();
+	}
+	
+	public String toString2() {
+		return Internationalization.getString("accom").toUpperCase() + ": " + getName();
+	}
+	
+	public String toString3() {
+		String str = super.toString3();
+		if (type == TypeHotel.HO)
+			str += String.format("<b>%s</b>: %d<br>", Internationalization.getString("stars").toUpperCase(), stars);
+		return str;
 	}
 
 }

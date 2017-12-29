@@ -89,7 +89,6 @@ public class Internationalization {
 	public static String getToolTips(String key) {
 		String str = key + "_tt";
 		return Internationalization.getString(str);
-
 	}
 
 	public static String getProduct(String code) {
@@ -97,6 +96,13 @@ public class Internationalization {
 		String aux = Internationalization.getString(str);
 		char letter = aux.charAt(0);
 		return letter == '!' ? ListProduct.searchProduct(code).getName() : aux;
+	}
+	
+	public static String getDescription(String code) {
+		String str = code + "_description";
+		String aux = Internationalization.getString(str);
+		char letter = aux.charAt(0);
+		return letter == '!' ? ListProduct.searchPark(code).getDescription() : aux;
 	}
 
 	public static String getCountry(String country) {

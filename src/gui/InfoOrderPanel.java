@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -109,7 +110,7 @@ public class InfoOrderPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					String nameFile = "orders/";
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-					nameFile = format.format(mainWindow.getDate()) + "_" + mainWindow.getOrder().getDni();
+					nameFile = format.format(new Date(System.currentTimeMillis())) + "_" + mainWindow.getOrder().getDni();
 					nameFile += ".dat";
 
 					try {

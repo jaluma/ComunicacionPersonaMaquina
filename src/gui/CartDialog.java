@@ -184,19 +184,6 @@ public class CartDialog extends JDialog {
 		return panelItem;
 	}
 
-	public void refresh() {
-		scrollPane.removeAll();
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		scrollPane.setViewportView(panel);
-		for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
-			panel.add(new CartItemPanel(mainWindow, this, mainWindow.getOrder().getProduct(i)));
-		}
-		scrollPane.repaint();
-		scrollPane.revalidate();
-
-	}
-
 	public JLabel getLblSubTotal() {
 		if (lblSubTotal == null) {
 			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal())); // $NON-NLS-1$

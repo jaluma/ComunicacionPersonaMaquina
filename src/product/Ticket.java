@@ -58,5 +58,14 @@ public class Ticket extends Product {
 	public boolean isSale() {
 		return park.isSale();
 	}
+	
+	public String toString2() {
+		return Internationalization.getString("ticket").toUpperCase() + ": " + getName();
+	}
+	
+	public String toString3() {
+		String str = super.toString3();
+		return str;
+	}
 
 }

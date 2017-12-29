@@ -12,8 +12,11 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -34,10 +37,17 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 import event.ComboBoxSortEvent;
 import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
+import event.SliderMouseWheelEvent;
+import event.SliderTextFieldEvent;
 import guiUtil.GuiUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
@@ -47,6 +57,12 @@ import product.ListProduct;
 import product.Package;
 import product.Product;
 import product.Ticket;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.beans.PropertyChangeEvent;
 
 public class ProductListPanel extends JPanel {
 
@@ -74,7 +90,6 @@ public class ProductListPanel extends JPanel {
 	private JLabel lblNumberperson;
 	private JSlider sliderPerson;
 	private JPanel panelSliderPerson;
-	private JLabel lblPersonText;
 	private JPanel panelPrice;
 	private JLabel lblPrice;
 	private JPanel panelSliderPrice;
@@ -111,6 +126,17 @@ public class ProductListPanel extends JPanel {
 	private JButton btnPricereset;
 	private JPanel panelLoading;
 	private JLabel lblLoading;
+	private JTextField txAdult;
+	private JPanel panelAdult;
+	private JPanel panelChild;
+	private JTextField txChild;
+	private JPanel panelTxChild;
+	private JPanel panelFilterDate;
+	private JLabel label;
+	private JComboBox comboBox_1;
+	private JPanel panelDate;
+	private JDateChooser dateArrive;
+	private JDateChooser dateExit;
 
 	public ProductListPanel(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
@@ -203,46 +229,53 @@ public class ProductListPanel extends JPanel {
 			panelFilter.setBorder(null);
 			GridBagLayout gbl_panelFilter = new GridBagLayout();
 			gbl_panelFilter.columnWidths = new int[] { 265, 0, 0, 0 };
-			gbl_panelFilter.rowHeights = new int[] { 46, 74, 50, 76, 64, 32, 0, 0 };
+			gbl_panelFilter.rowHeights = new int[] { 46, 41, 110, 54, 64, 32, 0, 0 };
 			gbl_panelFilter.columnWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 			gbl_panelFilter.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			panelFilter.setLayout(gbl_panelFilter);
+			GridBagConstraints gbc_panelFilterDate = new GridBagConstraints();
+			gbc_panelFilterDate.anchor = GridBagConstraints.NORTH;
+			gbc_panelFilterDate.insets = new Insets(0, 0, 5, 5);
+			gbc_panelFilterDate.fill = GridBagConstraints.HORIZONTAL;
+			gbc_panelFilterDate.gridx = 0;
+			gbc_panelFilterDate.gridy = 0;
+			panelFilter.add(getPanelFilterDate(), gbc_panelFilterDate);
 			GridBagConstraints gbc_panelPlace = new GridBagConstraints();
 			gbc_panelPlace.fill = GridBagConstraints.BOTH;
 			gbc_panelPlace.insets = new Insets(0, 0, 5, 5);
 			gbc_panelPlace.gridx = 0;
-			gbc_panelPlace.gridy = 0;
+			gbc_panelPlace.gridy = 1;
 			panelFilter.add(getPanelPlace(), gbc_panelPlace);
 			GridBagConstraints gbc_panelType = new GridBagConstraints();
 			gbc_panelType.insets = new Insets(0, 0, 5, 5);
 			gbc_panelType.fill = GridBagConstraints.BOTH;
 			gbc_panelType.gridx = 0;
-			gbc_panelType.gridy = 1;
+			gbc_panelType.gridy = 2;
 			panelFilter.add(getPanelType(), gbc_panelType);
 			GridBagConstraints gbc_panelCategory = new GridBagConstraints();
 			gbc_panelCategory.fill = GridBagConstraints.BOTH;
 			gbc_panelCategory.insets = new Insets(0, 0, 5, 5);
 			// gbc_panelCategory.insets = new Insets(0, 0, 15, 0);
 			gbc_panelCategory.gridx = 0;
-			gbc_panelCategory.gridy = 2;
+			gbc_panelCategory.gridy = 3;
 			panelFilter.add(getPanelCategory(), gbc_panelCategory);
 			GridBagConstraints gbc_panelPeople = new GridBagConstraints();
 			gbc_panelPeople.fill = GridBagConstraints.BOTH;
 			gbc_panelPeople.insets = new Insets(0, 0, 5, 5);
 			gbc_panelPeople.gridx = 0;
-			gbc_panelPeople.gridy = 3;
+			gbc_panelPeople.gridy = 4;
 			panelFilter.add(getPanelPeople(), gbc_panelPeople);
 			GridBagConstraints gbc_panelPrice = new GridBagConstraints();
 			gbc_panelPrice.fill = GridBagConstraints.BOTH;
 			gbc_panelPrice.insets = new Insets(0, 0, 5, 5);
 			gbc_panelPrice.gridx = 0;
-			gbc_panelPrice.gridy = 4;
+			gbc_panelPrice.gridy = 5;
 			panelFilter.add(getPanelPrice(), gbc_panelPrice);
 			GridBagConstraints gbc_panelOnlyPhotos = new GridBagConstraints();
 			gbc_panelOnlyPhotos.fill = GridBagConstraints.BOTH;
-			gbc_panelOnlyPhotos.insets = new Insets(0, 0, 5, 5);
+			gbc_panelOnlyPhotos.insets = new Insets(0, 0, 0, 5);
 			gbc_panelOnlyPhotos.gridx = 0;
-			gbc_panelOnlyPhotos.gridy = 5;
+			gbc_panelOnlyPhotos.gridy = 6;
 			panelFilter.add(getPanelOnlyPhotos(), gbc_panelOnlyPhotos);
 		}
 		return panelFilter;
@@ -464,17 +497,22 @@ public class ProductListPanel extends JPanel {
 			sliderPerson.setToolTipText(Internationalization.getToolTips("slider_adult"));
 			sliderPerson.setValue(mainWindow.getNumberAdult());
 			sliderPerson.setMinimum(1);
+			sliderPerson.setMinorTickSpacing(1);
 			int valueMax = setMaxSlider(mainWindow.getNumberAdult());
 			sliderPerson.setMaximum(valueMax + 1);
+			sliderPerson.addMouseWheelListener(new SliderMouseWheelEvent());
 			sliderPerson.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
+					getTxAdult().setText(String.valueOf(sliderPerson.getValue()));
 					mainWindow.setNumberAdult(sliderPerson.getValue());
-					lblPersonText.setText(updateLblPerson());
 					for (int i = 0; i < panelItem.getComponentCount(); i++) {
-						Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
-						product.setNumberAdult(sliderPerson.getValue());
-						mainWindow.setNumberAdult(sliderPerson.getValue());
-						((ItemPanel) panelItem.getComponent(i)).updatePrice();
+						JPanel panel = (JPanel) panelItem.getComponent(i);
+						if (panel instanceof ItemPanel) {
+							Product product = ((ItemPanel) panel).getProduct();
+							product.setNumberAdult(sliderPerson.getValue());
+							mainWindow.setNumberAdult(sliderPerson.getValue());
+							((ItemPanel) panelItem.getComponent(i)).updatePrice();
+						}
 					}
 				}
 			});
@@ -500,18 +538,23 @@ public class ProductListPanel extends JPanel {
 			int valueMax = setMaxSlider(mainWindow.getNumberChild());
 			sliderChild.setMaximum(valueMax);
 			sliderChild.setValue(mainWindow.getNumberChild());
+			sliderChild.setMinorTickSpacing(1);
 			sliderChild.setToolTipText(Internationalization.getToolTips("slider_child"));
 			sliderChild.setBackground(Color.WHITE);
 			sliderChild.setAlignmentY(0.0f);
+			sliderChild.addMouseWheelListener(new SliderMouseWheelEvent());
 			sliderChild.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
+					getTxChild().setText(String.valueOf(sliderChild.getValue()));
 					mainWindow.setNumberChild(sliderChild.getValue());
-					lblPersonText.setText(updateLblPerson());
 					for (int i = 0; i < panelItem.getComponentCount(); i++) {
-						Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
-						product.setNumberChild(sliderChild.getValue());
-						mainWindow.setNumberChild(sliderChild.getValue());
-						((ItemPanel) panelItem.getComponent(i)).updatePrice();
+						JPanel panel = (JPanel) panelItem.getComponent(i);
+						if (panel instanceof ItemPanel) {
+							Product product = ((ItemPanel) panel).getProduct();
+							product.setNumberAdult(sliderPerson.getValue());
+							mainWindow.setNumberAdult(sliderPerson.getValue());
+							((ItemPanel) panelItem.getComponent(i)).updatePrice();
+						}
 					}
 				}
 			});
@@ -524,22 +567,10 @@ public class ProductListPanel extends JPanel {
 			panelSliderPerson = new JPanel();
 			panelSliderPerson.setBackground(Color.WHITE);
 			panelSliderPerson.setLayout(new BoxLayout(panelSliderPerson, BoxLayout.Y_AXIS));
-			panelSliderPerson.add(getSliderPerson());
-			panelSliderPerson.add(getSliderChild());
-			panelSliderPerson.add(getLblPersonText());
+			panelSliderPerson.add(getPanelAdult());
+			panelSliderPerson.add(getPanelChild());
 		}
 		return panelSliderPerson;
-	}
-
-	private JLabel getLblPersonText() {
-		if (lblPersonText == null) {
-			String str = updateLblPerson();
-			lblPersonText = new JLabel(str);
-			lblPersonText.setFont(new Font("Tahoma", Font.PLAIN, 13));
-			lblPersonText.setAlignmentX(Component.CENTER_ALIGNMENT);
-			lblPersonText.setHorizontalAlignment(SwingConstants.CENTER);
-		}
-		return lblPersonText;
 	}
 
 	private JPanel getPanelPrice() {
@@ -574,12 +605,6 @@ public class ProductListPanel extends JPanel {
 			panelSliderPrice.add(getPanelBtnPrice());
 		}
 		return panelSliderPrice;
-	}
-
-	private String updateLblPerson() {
-		String str = Internationalization.getString("person_adult") + mainWindow.getNumberAdult() + " | "
-				+ Internationalization.getString("person_child") + mainWindow.getNumberChild();
-		return str;
 	}
 
 	protected JCheckBox getChOnlyPhotos() {
@@ -709,9 +734,12 @@ public class ProductListPanel extends JPanel {
 	private void loadItems() {
 		for (int i = 0; i < list.size(); i++) {
 			Product product = list.get(i);
-			product.loadData(mainWindow.getNumberAdult(), mainWindow.getNumberChild(), mainWindow.getDate(),
-					mainWindow.getDays());
-			panelItem.add(new ItemPanel(mainWindow, list.get(i)));
+			int numberAdult = mainWindow.getNumberAdult();
+			int numberChild = mainWindow.getNumberChild();
+			Date date = mainWindow.getDate();
+			int  days = mainWindow.getDays();
+			product.loadData(numberAdult, numberChild, date, days);
+			panelItem.add(new ItemPanel(mainWindow, product));
 		}
 	}
 
@@ -799,7 +827,7 @@ public class ProductListPanel extends JPanel {
 
 	private JLabel getLblLblnumberelem() {
 		if (lblLblnumberelem == null) {
-			lblLblnumberelem = new JLabel(String.valueOf(GuiUtil.getVisibleChildrenCount(getPanelItem()))); // $NON-NLS-1$
+			lblLblnumberelem = new JLabel("0"); // $NON-NLS-1$
 			lblLblnumberelem.setFont(new Font("Tahoma", Font.BOLD, 14));
 		}
 		return lblLblnumberelem;
@@ -811,7 +839,7 @@ public class ProductListPanel extends JPanel {
 			txtMinprice.setHorizontalAlignment(SwingConstants.CENTER);
 			txtMinprice.setForeground(Color.DARK_GRAY);
 			txtMinprice.setToolTipText(Internationalization.getToolTips("price_min"));
-			txtMinprice.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtMinprice.setFont(new Font("Tahoma", Font.BOLD, 13));
 			txtMinprice.setText(Internationalization.getString("min_price")); //$NON-NLS-1$
 			txtMinprice.setColumns(10);
 			txtMinprice.addKeyListener(new NumberTextFieldFormatEvent());
@@ -826,7 +854,7 @@ public class ProductListPanel extends JPanel {
 			txtMaxprice.setHorizontalAlignment(SwingConstants.CENTER);
 			txtMaxprice.setForeground(Color.DARK_GRAY);
 			txtMaxprice.setToolTipText(Internationalization.getToolTips("price_max"));
-			txtMaxprice.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtMaxprice.setFont(new Font("Tahoma", Font.BOLD, 13));
 			txtMaxprice.setText(Internationalization.getString("max_price")); //$NON-NLS-1$
 			txtMaxprice.setColumns(10);
 			txtMaxprice.addKeyListener(new NumberTextFieldFormatEvent());
@@ -894,7 +922,7 @@ public class ProductListPanel extends JPanel {
 		if (panelTxFPrice == null) {
 			panelTxFPrice = new JPanel();
 			panelTxFPrice.setBackground(Color.WHITE);
-			panelTxFPrice.setLayout(new GridLayout(0, 2, 2, 0));
+			panelTxFPrice.setLayout(new GridLayout(0, 2, 2, 2));
 			panelTxFPrice.add(getTxtMinprice());
 			panelTxFPrice.add(getTxtMaxprice());
 		}
@@ -935,6 +963,181 @@ public class ProductListPanel extends JPanel {
 		panelItem.revalidate();
 		panelItem.repaint();
 	}
+	
+	private JPanel getPanelLoading() {
+		if (panelLoading == null) {
+			panelLoading = new JPanel();
+			panelLoading.setLayout(new BoxLayout(panelLoading, BoxLayout.X_AXIS));
+			panelLoading.add(getLblLoading());
+		}
+		return panelLoading;
+	}
+	private JLabel getLblLoading() {
+		if (lblLoading == null) {
+			lblLoading = new JLabel(Internationalization.getString("loading")); //$NON-NLS-1$
+			lblLoading.setFont(new Font("Tahoma", Font.BOLD, 36));
+		}
+		return lblLoading;
+	}
+	private JTextField getTxAdult() {
+		if (txAdult == null) {
+			txAdult = new JTextField();
+			txAdult.setHorizontalAlignment(SwingConstants.CENTER);
+			txAdult.setForeground(Color.DARK_GRAY);
+			txAdult.setFont(new Font("Tahoma", Font.BOLD, 13));
+			txAdult.setText(String.valueOf(getSliderPerson().getValue())); //$NON-NLS-1$
+			txAdult.setColumns(10);
+			txAdult.addKeyListener(new NumberTextFieldFormatEvent());
+			txAdult.addFocusListener(new FocusTextFieldEvent(String.valueOf(getSliderPerson().getValue())));
+			txAdult.addFocusListener(new SliderTextFieldEvent(txAdult, sliderPerson));
+		}
+		return txAdult;
+	}
+	
+	private JPanel getPanelAdult() {
+		if (panelAdult == null) {
+			panelAdult = new JPanel();
+			panelAdult.setLayout(new GridLayout(0, 1, 0, 0));
+			panelAdult.add(getSliderPerson());
+		}
+		return panelAdult;
+	}
+	private JPanel getPanelChild() {
+		if (panelChild == null) {
+			panelChild = new JPanel();
+			panelChild.setLayout(new GridLayout(0, 1, 0, 0));
+			panelChild.add(getSliderChild());
+			panelChild.add(getPanelTxChild());
+		}
+		return panelChild;
+	}
+	private JTextField getTxChild() {
+		if (txChild == null) {
+			txChild = new JTextField();
+			txChild.setHorizontalAlignment(SwingConstants.CENTER);
+			txChild.setForeground(Color.DARK_GRAY);
+			txChild.setFont(new Font("Tahoma", Font.BOLD, 13));
+			txChild.setText(String.valueOf(getSliderChild().getValue())); //$NON-NLS-1$
+			txChild.setColumns(10);
+			txChild.addKeyListener(new NumberTextFieldFormatEvent());
+			txChild.addFocusListener(new FocusTextFieldEvent(String.valueOf(getSliderChild().getValue())));
+			txChild.addFocusListener(new SliderTextFieldEvent(txChild, sliderChild));
+		}
+		return txChild;
+	}
+	private JPanel getPanelTxChild() {
+		if (panelTxChild == null) {
+			panelTxChild = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) panelTxChild.getLayout();
+			flowLayout.setVgap(2);
+			flowLayout.setHgap(2);
+			panelTxChild.setBackground(Color.WHITE);
+			panelTxChild.add(getTxAdult());
+			panelTxChild.add(getTxChild());
+		}
+		return panelTxChild;
+	}
+	private JPanel getPanelFilterDate() {
+		if (panelFilterDate == null) {
+			panelFilterDate = new JPanel();
+			panelFilterDate.setBorder(UIManager.getBorder("Spinner.border"));
+			panelFilterDate.setBackground(Color.WHITE);
+			panelFilterDate.setLayout(new BoxLayout(panelFilterDate, BoxLayout.Y_AXIS));
+			panelFilterDate.add(getLabel());
+			panelFilterDate.add(getPanelDate());
+		}
+		return panelFilterDate;
+	}
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel(Internationalization.getString("date"));
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			label.setFont(new Font("Tahoma", Font.BOLD, 16));
+			label.setBackground(Color.WHITE);
+			label.setAlignmentY(0.0f);
+			label.setAlignmentX(0.5f);
+		}
+		return label;
+	}
+	
+	private JPanel getPanelDate() {
+	if (panelDate == null) {
+		panelDate = new JPanel();
+		panelDate.setBorder(UIManager.getBorder("Spinner.border"));
+		panelDate.setBackground(Color.WHITE);
+		panelDate.setLayout(new GridLayout(0, 2, 2, 2));
+		// panelDate.add(getCalendarArrive());
+		// panelDate.add(getCalendarExit());
+		panelDate.add(getDateArrive());
+		panelDate.add(getDateExit());
+	}
+	return panelDate;
+}
+
+private JDateChooser getDateArrive() {
+	if (dateArrive == null) {
+		dateArrive = new JDateChooser();
+		dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
+		JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
+		dateEditor.setHorizontalAlignment(JTextField.CENTER);
+		Date date = mainWindow.getDate();
+		dateArrive.setDate(date);
+		dateArrive.setMinSelectableDate(date);
+		dateArrive.setDateFormatString(
+				((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
+						.toLocalizedPattern());
+		dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
+					Date date2 = new Date(dateArrive.getDate().getTime()  + 86400000);
+					getDateExit().setDate(date2);
+					getDateExit().setMinSelectableDate(date2);
+				}
+				mainWindow.setDateFinish(dateArrive.getDate());
+//				for (int i = 0; i < panelItem.getComponentCount(); i++) {
+//					JPanel panel = (JPanel) panelItem.getComponent(i);
+//					if (panel instanceof ItemPanel) {
+//						Product product = ((ItemPanel) panel).getProduct();
+//						product.setDate(dateExit.getDate());
+//						product.setDuration(mainWindow.getDays());
+//						((ItemPanel) panelItem.getComponent(i)).updatePrice();
+//					}
+//				}
+			}
+		});
+	}
+	return dateArrive;
+}
+
+private JDateChooser getDateExit() {
+	if (dateExit == null) {
+		dateExit = new JDateChooser();
+		dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
+		JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
+		dateEditor.setHorizontalAlignment(JTextField.CENTER);
+		Date date =  mainWindow.getDateFinish();
+		dateExit.setDate(date);
+		dateExit.setMinSelectableDate(date);
+		dateExit.setDateFormatString(
+				((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
+						.toLocalizedPattern());
+		dateExit.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				mainWindow.setDateFinish(dateExit.getDate());
+				for (int i = 0; i < panelItem.getComponentCount(); i++) {
+					JPanel panel = (JPanel) panelItem.getComponent(i);
+					if (panel instanceof ItemPanel) {
+						Product product = ((ItemPanel) panel).getProduct();
+						product.setDate(dateExit.getDate());
+						product.setDuration(mainWindow.getDays());
+						((ItemPanel) panelItem.getComponent(i)).updatePrice();
+					}
+				}
+			}
+		});
+	}
+	return dateExit;
+}
 
 	// <----------------------------FILTERS---------------------------------->
 	protected void filtersReset() {
@@ -1062,19 +1265,5 @@ public class ProductListPanel extends JPanel {
 		}
 
 	}
-	private JPanel getPanelLoading() {
-		if (panelLoading == null) {
-			panelLoading = new JPanel();
-			panelLoading.setLayout(new BoxLayout(panelLoading, BoxLayout.X_AXIS));
-			panelLoading.add(getLblLoading());
-		}
-		return panelLoading;
-	}
-	private JLabel getLblLoading() {
-		if (lblLoading == null) {
-			lblLoading = new JLabel(Internationalization.getString("loading")); //$NON-NLS-1$
-			lblLoading.setFont(new Font("Tahoma", Font.BOLD, 36));
-		}
-		return lblLoading;
-	}
+	
 }

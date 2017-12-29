@@ -2,6 +2,7 @@ package product;
 
 import java.util.Date;
 
+import internationalization.Internationalization;
 import park.Park;
 
 public abstract class Product {
@@ -9,7 +10,6 @@ public abstract class Product {
 	private static final double DISCOUNT = 0.2;
 	protected String code;
 	protected String name;
-	protected Date initialDate;
 	protected int numberAdult;
 	protected int numberChild;
 	protected Date date;
@@ -43,15 +43,11 @@ public abstract class Product {
 		this.numberChild = i;
 	}
 
-	protected void setDate(Date date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	protected void setInitialDate(Date date) {
-		this.initialDate = date;
-	}
-
-	protected void setDuration(int duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 
@@ -94,5 +90,13 @@ public abstract class Product {
 	public abstract boolean isSale();
 
 	public abstract String toString();
+	
+	public abstract String toString2();
+
+	public String toString3() {
+		String str = String.format("<b>%s</b>: %s<br>", Internationalization.getString("description_park").toUpperCase(), Internationalization.getDescription(this.getPark().getCode()));
+		str += String.format("<b>%s</b> %s<br>", Internationalization.getString("location").toUpperCase(), getPark().getCity() + "-" + getPark().getCountry() + " (" + getPark().getName() + ")");
+		return str;
+	}
 
 }

@@ -84,8 +84,7 @@ public class InitialPanel extends JPanel {
 	private MainWindow mainWindow;
 	private DefaultComboBoxModel<String> modelPlace;
 	private JDateChooser dateArrive;
-	private 
-	JDateChooser dateExit;
+	private JDateChooser dateExit;
 
 	private JDateChooser dateChooser;
 	private JPanel panelLblDate;
@@ -610,20 +609,9 @@ public class InitialPanel extends JPanel {
 		return btnSearch;
 	}
 
-	private void updateOrder() {
-		mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
-		mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
-		mainWindow.setDate(dateArrive.getDate());
-
-		long diff = Math.abs(getDateExit().getDate().getTime() - getDateArrive().getDate().getTime());
-		long diffDays = diff / (24 * 60 * 60 * 1000);
-		mainWindow.setDays((int) diffDays);
-	}
-
 	protected void loadListProduct() {
 		btnSearch.revalidate();
 		btnSearch.repaint();
-		updateOrder();
 		mainWindow.mntmFullscreen.setEnabled(true);
 		mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
 		mainWindow.mnSort.setEnabled(true);
@@ -633,6 +621,11 @@ public class InitialPanel extends JPanel {
 		mainWindow.mntmStars.setEnabled(true);
 		mainWindow.mntmOnlyphotos.setEnabled(true);
 		mainWindow.mntmCart.setEnabled(true);
+		
+		mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
+		mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
+		mainWindow.setDate(dateArrive.getDate());
+		mainWindow.setDateFinish(dateExit.getDate());
 
 		removeAll();
 		mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow));
