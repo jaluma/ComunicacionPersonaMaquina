@@ -8,9 +8,9 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import logic.ListProduct;
+import product.ListProduct;
 
-public class Internationalization {	
+public class Internationalization {
 	private static final String BUNDLE_NAME = "resources.values";
 
 	private static final String DEFAULT_LANGUAGE = Locale.getDefault().getLanguage();
@@ -19,8 +19,9 @@ public class Internationalization {
 	public static Locale locale = new Locale(DEFAULT_LANGUAGE, DEFAULT_COUNTRY);
 
 	private static ResourceBundle RESOURCE_BUNDLE = inicialiceBundle();
-	
-	public static final Locale[] LOCATION_SUPPORTED = new Locale[] {Locale.forLanguageTag("es-ES"), Locale.forLanguageTag("en-US")};
+
+	public static final Locale[] LOCATION_SUPPORTED = new Locale[] { Locale.forLanguageTag("es-ES"),
+			Locale.forLanguageTag("en-US") };
 
 	private Internationalization() {
 	}
@@ -64,7 +65,7 @@ public class Internationalization {
 		DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		return formatter.format(date);
 	}
-	
+
 	public static Date getDate(String formatDate) {
 		DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		try {

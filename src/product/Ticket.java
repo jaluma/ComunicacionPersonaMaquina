@@ -1,9 +1,6 @@
-package park;
-
-import java.util.Date;
+package product;
 
 import internationalization.Internationalization;
-import logic.ListProduct;
 
 public class Ticket extends Product {
 

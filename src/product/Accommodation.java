@@ -1,6 +1,4 @@
-package park;
-
-import java.util.Date;
+package product;
 
 import internationalization.Internationalization;
 

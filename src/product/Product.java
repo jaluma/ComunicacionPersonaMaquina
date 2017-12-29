@@ -1,8 +1,8 @@
-package park;
+package product;
 
 import java.util.Date;
 
-import logic.ListProduct;
+import park.Park;
 
 public abstract class Product {
 
@@ -31,7 +31,7 @@ public abstract class Product {
 			setNumberChild(numberChild);
 		if (date != null)
 			setDate(date);
-		if (days >= 0 && ! (this instanceof Package))
+		if (days >= 0 && !(this instanceof Package))
 			setDuration(days);
 	}
 

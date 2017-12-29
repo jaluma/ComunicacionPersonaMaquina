@@ -23,8 +23,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 

@@ -28,7 +28,7 @@ import event.FocusTextAreaEvent;
 import event.FocusTextFieldEvent;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import logic.Order;
+import order.Order;
 
 public class LogUpDialog extends JDialog {
 
@@ -130,14 +130,14 @@ public class LogUpDialog extends JDialog {
 							throw new NumberFormatException();
 						// first 8 chracters no Digit
 						Integer.parseInt(text.substring(0, text.length() - 1));
-						
-						mainWindow.setOrder(new Order(mainWindow.getOrder(), txName.getText() + " " + txSurname.getText(),
-								txDni.getText(), txObs.getText()));
+
+						mainWindow.setOrder(new Order(mainWindow.getOrder(),
+								txName.getText() + " " + txSurname.getText(), txDni.getText(), txObs.getText()));
 						contentPane.removeAll();
 						contentPane.add(new InfoOrderPanel(mainWindow));
 						contentPane.revalidate();
 						contentPane.repaint();
-						
+
 					} catch (NumberFormatException ex) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
 								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);

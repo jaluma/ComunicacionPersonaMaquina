@@ -1,10 +1,7 @@
-package park;
-
-import java.util.Date;
+package product;
 
 import fileUtil.AssertParam;
 import internationalization.Internationalization;
-import logic.ListProduct;
 
 public class Package extends Product {
 

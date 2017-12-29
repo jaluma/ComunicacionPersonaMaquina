@@ -1,8 +1,8 @@
 package parser;
 
 import fileUtil.IncorrectLineFormatException;
-import park.Package;
-import park.Product;
+import product.Package;
+import product.Product;
 
 public class ParserPackage extends ParserAdapter<Product> {
 

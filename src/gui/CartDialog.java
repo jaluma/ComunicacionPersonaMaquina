@@ -23,8 +23,6 @@ import javax.swing.border.EmptyBorder;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class CartDialog extends JDialog {
 

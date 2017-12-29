@@ -22,19 +22,19 @@ public class GuiUtil {
 		formatter.setAllowsInvalid(false);
 		return formatter;
 	}
-	
-	 public static int getVisibleChildrenCount(Component c) {
-		    if (c == null || !(c instanceof Container))
-		      return 0;
 
-		    int count = 0;
-		    Container container = (Container) c;
+	public static int getVisibleChildrenCount(Component c) {
+		if (c == null || !(c instanceof Container))
+			return 0;
 
-		    for (int i = 0; i < container.getComponentCount(); i++)
-		      if (container.getComponent(i).isVisible())
-		        count++;
+		int count = 0;
+		Container container = (Container) c;
 
-		    return count;
-		  }
+		for (int i = 0; i < container.getComponentCount(); i++)
+			if (container.getComponent(i).isVisible())
+				count++;
+
+		return count;
+	}
 
 }

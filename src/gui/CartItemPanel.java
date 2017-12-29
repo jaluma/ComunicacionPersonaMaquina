@@ -19,9 +19,9 @@ import javax.swing.UIManager;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import park.Package;
-import park.Product;
-import park.Ticket;
+import product.Package;
+import product.Product;
+import product.Ticket;
 
 public class CartItemPanel extends JPanel {
 
@@ -129,7 +129,7 @@ public class CartItemPanel extends JPanel {
 
 					CartItemPanel.this.setVisible(false);
 					repaint();
-					
+
 					mainWindow.getCartWindow().getBtnFinish().setEnabled(true);
 				}
 			});

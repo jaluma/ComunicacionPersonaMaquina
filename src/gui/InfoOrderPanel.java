@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,6 @@ import javax.swing.SwingUtilities;
 import fileUtil.FileUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import java.awt.Font;
 
 public class InfoOrderPanel extends JPanel {
 
@@ -97,7 +97,6 @@ public class InfoOrderPanel extends JPanel {
 		return panelButton;
 	}
 
-	@SuppressWarnings("deprecation")
 	private JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("info_finish"));

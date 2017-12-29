@@ -13,15 +13,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.DataFormatException;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,10 +37,9 @@ import fileUtil.IncorrectOrderException;
 import fileUtil.StringUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import logic.ListOrders;
-import logic.ListProduct;
-import logic.Order;
-import javax.swing.BoxLayout;
+import order.ListOrders;
+import order.Order;
+import product.ListProduct;
 
 public class InitialPanel extends JPanel {
 
@@ -84,7 +82,6 @@ public class InitialPanel extends JPanel {
 	JDateChooser dateArrive;
 	JDateChooser dateExit;
 
-	private JDateChooser dateRestore;
 	private JDateChooser dateChooser;
 	private JPanel panelLblDate;
 	private JPanel paneltxDate;
@@ -152,10 +149,10 @@ public class InitialPanel extends JPanel {
 			panelData.setBackground(Color.WHITE);
 			panelData.setBorder(UIManager.getBorder("Spinner.border"));
 			panelData.setLayout(new GridLayout(2, 2, 2, 2));
-			panelData.add(getPanelLblDni());
-			panelData.add(getPanelTxDni());
 			panelData.add(getPanelLblDate());
 			panelData.add(getPaneltxDate());
+			panelData.add(getPanelLblDni());
+			panelData.add(getPanelTxDni());
 		}
 		return panelData;
 	}
@@ -188,7 +185,7 @@ public class InitialPanel extends JPanel {
 	private JTextField getTxtDni() {
 		if (txtDni == null) {
 			txtDni = new JTextField();
-			txtDni.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			txtDni.setFont(new Font("Tahoma", Font.BOLD, 13));
 			txtDni.setBackground(Color.WHITE);
 			txtDni.setHorizontalAlignment(SwingConstants.CENTER);
 			txtDni.setForeground(Color.DARK_GRAY);
@@ -252,16 +249,15 @@ public class InitialPanel extends JPanel {
 							throw new NumberFormatException();
 						// first 8 chracters no Digit
 						Integer.parseInt(text.substring(0, text.length() - 1));
-						
-						
+
 						Order order = ListOrders.search(getDateChooser().getDate(), txtDni.getText());
-						
+
 						mainWindow.setOrder(order);
-						
+
 						CartDialog dialog = new CartDialog(mainWindow, true);
 						dialog.setVisible(true);
 						mainWindow.setCartWindow(dialog);
-						
+
 					} catch (NumberFormatException exc) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
 								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
@@ -271,9 +267,8 @@ public class InitialPanel extends JPanel {
 								JOptionPane.WARNING_MESSAGE);
 					} catch (DataFormatException e1) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-								Internationalization.getString("error_date_title"),
-								JOptionPane.WARNING_MESSAGE);
-					} 
+								Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			});
 		}
@@ -483,7 +478,7 @@ public class InitialPanel extends JPanel {
 			txtNumberadult.setHorizontalAlignment(SwingConstants.CENTER);
 			txtNumberadult.setText("0"); //$NON-NLS-1$
 			txtNumberadult.setForeground(Color.DARK_GRAY);
-			txtNumberadult.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			txtNumberadult.setFont(new Font("Tahoma", Font.BOLD, 13));
 			txtNumberadult.setColumns(10);
 			txtNumberadult.setToolTipText(getLblAdult().getToolTipText());
 			txtNumberadult.addKeyListener(new NumberTextFieldFormatEvent());
@@ -507,7 +502,7 @@ public class InitialPanel extends JPanel {
 			txtNumberchild.setHorizontalAlignment(SwingConstants.CENTER);
 			txtNumberchild.setText("0"); //$NON-NLS-1$
 			txtNumberchild.setForeground(Color.DARK_GRAY);
-			txtNumberchild.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			txtNumberchild.setFont(new Font("Tahoma", Font.BOLD, 13));
 			txtNumberchild.setColumns(10);
 			txtNumberchild.setToolTipText(getLblChild().getToolTipText());
 			txtNumberchild.addKeyListener(new NumberTextFieldFormatEvent());
@@ -544,12 +539,13 @@ public class InitialPanel extends JPanel {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_adult"),
 								Internationalization.getString("error_number_adult_title"),
 								JOptionPane.WARNING_MESSAGE);
-					else if (Integer.parseInt(txtNumberadult.getText()) <= 0 && Integer.parseInt(txtNumberchild.getText()) <= 0)
+					else if (Integer.parseInt(txtNumberadult.getText()) <= 0
+							&& Integer.parseInt(txtNumberchild.getText()) <= 0)
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_child"),
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
 					else { // valores correctos, pasamos a siguiente ventana
-						// update values mainWindow
+							// update values mainWindow
 						loadListProduct();
 					}
 
@@ -559,7 +555,7 @@ public class InitialPanel extends JPanel {
 		}
 		return btnSearch;
 	}
-	
+
 	private void updateOrder() {
 		mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
 		mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
@@ -569,7 +565,7 @@ public class InitialPanel extends JPanel {
 		long diffDays = diff / (24 * 60 * 60 * 1000);
 		mainWindow.setDays((int) diffDays);
 	}
-	
+
 	protected void loadListProduct() {
 		try {
 			btnSearch.setText(Internationalization.getString("loading"));
@@ -624,12 +620,13 @@ public class InitialPanel extends JPanel {
 	public String getSelectedItem() {
 		return String.valueOf(comboBox.getSelectedItem());
 	}
+
 	private JDateChooser getDateChooser() {
 		if (dateChooser == null) {
 			dateChooser = new JDateChooser(new Date());
 			dateChooser.setMaxSelectableDate(new Date(System.currentTimeMillis()));
 			dateChooser.setToolTipText("Fecha de llegada al destino.");
-			dateChooser.setFont(new Font("Tahoma", Font.PLAIN, 13));
+			dateChooser.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateChooser.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
 			dateChooser.setDateFormatString(
@@ -638,6 +635,7 @@ public class InitialPanel extends JPanel {
 		}
 		return dateChooser;
 	}
+
 	private JPanel getPanelLblDate() {
 		if (panelLblDate == null) {
 			panelLblDate = new JPanel();
@@ -647,6 +645,7 @@ public class InitialPanel extends JPanel {
 		}
 		return panelLblDate;
 	}
+
 	private JPanel getPaneltxDate() {
 		if (paneltxDate == null) {
 			paneltxDate = new JPanel();
@@ -656,6 +655,7 @@ public class InitialPanel extends JPanel {
 		}
 		return paneltxDate;
 	}
+
 	private JPanel getPanelLblDni() {
 		if (panelLblDni == null) {
 			panelLblDni = new JPanel();
@@ -665,6 +665,7 @@ public class InitialPanel extends JPanel {
 		}
 		return panelLblDni;
 	}
+
 	private JPanel getPanelTxDni() {
 		if (panelTxDni == null) {
 			panelTxDni = new JPanel();
@@ -674,6 +675,7 @@ public class InitialPanel extends JPanel {
 		}
 		return panelTxDni;
 	}
+
 	private JPanel getPanelLblAdult() {
 		if (panelLblAdult == null) {
 			panelLblAdult = new JPanel();
@@ -684,6 +686,7 @@ public class InitialPanel extends JPanel {
 		}
 		return panelLblAdult;
 	}
+
 	private JPanel getPanelTxNumberAdult() {
 		if (panelTxNumberAdult == null) {
 			panelTxNumberAdult = new JPanel();
@@ -694,6 +697,7 @@ public class InitialPanel extends JPanel {
 		}
 		return panelTxNumberAdult;
 	}
+
 	private JPanel getPaneLblNumberChild() {
 		if (paneLblNumberChild == null) {
 			paneLblNumberChild = new JPanel();
@@ -703,6 +707,7 @@ public class InitialPanel extends JPanel {
 		}
 		return paneLblNumberChild;
 	}
+
 	private JPanel getPanelTxNumberChild() {
 		if (panelTxNumberChild == null) {
 			panelTxNumberChild = new JPanel();

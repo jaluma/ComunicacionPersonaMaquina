@@ -1,14 +1,15 @@
-package logic;
+package order;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import internationalization.Internationalization;
-import park.Accommodation;
-import park.Package;
-import park.Product;
-import park.Ticket;
+import product.Accommodation;
+import product.ListProduct;
+import product.Package;
+import product.Product;
+import product.Ticket;
 
 public class Order {
 	private String name;

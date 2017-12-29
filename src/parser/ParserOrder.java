@@ -7,12 +7,12 @@ import java.util.List;
 import fileUtil.FileUtil;
 import fileUtil.IncorrectOrderException;
 import internationalization.Internationalization;
-import logic.ListProduct;
-import logic.Order;
-import park.Accommodation;
-import park.Package;
-import park.Product;
-import park.Ticket;
+import order.Order;
+import product.Accommodation;
+import product.ListProduct;
+import product.Package;
+import product.Product;
+import product.Ticket;
 
 public class ParserOrder {
 

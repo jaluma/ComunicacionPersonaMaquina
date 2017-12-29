@@ -2,7 +2,7 @@ package sorter;
 
 import java.util.Comparator;
 
-import park.Product;
+import product.Product;
 
 public class AmountSorter implements Comparator<Product> {
 

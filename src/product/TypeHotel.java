@@ -1,4 +1,4 @@
-package park;
+package product;
 
 public enum TypeHotel {
 	HO("Hotel"), AH("ApartHotel"), AP("Apartment");

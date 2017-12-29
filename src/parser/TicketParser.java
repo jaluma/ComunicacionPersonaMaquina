@@ -1,7 +1,7 @@
 package parser;
 
 import fileUtil.IncorrectLineFormatException;
-import park.Ticket;
+import product.Ticket;
 
 public class TicketParser extends ParserAdapter<Ticket> {
 

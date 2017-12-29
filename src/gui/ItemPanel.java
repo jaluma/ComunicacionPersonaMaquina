@@ -25,12 +25,13 @@ import javax.swing.border.LineBorder;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import park.Package;
-import park.Product;
-import park.Ticket;
+import product.Package;
+import product.Product;
+import product.Ticket;
 
 public class ItemPanel extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel panelItem;
 	private JPanel panel;
 	private JPanel panelPhoto;
@@ -40,8 +41,6 @@ public class ItemPanel extends JPanel {
 	private JButton btnAdd;
 	private JLabel lblNameproduct;
 	private JPanel panelSouth;
-	private JLabel lblDateinitial;
-	private JLabel lblDays;
 	private JLabel lblPlace;
 
 	private MainWindow mainWindow;
@@ -63,11 +62,11 @@ public class ItemPanel extends JPanel {
 		add(getPanelItem());
 		setVisible(true);
 	}
-	
+
 	public Product getProduct() {
 		return product;
 	}
-	
+
 	public boolean getImage() {
 		return image;
 	}

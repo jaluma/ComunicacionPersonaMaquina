@@ -1,8 +1,8 @@
 package parser;
 
 import fileUtil.IncorrectLineFormatException;
-import park.Accommodation;
-import park.Product;
+import product.Accommodation;
+import product.Product;
 
 public class ParserAccommodation extends ParserAdapter<Product> {
 
