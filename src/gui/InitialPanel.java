@@ -271,7 +271,6 @@ public class InitialPanel extends JPanel {
 
 						CartDialog dialog = new CartDialog(mainWindow, true);
 						dialog.setVisible(true);
-						mainWindow.setCartWindow(dialog);
 
 					} catch (NumberFormatException exc) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
@@ -367,7 +366,7 @@ public class InitialPanel extends JPanel {
 			// });
 			Date date = new Date(System.currentTimeMillis());
 			dateArrive.setDate(date);
-			dateArrive.setMinSelectableDate(date);
+			dateArrive.setMinSelectableDate(new Date());
 			dateArrive.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
@@ -598,10 +597,10 @@ public class InitialPanel extends JPanel {
 
 				protected void checkDate(JDateChooser date) {
 					long time1 = date.getDate().getTime();
-					String timeA = String.valueOf(time1).substring(0, 5) + "000000";
+					String timeA = String.valueOf(time1).substring(0, 4) + "0000000";
 					time1 = Long.valueOf(timeA);
 					long time2 = date.getMinSelectableDate().getTime();
-					String timeB = String.valueOf(time2).substring(0, 5) + "000000";
+					String timeB = String.valueOf(time2).substring(0, 4) + "0000000";
 					time2 = Long.valueOf(timeB);
 
 					if (time1 < time2)

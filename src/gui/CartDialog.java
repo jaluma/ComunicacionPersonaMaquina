@@ -24,6 +24,8 @@ import javax.swing.border.EmptyBorder;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class CartDialog extends JDialog {
 
@@ -60,8 +62,11 @@ public class CartDialog extends JDialog {
 		contentPane.add(getBottomPanel(), BorderLayout.SOUTH);
 		setContentPane(contentPane);
 		setModal(true);
-		setBounds(0, 0, 900, 589);
+		setResizable(true);
+		setBounds(0, 0, 950, 580);
 		setLocationRelativeTo(mainWindow);
+		getRootPane().setDefaultButton(btnFinish);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getBtnAddmore()}));
 	}
 
 	public CartDialog(MainWindow mainWindow2, boolean b) {
@@ -188,7 +193,8 @@ public class CartDialog extends JDialog {
 
 	public JLabel getLblSubTotal() {
 		if (lblSubTotal == null) {
-			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal())); // $NON-NLS-1$
+			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal() - mainWindow.getOrder().getDiscount()));
+			updatePrice();
 			lblSubTotal.setForeground(Color.DARK_GRAY);
 			lblSubTotal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
 			lblSubTotal.setBackground(Color.WHITE);
@@ -196,6 +202,10 @@ public class CartDialog extends JDialog {
 			lblSubTotal.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblSubTotal;
+	}
+
+	public void updatePrice() {
+		lblSubTotal.setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal() - mainWindow.getOrder().getDiscount())); // $NON-NLS-1$
 	}
 
 	private JPanel getPanelAcount() {

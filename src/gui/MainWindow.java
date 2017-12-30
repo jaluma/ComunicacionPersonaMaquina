@@ -132,7 +132,6 @@ public class MainWindow extends JFrame {
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		setCartWindow(new CartDialog(this));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		loadHelp();
 
@@ -212,14 +211,6 @@ public class MainWindow extends JFrame {
 
 	public void setProductListPanel(ProductListPanel productListPanel) {
 		this.productListPanel = productListPanel;
-	}
-
-	public CartDialog getCartWindow() {
-		return cartWindow;
-	}
-
-	public void setCartWindow(CartDialog cartWindow) {
-		this.cartWindow = cartWindow;
 	}
 
 	public void setOrder(Order order2) {

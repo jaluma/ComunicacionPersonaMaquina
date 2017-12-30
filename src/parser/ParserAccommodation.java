@@ -19,11 +19,12 @@ public class ParserAccommodation extends ParserAdapter<Product> {
 			String type = lineArray[1];
 			int stars = Integer.parseInt(lineArray[2]);
 			String name = lineArray[3];
-			String codeAccom = lineArray[4];
+			String codePark = lineArray[4];
 			int num = Integer.parseInt(lineArray[5]);
 			double price = Double.parseDouble(lineArray[6]);
+			
 
-			return new Accommodation(code, type, stars, name, codeAccom, num, price);
+			return new Accommodation(code, type, stars, name, codePark, num, price);
 		} catch (NumberFormatException e) {
 			throw new IncorrectLineFormatException("ERROR");
 		}

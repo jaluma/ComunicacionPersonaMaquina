@@ -80,6 +80,7 @@ public class Package extends Product {
 		if (accom.getType() == TypeHotel.HO.toString())
 			str += String.format("<b>%s</b>: %s<br>", Internationalization.getString("stars").toUpperCase(),
 					accom.getType());
+		str += String.format("<b>%s</b>: %d<br>", Internationalization.getString("size").toUpperCase(), accom.getNum());
 		str += String.format("<b>%s</b>: %d", Internationalization.getString("duration").toUpperCase(), duration);
 		return str;
 	}

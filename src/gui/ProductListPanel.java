@@ -46,6 +46,7 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import event.ComboBoxSortEvent;
 import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
+import event.RefreshItemThread;
 import event.SliderMouseWheelEvent;
 import event.SliderTextFieldEvent;
 import guiUtil.GuiUtil;
@@ -130,10 +131,12 @@ public class ProductListPanel extends JPanel {
 	private JPanel panelDate;
 	private JDateChooser dateArrive;
 	private JDateChooser dateExit;
+	private ComboBoxSortEvent comboBoxSortEvent;
 
 	public ProductListPanel(MainWindow mainWindow) {
 		this.mainWindow = mainWindow;
 		list = ListProduct.products;
+		comboBoxSortEvent = new ComboBoxSortEvent(mainWindow, this);
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelNorth(), BorderLayout.NORTH);
@@ -489,11 +492,11 @@ public class ProductListPanel extends JPanel {
 			sliderPerson.setBackground(Color.WHITE);
 			sliderPerson.setPaintLabels(true);
 			sliderPerson.setToolTipText(Internationalization.getToolTips("slider_adult"));
-			sliderPerson.setValue(mainWindow.getNumberAdult());
 			sliderPerson.setMinimum(1);
 			sliderPerson.setMinorTickSpacing(1);
 			int valueMax = setMaxSlider(mainWindow.getNumberAdult());
 			sliderPerson.setMaximum(valueMax + 1);
+			sliderPerson.setValue(mainWindow.getNumberAdult());
 			sliderPerson.addMouseWheelListener(new SliderMouseWheelEvent());
 			sliderPerson.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
@@ -508,6 +511,7 @@ public class ProductListPanel extends JPanel {
 							((ItemPanel) panelItem.getComponent(i)).updatePrice();
 						}
 					}
+					filtersReset();
 				}
 			});
 		}
@@ -545,11 +549,12 @@ public class ProductListPanel extends JPanel {
 						JPanel panel = (JPanel) panelItem.getComponent(i);
 						if (panel instanceof ItemPanel) {
 							Product product = ((ItemPanel) panel).getProduct();
-							product.setNumberAdult(sliderPerson.getValue());
-							mainWindow.setNumberAdult(sliderPerson.getValue());
+							product.setNumberChild(sliderChild.getValue());
+							mainWindow.setNumberChild(sliderChild.getValue());
 							((ItemPanel) panelItem.getComponent(i)).updatePrice();
 						}
 					}
+					filtersReset();
 				}
 			});
 		}
@@ -683,6 +688,11 @@ public class ProductListPanel extends JPanel {
 	protected JComboBox<String> getComboBoxSort() {
 		if (comboBoxSort == null) {
 			comboBoxSort = new JComboBox<String>();
+			comboBoxSort.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					comboBoxSortEvent.resetCount();
+				}
+			});
 			comboBoxSort.setToolTipText(Internationalization.getToolTips("place"));
 			comboBoxSort.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			modelSort = new DefaultComboBoxModel<String>(
@@ -690,7 +700,7 @@ public class ProductListPanel extends JPanel {
 							Internationalization.getString("box_combo_price_down"),
 							Internationalization.getString("box_combo_price_up") });
 			comboBoxSort.setModel(modelSort);
-			comboBoxSort.addItemListener(new ComboBoxSortEvent(mainWindow, this));
+			comboBoxSort.addItemListener(comboBoxSortEvent);
 		}
 		return comboBoxSort;
 	}
@@ -711,21 +721,12 @@ public class ProductListPanel extends JPanel {
 			panelItem = new JPanel();
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
 			panelItem.add(getPanelLoading());
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					loadItems();
-					filterPlaceChange();
-					getPanelLoading().setVisible(false);
-					getRbAll().doClick();
-				}
-			}).start();
+			refresh();
 		}
 		return panelItem;
 	}
 
-	private void loadItems() {
+	public void loadItems() {
 		for (int i = 0; i < list.size(); i++) {
 			Product product = list.get(i);
 			int numberAdult = mainWindow.getNumberAdult();
@@ -802,7 +803,7 @@ public class ProductListPanel extends JPanel {
 		return comboBox;
 	}
 
-	private JRadioButton getRbAll() {
+	public JRadioButton getRbAll() {
 		if (rbAll == null) {
 			rbAll = new JRadioButton(Internationalization.getString("type_all_product"));
 			rbAll.setBackground(TRANSPARENT);
@@ -952,13 +953,7 @@ public class ProductListPanel extends JPanel {
 		return btnPricereset;
 	}
 
-	public void refresh() {
-		panelItem.removeAll();
-		panelItem.revalidate();
-		panelItem.repaint();
-	}
-
-	private JPanel getPanelLoading() {
+	public JPanel getPanelLoading() {
 		if (panelLoading == null) {
 			panelLoading = new JPanel();
 			panelLoading.setLayout(new BoxLayout(panelLoading, BoxLayout.X_AXIS));
@@ -1141,6 +1136,15 @@ public class ProductListPanel extends JPanel {
 	}
 
 	// <----------------------------FILTERS---------------------------------->
+	public void refresh() {
+		getPanelLoading().setVisible(true);
+		panelItem.removeAll();
+		panelItem.add(getPanelLoading());
+		panelItem.revalidate();
+		panelItem.repaint();
+		new Thread(new RefreshItemThread(this)).start();
+	}
+	
 	protected void filtersReset() {
 		filterPlaceChange();
 		filterOnlyAccomCh();
@@ -1149,12 +1153,13 @@ public class ProductListPanel extends JPanel {
 		filterOnlyPhostosCh();
 		filterStars();
 		filterPriceCh();
-		lblLblnumberelem.setText(String.valueOf(GuiUtil.getVisibleChildrenCount(getPanelItem())));
+		filterSize();
+		lblLblnumberelem.setText(String.valueOf(GuiUtil.getVisibleChildrenCount(panelItem)));
 	}
 
 	private void filterOnlyAccomCh() {
 		if (rbOnlyAccom.isSelected()) {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			for (int i = 0; i < panelItem.getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Accommodation) {
@@ -1169,7 +1174,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyTicketCh() {
 		if (rbOnlyTicket.isSelected()) {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			for (int i = 0; i < panelItem.getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Ticket) {
@@ -1184,7 +1189,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyPackageCh() {
 		if (rbOnlyPackage.isSelected()) {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			for (int i = 0; i < panelItem.getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Package) {
@@ -1197,8 +1202,8 @@ public class ProductListPanel extends JPanel {
 		}
 	}
 
-	private void filterPlaceChange() {
-		for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+	public void filterPlaceChange() {
+		for (int i = 0; i < panelItem.getComponentCount(); i++) {
 			if (panelItem.getComponent(i) instanceof ItemPanel) {
 				Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 				String aux = String.valueOf(getComboBox().getSelectedItem());
@@ -1215,7 +1220,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterStars() {
 		if (rbOnlyAccom.isSelected()) {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			for (int i = 0; i < panelItem.getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible() && product instanceof Accommodation
@@ -1231,7 +1236,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyPhostosCh() {
 		if (chOnlyPhotos.isSelected()) {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			for (int i = 0; i < panelItem.getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					boolean value = ((ItemPanel) panelItem.getComponent(i)).getImage();
 					if (panelItem.getComponent(i).isVisible() && value) {
@@ -1249,7 +1254,7 @@ public class ProductListPanel extends JPanel {
 		try {
 			double maxPrice = Double.parseDouble(txtMaxprice.getText());
 			double minPrice = Double.parseDouble(txtMinprice.getText());
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			for (int i = 0; i < panelItem.getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 					if (panelItem.getComponent(i).isVisible()
@@ -1265,6 +1270,23 @@ public class ProductListPanel extends JPanel {
 
 		}
 
+	}
+	
+	private void filterSize() {
+			for (int i = 0; i < panelItem.getComponentCount(); i++) {
+				if (panelItem.getComponent(i) instanceof ItemPanel) {
+					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
+					int number = Integer.parseInt(getTxAdult().getText()) + Integer.parseInt(getTxChild().getText());
+					if (panelItem.getComponent(i).isVisible() && (product instanceof Accommodation && ((Accommodation)product).getNum() >= number || product instanceof Package && ((Package)product).getAccom().getNum() >= number)) {
+						panelItem.getComponent(i).setVisible(true);
+					}else if (panelItem.getComponent(i).isVisible() && product instanceof Ticket) {
+						panelItem.getComponent(i).setVisible(true);
+					}
+					else {
+						panelItem.getComponent(i).setVisible(false);
+					}
+				}
+			}
 	}
 
 }

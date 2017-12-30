@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -29,7 +30,10 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
+import event.FocusTextFieldEvent;
+import event.NumberTextFieldFormatEvent;
 import guiUtil.DateUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
@@ -38,6 +42,10 @@ import product.Package;
 import product.Product;
 import product.Ticket;
 import product.TypeHotel;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class CartItemPanel extends JPanel {
 
@@ -58,17 +66,20 @@ public class CartItemPanel extends JPanel {
 	private JEditorPane editorPane;
 	private JPanel panelEdit;
 	private JPanel panelNumber;
-	private JDateChooser dateChooser;
-	private JDateChooser dateChooser_1;
+	private JDateChooser dateArrive;
+	private JDateChooser dateExit;
 	private JPanel panelDate;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField txAdult;
+	private JTextField txChild;
 	private JCheckBox chckbxBreakfast;
 	private JPanel panelCentrar;
-	private JLabel lblNumber;
-	private JLabel lblDate;
 	private JToggleButton tglbtnEdit;
 	private JPanel panel_1;
+	private JLabel label;
+	private JLabel label_1;
+	private JLabel lblPrice;
+	private JPanel panelPrice;
+	private JPanel panelTools;
 
 	public CartItemPanel(MainWindow mainWindow, CartDialog cartWindow, Product product) {
 		this.mainWindow = mainWindow;
@@ -134,10 +145,9 @@ public class CartItemPanel extends JPanel {
 		if (panelToolsOrder == null) {
 			panelToolsOrder = new JPanel();
 			panelToolsOrder.setBackground(Color.WHITE);
-			FlowLayout fl_panelToolsOrder = (FlowLayout) panelToolsOrder.getLayout();
-			fl_panelToolsOrder.setAlignment(FlowLayout.RIGHT);
-			panelToolsOrder.add(getTglbtnEdit());
-			panelToolsOrder.add(getBtnRemove());
+			panelToolsOrder.setLayout(new BorderLayout(2, 2));
+			panelToolsOrder.add(getPanelPrice(), BorderLayout.WEST);
+			panelToolsOrder.add(getPanelTools(), BorderLayout.EAST);
 		}
 		return panelToolsOrder;
 	}
@@ -158,7 +168,7 @@ public class CartItemPanel extends JPanel {
 					CartItemPanel.this.setVisible(false);
 					repaint();
 
-					mainWindow.getCartWindow().getBtnFinish().setEnabled(true);
+					cartWindow.getBtnFinish().setEnabled(true);
 				}
 			});
 		}
@@ -191,11 +201,13 @@ public class CartItemPanel extends JPanel {
 			gbl_panelEdit.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			panelEdit.setLayout(gbl_panelEdit);
 			GridBagConstraints gbc_panelNumber = new GridBagConstraints();
+			gbc_panelNumber.fill = GridBagConstraints.HORIZONTAL;
 			gbc_panelNumber.insets = new Insets(0, 0, 5, 5);
 			gbc_panelNumber.gridx = 0;
 			gbc_panelNumber.gridy = 0;
 			panelEdit.add(getPanel_2_1(), gbc_panelNumber);
 			GridBagConstraints gbc_panelDate = new GridBagConstraints();
+			gbc_panelDate.fill = GridBagConstraints.HORIZONTAL;
 			gbc_panelDate.insets = new Insets(0, 0, 5, 5);
 			gbc_panelDate.gridx = 0;
 			gbc_panelDate.gridy = 1;
@@ -216,37 +228,74 @@ public class CartItemPanel extends JPanel {
 			panelNumber.setBorder(UIManager.getBorder("Spinner.border"));
 			panelNumber.setBackground(Color.WHITE);
 			panelNumber.setLayout(new GridLayout(0, 1, 0, 2));
-			panelNumber.add(getLblNumber());
-			panelNumber.add(getDateChooser());
-			panelNumber.add(getDateChooser_1());
+			panelNumber.add(getLabel());
+			panelNumber.add(getDateArrive());
+			panelNumber.add(getDateExit());
 		}
 		return panelNumber;
 	}
 
-	private JDateChooser getDateChooser() {
-		if (dateChooser == null) {
-			dateChooser = new JDateChooser();
-			dateChooser.setFont(new Font("Tahoma", Font.BOLD, 13));
-			dateChooser.setDate(product.getDate());
-			dateChooser.setMinSelectableDate(new Date());
-			dateChooser.setDateFormatString(
+	private JDateChooser getDateArrive() {
+		if (dateArrive == null) {
+			dateArrive = new JDateChooser();
+			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
+			dateEditor.setHorizontalAlignment(JTextField.CENTER);
+			dateArrive.setToolTipText(Internationalization.getToolTips("start"));
+			dateArrive.setDate(product.getDate());
+			dateArrive.setMinSelectableDate(new Date());
+			dateArrive.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
+			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					if (dateArrive.getDate() != null ) {
+						if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
+							Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
+							getDateExit().setDate(date2);
+							getDateExit().setMinSelectableDate(date2);
+						}
+						product.setDate(dateArrive.getDate());
+						cartWindow.updatePrice();
+					} else
+						dateArrive.setDate(product.getDate());
+					
+					cartWindow.updatePrice();
+					updatePrice();
+				} 
+			});
 		}
-		return dateChooser;
+		return dateArrive;
 	}
 
-	private JDateChooser getDateChooser_1() {
-		if (dateChooser_1 == null) {
-			dateChooser_1 = new JDateChooser();
-			dateChooser_1.setFont(new Font("Tahoma", Font.BOLD, 13));
-			dateChooser_1.setDate(DateUtil.sumDate(dateChooser.getDate(), product.getDuration()));
-			dateChooser_1.setMinSelectableDate(new Date(dateChooser.getDate().getTime() + 86400000));
-			dateChooser_1.setDateFormatString(
+	private JDateChooser getDateExit() {
+		if (dateExit == null) {
+			dateExit = new JDateChooser();
+			dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
+			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
+			dateEditor.setHorizontalAlignment(JTextField.CENTER);
+			dateExit.setToolTipText(Internationalization.getToolTips("finish"));
+			dateExit.setDate(DateUtil.sumDate(dateArrive.getDate(), product.getDuration()));
+			dateExit.setMinSelectableDate(new Date(dateArrive.getDate().getTime() + 86400000));
+			dateExit.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
+			dateExit.addPropertyChangeListener(new PropertyChangeListener() {
+
+				@Override
+				public void propertyChange(PropertyChangeEvent arg0) {
+					if (dateExit.getDate() != null) {
+						product.setDate(dateExit.getDate());
+					} else
+						dateExit.setDate(DateUtil.sumDate(dateArrive.getDate(), product.getDuration()));
+					
+					cartWindow.updatePrice();
+					updatePrice();
+				}
+				
+			});
 		}
-		return dateChooser_1;
+		return dateExit;
 	}
 
 	private JPanel getPanelDate() {
@@ -255,35 +304,73 @@ public class CartItemPanel extends JPanel {
 			panelDate.setBorder(UIManager.getBorder("Spinner.border"));
 			panelDate.setBackground(Color.WHITE);
 			panelDate.setLayout(new GridLayout(0, 1, 0, 2));
-			panelDate.add(getLblDate());
-			panelDate.add(getTextField());
-			panelDate.add(getTextField_1());
+			panelDate.add(getLabel_1());
+			panelDate.add(getTxChild());
+			panelDate.add(getTxAdult());
 		}
 		return panelDate;
 	}
 
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setText(String.valueOf(product.getNumberAdult()));
-			textField.setHorizontalAlignment(SwingConstants.CENTER);
-			textField.setForeground(Color.DARK_GRAY);
-			textField.setFont(new Font("Tahoma", Font.BOLD, 13));
-			textField.setColumns(10);
+	private JTextField getTxAdult() {
+		if (txAdult == null) {
+			txAdult = new JTextField();
+			txAdult.setText(String.valueOf(product.getNumberAdult()));
+			txAdult.setToolTipText(Internationalization.getToolTips("number_adult"));
+			txAdult.setHorizontalAlignment(SwingConstants.CENTER);
+			txAdult.setForeground(Color.DARK_GRAY);
+			txAdult.setFont(new Font("Tahoma", Font.BOLD, 13));
+			txAdult.setColumns(10);
+			txAdult.addKeyListener(new NumberTextFieldFormatEvent());
+			txAdult.addFocusListener(new FocusTextFieldEvent(String.valueOf(txAdult.getText())));
+			txAdult.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					int number = product.getNumberAdult() + product.getNumberChild();
+					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_size"),
+								Internationalization.getString("error_number_size_title"),
+								JOptionPane.WARNING_MESSAGE);
+						return;
+					} else {
+						product.setNumberChild(Integer.parseInt(txAdult.getText()));
+						cartWindow.updatePrice();
+						updatePrice();
+					}
+				}
+			});
 		}
-		return textField;
+		return txAdult;
 	}
 
-	private JTextField getTextField_1() {
-		if (textField_1 == null) {
-			textField_1 = new JTextField();
-			textField_1.setText(String.valueOf(product.getNumberChild()));
-			textField_1.setHorizontalAlignment(SwingConstants.CENTER);
-			textField_1.setForeground(Color.DARK_GRAY);
-			textField_1.setFont(new Font("Tahoma", Font.BOLD, 13));
-			textField_1.setColumns(10);
+	private JTextField getTxChild() {
+		if (txChild == null) {
+			txChild = new JTextField();
+			txChild.setText(String.valueOf(product.getNumberChild()));
+			txChild.setToolTipText(Internationalization.getToolTips("number_child"));
+			txChild.setHorizontalAlignment(SwingConstants.CENTER);
+			txChild.setForeground(Color.DARK_GRAY);
+			txChild.setFont(new Font("Tahoma", Font.BOLD, 13));
+			txChild.setColumns(10);
+			txChild.addKeyListener(new NumberTextFieldFormatEvent());
+			txChild.addFocusListener(new FocusTextFieldEvent(String.valueOf(txChild.getText())));
+			txChild.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					int number = product.getNumberAdult() + product.getNumberChild();
+					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_size"),
+								Internationalization.getString("error_number_size_title"),
+								JOptionPane.WARNING_MESSAGE);
+						return;
+					} else {
+						product.setNumberChild(Integer.parseInt(txChild.getText()));
+						cartWindow.updatePrice();
+						updatePrice();
+					}
+				}
+			});
 		}
-		return textField_1;
+		return txChild;
 	}
 
 	private JCheckBox getChckbxBreakfast() {
@@ -292,6 +379,14 @@ public class CartItemPanel extends JPanel {
 			chckbxBreakfast.setHorizontalAlignment(SwingConstants.RIGHT);
 			chckbxBreakfast.setSelected(((Accommodation) product).isBreakfast());
 			chckbxBreakfast.setBackground(Color.WHITE);
+			chckbxBreakfast.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					chckbxBreakfast.setSelected(((Accommodation) product).isBreakfast());
+					cartWindow.getLblSubTotal().setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal()));
+				}
+			});
 		}
 		return chckbxBreakfast;
 	}
@@ -305,29 +400,6 @@ public class CartItemPanel extends JPanel {
 			panelCentrar.add(getEditorPane());
 		}
 		return panelCentrar;
-	}
-
-	private JLabel getLblNumber() {
-		if (lblNumber == null) {
-			lblNumber = new JLabel(Internationalization.getString("number_person"));
-			lblNumber.setHorizontalAlignment(SwingConstants.CENTER);
-			lblNumber.setFont(new Font("Tahoma", Font.BOLD, 16));
-			lblNumber.setAlignmentY(0.0f);
-			lblNumber.setAlignmentX(0.5f);
-		}
-		return lblNumber;
-	}
-
-	private JLabel getLblDate() {
-		if (lblDate == null) {
-			lblDate = new JLabel(Internationalization.getString("date"));
-			lblDate.setHorizontalAlignment(SwingConstants.CENTER);
-			lblDate.setFont(new Font("Tahoma", Font.BOLD, 16));
-			lblDate.setBackground(Color.WHITE);
-			lblDate.setAlignmentY(0.0f);
-			lblDate.setAlignmentX(0.5f);
-		}
-		return lblDate;
 	}
 
 	private JToggleButton getTglbtnEdit() {
@@ -354,5 +426,59 @@ public class CartItemPanel extends JPanel {
 			panel_1.add(getPanelEdit());
 		}
 		return panel_1;
+	}
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("Fecha de la reserva");
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			label.setFont(new Font("Tahoma", Font.BOLD, 16));
+			label.setBackground(Color.WHITE);
+			label.setAlignmentY(0.0f);
+			label.setAlignmentX(0.5f);
+		}
+		return label;
+	}
+	private JLabel getLabel_1() {
+		if (label_1 == null) {
+			label_1 = new JLabel("N\u00FAmero de personas");
+			label_1.setHorizontalAlignment(SwingConstants.CENTER);
+			label_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+			label_1.setAlignmentY(0.0f);
+			label_1.setAlignmentX(0.5f);
+		}
+		return label_1;
+	}
+	private JLabel getLblPrice() {
+		if (lblPrice == null) {
+			lblPrice = new JLabel(); //$NON-NLS-1$
+			updatePrice();
+			lblPrice.setForeground(Color.DARK_GRAY);
+			lblPrice.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
+			lblPrice.setBackground(Color.WHITE);
+			lblPrice.setBorder(new EmptyBorder(0, 0, 0, 10));
+			lblPrice.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return lblPrice;
+	}
+	public void updatePrice() {
+		lblPrice.setText(Internationalization.getCurrency(product.getTotal() - product.getDiscount())); // $NON-NLS-1$
+	}
+	private JPanel getPanelPrice() {
+		if (panelPrice == null) {
+			panelPrice = new JPanel();
+			panelPrice.setBackground(Color.WHITE);
+			panelPrice.add(getLblPrice());
+		}
+		return panelPrice;
+	}
+	private JPanel getPanelTools() {
+		if (panelTools == null) {
+			panelTools = new JPanel();
+			panelTools.setBackground(Color.WHITE);
+			panelTools.setLayout(new BoxLayout(panelTools, BoxLayout.X_AXIS));
+			panelTools.add(getTglbtnEdit());
+			panelTools.add(getBtnRemove());
+		}
+		return panelTools;
 	}
 }

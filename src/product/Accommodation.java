@@ -108,6 +108,7 @@ public class Accommodation extends Product {
 		String str = super.toString3();
 		if (type == TypeHotel.HO)
 			str += String.format("<b>%s</b>: %d<br>", Internationalization.getString("stars").toUpperCase(), stars);
+		str += String.format("<b>%s</b>: %d<br>", Internationalization.getString("size").toUpperCase(), num);
 		return str;
 	}
 
