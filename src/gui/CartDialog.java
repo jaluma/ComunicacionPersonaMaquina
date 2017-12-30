@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -22,10 +23,10 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
 public class CartDialog extends JDialog {
 
@@ -35,7 +36,6 @@ public class CartDialog extends JDialog {
 	private JPanel bottomPanel;
 	private JButton btnAddmore;
 	private JButton btnFinish;
-	private MainWindow mainWindow;
 	private JPanel contentPane;
 	private JPanel panelCenter;
 	private JLabel lblOrder;
@@ -46,15 +46,16 @@ public class CartDialog extends JDialog {
 	private JPanel panel_1;
 	private JPanel panelItem;
 	private boolean restoreBool;
+	private MainWindow mainWindow;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public CartDialog(MainWindow mainWindow) {
+		this.mainWindow = mainWindow;
 		setMinimumSize(new Dimension(950, 0));
 		setTitle(Internationalization.getString("CartWindow.this.title")); //$NON-NLS-1$
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CartDialog.class.getResource("/img/cesta.png")));
-		this.mainWindow = mainWindow;
 		this.contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getPanelNorth(), BorderLayout.NORTH);
@@ -69,10 +70,10 @@ public class CartDialog extends JDialog {
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getBtnAddmore()}));
 	}
 
-	public CartDialog(MainWindow mainWindow2, boolean b) {
-		this(mainWindow2);
-		restoreBool = b;
-	}
+//	public CartDialog(MainWindow mainWindow2, boolean b) {
+//		this(mainWindow2);
+//		restoreBool = b;
+//	}
 
 	private JPanel getPanelNorth() {
 		if (panelNorth == null) {
@@ -111,10 +112,6 @@ public class CartDialog extends JDialog {
 			btnAddmore = new JButton(Internationalization.getString("cart_add_more"));
 			btnAddmore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if (restoreBool) {
-						mainWindow.getInitialPanel().loadListProduct();
-						btnFinish.setEnabled(true);
-					}
 					CartDialog.this.dispose();
 				}
 			});
@@ -130,13 +127,13 @@ public class CartDialog extends JDialog {
 				btnFinish.setEnabled(false);
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (mainWindow.getOrder().getItems() == 0)
+					if (ProductListPanel.getOrder().getItems() == 0)
 						JOptionPane.showMessageDialog(CartDialog.this,
 								Internationalization.getString("error_cart_emptry"),
 								Internationalization.getString("error_cart_emptry_title"), JOptionPane.WARNING_MESSAGE);
 					else {
 						CartDialog.this.dispose();
-						JDialog dialog = new LogUpDialog(mainWindow);
+						JDialog dialog = new LogUpDialog(mainWindow, CartDialog.this);
 						dialog.setVisible(true);
 					}
 				}
@@ -174,9 +171,6 @@ public class CartDialog extends JDialog {
 			scrollPane.setViewportView(getItemPanel());
 			scrollPane.getVerticalScrollBar().setValue(0);
 			scrollPane.getVerticalScrollBar().setUnitIncrement(20);
-			for (int i = 0; i < mainWindow.getOrder().getItems(); i++) {
-				panelItem.add(new CartItemPanel(mainWindow, CartDialog.this, mainWindow.getOrder().getProduct(i)));
-			}
 		}
 		return scrollPane;
 	}
@@ -186,6 +180,9 @@ public class CartDialog extends JDialog {
 			panelItem = new JPanel();
 			panelItem.setBorder(UIManager.getBorder("Spinner.border"));
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
+			for (int i = 0; i < ProductListPanel.getOrder().getItems(); i++) {
+				panelItem.add(new CartItemPanel(CartDialog.this, ProductListPanel.getOrder().getProduct(i)));
+			}
 		}
 
 		return panelItem;
@@ -193,7 +190,7 @@ public class CartDialog extends JDialog {
 
 	public JLabel getLblSubTotal() {
 		if (lblSubTotal == null) {
-			lblSubTotal = new JLabel(Internationalization.getCurrency(mainWindow.getOrder().getTotal() - mainWindow.getOrder().getDiscount()));
+			lblSubTotal = new JLabel(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal() - ProductListPanel.getOrder().getDiscount()));
 			updatePrice();
 			lblSubTotal.setForeground(Color.DARK_GRAY);
 			lblSubTotal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
@@ -205,7 +202,7 @@ public class CartDialog extends JDialog {
 	}
 
 	public void updatePrice() {
-		lblSubTotal.setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal() - mainWindow.getOrder().getDiscount())); // $NON-NLS-1$
+		lblSubTotal.setText(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal() - ProductListPanel.getOrder().getDiscount())); // $NON-NLS-1$
 	}
 
 	private JPanel getPanelAcount() {

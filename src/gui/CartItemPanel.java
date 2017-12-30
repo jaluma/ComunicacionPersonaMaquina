@@ -3,7 +3,6 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +11,10 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,10 +45,6 @@ import product.Package;
 import product.Product;
 import product.Ticket;
 import product.TypeHotel;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class CartItemPanel extends JPanel {
 
@@ -81,7 +80,7 @@ public class CartItemPanel extends JPanel {
 	private JPanel panelPrice;
 	private JPanel panelTools;
 
-	public CartItemPanel(MainWindow mainWindow, CartDialog cartWindow, Product product) {
+	public CartItemPanel(CartDialog cartWindow, Product product) {
 		this.mainWindow = mainWindow;
 		this.cartWindow = cartWindow;
 		this.product = product;
@@ -160,10 +159,10 @@ public class CartItemPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					mainWindow.getOrder().remove(product.getCode());
-					mainWindow.getProductListPanel().setNumberItemsCart(mainWindow.getOrder().getItems());
+					ProductListPanel.getOrder().remove(product.getCode());
+					mainWindow.getProductListPanel().setNumberItemsCart(ProductListPanel.getOrder().getItems());
 					cartWindow.getLblSubTotal()
-							.setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal()));
+							.setText(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal()));
 
 					CartItemPanel.this.setVisible(false);
 					repaint();
@@ -384,7 +383,7 @@ public class CartItemPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					chckbxBreakfast.setSelected(((Accommodation) product).isBreakfast());
-					cartWindow.getLblSubTotal().setText(Internationalization.getCurrency(mainWindow.getOrder().getTotal()));
+					cartWindow.getLblSubTotal().setText(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal()));
 				}
 			});
 		}

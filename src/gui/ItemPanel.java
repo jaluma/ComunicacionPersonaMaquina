@@ -47,7 +47,7 @@ public class ItemPanel extends JPanel {
 	private JLabel lblNameproduct;
 	private JPanel panelSouth;
 
-	private MainWindow mainWindow;
+	private ProductListPanel panelProducts;
 	private Product product;
 	private JLabel lblSale;
 	private JPanel panelPrice;
@@ -61,9 +61,9 @@ public class ItemPanel extends JPanel {
 	private JLabel lblTicket;
 	private JLabel lblApartament;
 
-	public ItemPanel(MainWindow mainWindow, Product product) {
+	public ItemPanel(ProductListPanel panel, Product product) {
 		setBackground(Color.WHITE);
-		this.mainWindow = mainWindow;
+		this.panelProducts = panel;
 		this.product = product;
 		setBorder(UIManager.getBorder("Spinner.border"));
 		setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 230));
@@ -168,15 +168,13 @@ public class ItemPanel extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					int number = product.getNumberAdult() + product.getNumberChild();
 					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_size"),
+						JOptionPane.showMessageDialog(ItemPanel.this, Internationalization.getString("error_number_size"),
 								Internationalization.getString("error_number_size_title"),
 								JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 					
-					mainWindow.getOrder().add(product);
-					System.out.println(mainWindow.getOrder().toString());
-					mainWindow.getProductListPanel().setNumberItemsCart(mainWindow.getOrder().getItems());
+					ProductListPanel.getOrder().add(product);
 				}
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.BOLD, 33));

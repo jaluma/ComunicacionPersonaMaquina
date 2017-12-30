@@ -41,7 +41,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import internationalization.Internationalization;
-import order.Order;
 import product.ListProduct;
 
 public class MainWindow extends JFrame {
@@ -55,9 +54,7 @@ public class MainWindow extends JFrame {
 	private JPanel contentPane;
 	private InitialPanel initialPanel;
 	private ProductListPanel productListPanel;
-	private CartDialog cartWindow;
 
-	private Order order;
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenu mnHelp;
@@ -114,7 +111,6 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
-		order = new Order();
 		setTitle("EII TOURS");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/img/ico.png")));
 		// Default
@@ -151,10 +147,6 @@ public class MainWindow extends JFrame {
 		});
 	}
 
-	public Order getOrder() {
-		return order;
-	}
-
 	public int getDays(Date dateStart, Date dateFinish) {
 		long diff = Math.abs(dateFinish.getTime() - dateStart.getTime());
 		long diffDays = diff / (24 * 60 * 60 * 1000);
@@ -163,18 +155,6 @@ public class MainWindow extends JFrame {
 
 	public InitialPanel getInitialPanel() {
 		return initialPanel;
-	}
-
-	public ProductListPanel getProductListPanel() {
-		return productListPanel;
-	}
-
-	public void setProductListPanel(ProductListPanel productListPanel) {
-		this.productListPanel = productListPanel;
-	}
-
-	public void setOrder(Order order2) {
-		this.order = order2;
 	}
 
 	private JMenuBar getMenuBaR() {
@@ -512,5 +492,14 @@ public class MainWindow extends JFrame {
 
 		hb.enableHelpKey(getRootPane(), "introduction", hs);
 		hb.enableHelpOnButton(mntmContents, "introduction", hs);
+	}
+
+	public void setProductListPanel(ProductListPanel productListPanel2) {
+		this.productListPanel = productListPanel2;
+		
+	}
+
+	public ProductListPanel getProductListPanel() {
+		return productListPanel;
 	}
 }

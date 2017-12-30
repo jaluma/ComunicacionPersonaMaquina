@@ -29,7 +29,6 @@ import internationalization.Internationalization;
 public class InfoOrderPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private MainWindow mainWindow;
 	private JPanel panelNorth;
 	private JLabel lblLogo;
 	private JScrollPane scrollPaneOrder;
@@ -38,9 +37,10 @@ public class InfoOrderPanel extends JPanel {
 	private JButton btnFinish;
 	private JButton btnCancel;
 	private JButton btnBack;
+	private MainWindow main;
 
-	public InfoOrderPanel(MainWindow mainWindow) {
-		this.mainWindow = mainWindow;
+	public InfoOrderPanel(MainWindow main) {
+		this.main = main;
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelNorth(), BorderLayout.NORTH);
 		add(getScrollPaneOrder(), BorderLayout.CENTER);
@@ -85,7 +85,7 @@ public class InfoOrderPanel extends JPanel {
 			txtrInfoOrder.setWrapStyleWord(true);
 			txtrInfoOrder.setLineWrap(true);
 			txtrInfoOrder.setEditable(false);
-			txtrInfoOrder.setText(mainWindow.getOrder().toString());
+			txtrInfoOrder.setText(ProductListPanel.getOrder().toString());
 		}
 		return txtrInfoOrder;
 	}
@@ -113,18 +113,18 @@ public class InfoOrderPanel extends JPanel {
 					String nameFile = "orders/";
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					nameFile = format.format(new Date(System.currentTimeMillis())) + "_"
-							+ mainWindow.getOrder().getDni();
+							+ ProductListPanel.getOrder().getDni();
 					nameFile += ".dat";
 
 					try {
-						FileUtil.saveToFile(nameFile, Arrays.asList(mainWindow.getOrder().toString()));
+						FileUtil.saveToFile(nameFile, Arrays.asList(ProductListPanel.getOrder().toString()));
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
 					removeAll();
-					add(new FinishPanel(mainWindow));
+					add(new FinishPanel(main));
 					revalidate();
 					repaint();
 
@@ -156,7 +156,7 @@ public class InfoOrderPanel extends JPanel {
 			btnBack.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					removeAll();
-					add(new LogUpDialog(mainWindow).getContentPane());
+					add(new LogUpDialog(main, null).getContentPane());
 					revalidate();
 					repaint();
 				}

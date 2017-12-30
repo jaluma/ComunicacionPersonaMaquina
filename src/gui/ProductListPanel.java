@@ -18,6 +18,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +54,7 @@ import guiUtil.GuiUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 import net.miginfocom.swing.MigLayout;
+import order.Order;
 import product.Accommodation;
 import product.ListProduct;
 import product.Package;
@@ -133,6 +135,7 @@ public class ProductListPanel extends JPanel {
 	private JDateChooser dateExit;
 	private ComboBoxSortEvent comboBoxSortEvent;
 	private InitialPanel initialWindow;
+	private static Order order = new Order();
 
 	public ProductListPanel(MainWindow mainWindow, InitialPanel initialWindow) {
 		this.mainWindow = mainWindow;
@@ -148,6 +151,14 @@ public class ProductListPanel extends JPanel {
 		mainWindow.setLocationRelativeTo(null);
 	}
 
+	public static Order getOrder() {
+		return order;
+	}
+	
+	public static void setOrder(String name, String dni, String obs) {
+		order = new Order(order, name, dni, obs);
+	}
+	
 	public List<Product> getListProduct() {
 		return list;
 	}
@@ -192,7 +203,7 @@ public class ProductListPanel extends JPanel {
 			lblNumberitems = new JLabel();
 			lblNumberitems.setFont(new Font("Tahoma", Font.BOLD, 14));
 			lblNumberitems.setHorizontalAlignment(SwingConstants.RIGHT);
-			setNumberItemsCart(mainWindow.getOrder().getItems());
+			setNumberItemsCart(order.getItems());
 		}
 		return lblNumberitems;
 	}
@@ -727,13 +738,13 @@ public class ProductListPanel extends JPanel {
 
 	public void loadItems() {
 		for (int i = 0; i < list.size(); i++) {
-			Product product = list.get(i);
+			Product product = ListProduct.searchProduct(list.get(i).getCode());
 			int numberAdult = Integer.parseInt(txAdult.getText());
 			int numberChild = Integer.parseInt(txChild.getText());
 			Date date = dateArrive.getDate();
 			int days = mainWindow.getDays(date, dateExit.getDate());
 			product.loadData(numberAdult, numberChild, date, days);
-			panelItem.add(new ItemPanel(mainWindow, product));
+			panelItem.add(new ItemPanel(this, product));
 		}
 	}
 

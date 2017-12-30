@@ -36,7 +36,6 @@ public class LogUpDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private MainWindow mainWindow;
 	private JPanel contentPane;
 	private JPanel panelNorth;
 	private JLabel lblLogo;
@@ -52,13 +51,14 @@ public class LogUpDialog extends JDialog {
 	private JTextField txDni;
 	private JLabel lblObs;
 	private JTextArea txObs;
+	private MainWindow main;
 
-	public LogUpDialog(MainWindow mainWindow) {
+	public LogUpDialog(MainWindow main, CartDialog cartDialog) {
+		this.main = main;
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LogUpDialog.class.getResource("/img/user.png")));
 		setTitle(Internationalization.getString("LogUpWindow.this.title")); //$NON-NLS-1$
 		setResizable(false);
-		this.mainWindow = mainWindow;
 		this.contentPane = new JPanel();
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getPanelNorth(), BorderLayout.NORTH);
@@ -67,7 +67,7 @@ public class LogUpDialog extends JDialog {
 		setContentPane(contentPane);
 		setModal(true);
 		setBounds(0, 0, 1028, 561);
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(cartDialog);
 		this.getRootPane().setDefaultButton(getBtnFinish());
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getTxName(), getTxSurname(), getTxDNI(),
 				getTxObs(), getBtnCancel(), getBtnFinish() }));
@@ -131,15 +131,14 @@ public class LogUpDialog extends JDialog {
 						// first 8 chracters no Digit
 						Integer.parseInt(text.substring(0, text.length() - 1));
 
-						mainWindow.setOrder(new Order(mainWindow.getOrder(),
-								txName.getText() + " " + txSurname.getText(), txDni.getText(), txObs.getText()));
+						ProductListPanel.setOrder(txName.getText() + " " + txSurname.getText(), txDni.getText(), txObs.getText());
 						contentPane.removeAll();
-						contentPane.add(new InfoOrderPanel(mainWindow));
+						contentPane.add(new InfoOrderPanel(main));
 						contentPane.revalidate();
 						contentPane.repaint();
 
 					} catch (NumberFormatException ex) {
-						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
+						JOptionPane.showMessageDialog(LogUpDialog.this, Internationalization.getString("error_dni"),
 								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
 					}
 				}
@@ -225,10 +224,10 @@ public class LogUpDialog extends JDialog {
 			txName = new JTextField();
 			txName.setForeground(Color.DARK_GRAY);
 			txName.setFont(new Font("Tahoma", Font.BOLD, 14));
-			if (mainWindow.getName().equals(""))
+			if (ProductListPanel.getOrder().equals(""))
 				txName.setText(Internationalization.getString("log_name").toLowerCase());
 			else
-				txName.setText(mainWindow.getOrder().getName().split(" ")[0]);
+				txName.setText(ProductListPanel.getOrder().getName().split(" ")[0]);
 			txName.addFocusListener(new FocusTextFieldEvent("log_name"));
 			txName.setColumns(10);
 		}
@@ -242,10 +241,10 @@ public class LogUpDialog extends JDialog {
 			txSurname.setHorizontalAlignment(SwingConstants.LEFT);
 			txSurname.setFont(new Font("Tahoma", Font.BOLD, 14));
 			txSurname.setColumns(10);
-			if (mainWindow.getOrder().getName().equals(""))
+			if (ProductListPanel.getOrder().getName().equals(""))
 				txSurname.setText(Internationalization.getString("log_surname").toLowerCase());
 			else
-				txSurname.setText(mainWindow.getOrder().getName().split(" ")[1]);
+				txSurname.setText(ProductListPanel.getOrder().getName().split(" ")[1]);
 			txSurname.addFocusListener(new FocusTextFieldEvent("log_surname"));
 		}
 		return txSurname;
@@ -269,10 +268,10 @@ public class LogUpDialog extends JDialog {
 			txDni.setForeground(Color.DARK_GRAY);
 			txDni.setFont(new Font("Tahoma", Font.BOLD, 14));
 			txDni.setColumns(10);
-			if (mainWindow.getOrder().getDni().equals(""))
+			if (ProductListPanel.getOrder().getDni().equals(""))
 				txDni.setText(Internationalization.getString("log_dni").toLowerCase());
 			else
-				txDni.setText(mainWindow.getOrder().getDni());
+				txDni.setText(ProductListPanel.getOrder().getDni());
 			txDni.addFocusListener(new FocusTextFieldEvent("log_dni"));
 		}
 		return txDni;
