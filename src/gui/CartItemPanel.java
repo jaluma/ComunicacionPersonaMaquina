@@ -105,7 +105,7 @@ public class CartItemPanel extends JPanel {
 
 	private JLabel getLblName() {
 		if (lblName == null) {
-			lblName = new JLabel(Internationalization.getProduct(product.getCode()));
+			lblName = new JLabel(product.toString2());
 			lblName.setBackground(Color.WHITE);
 			lblName.setHorizontalAlignment(SwingConstants.CENTER);
 			lblName.setFont(new Font("Tahoma", Font.BOLD, 18));

@@ -1165,6 +1165,11 @@ public class ProductListPanel extends JPanel {
 		filterStars();
 		filterPriceCh();
 		filterSize();
+		filterTicket();
+		updateNumberItems();
+	}
+
+	public void updateNumberItems() {
 		lblLblnumberelem.setText(String.valueOf(GuiUtil.getVisibleChildrenCount(panelItem)));
 	}
 
@@ -1300,6 +1305,20 @@ public class ProductListPanel extends JPanel {
 				}
 			}
 		}
+	}
+	
+	private void filterTicket() {
+		for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			if (panelItem.getComponent(i) instanceof ItemPanel) {
+				Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
+				if (product instanceof Ticket) {
+					if (ProductListPanel.getOrder().getCodes().indexOf(product.getCode()) != (-1)) {
+						panelItem.getComponent(i).setVisible(false);
+					}
+				}
+			}
+		}
+		
 	}
 
 }

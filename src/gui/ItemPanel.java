@@ -178,6 +178,11 @@ public class ItemPanel extends JPanel {
 
 					ProductListPanel.getOrder().add(CopyObject.copy(product));
 					productListPanel.setNumberItemsCart(ProductListPanel.getOrder().getItems());
+					
+					if (product instanceof Ticket)
+						ItemPanel.this.setVisible(false);
+					
+					productListPanel.updateNumberItems();
 				}
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.BOLD, 33));

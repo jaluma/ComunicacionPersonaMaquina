@@ -67,7 +67,7 @@ public class CartDialog extends JDialog {
 		setContentPane(contentPane);
 		setModal(true);
 		setResizable(true);
-		setBounds(0, 0, 950, 580);
+		setBounds(0, 0, mainWindow.getWidth() *2/3, mainWindow.getHeight() *2/3);
 		setLocationRelativeTo(mainWindow);
 		getRootPane().setDefaultButton(btnFinish);
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getBtnAddmore() }));

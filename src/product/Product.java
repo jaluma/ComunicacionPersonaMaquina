@@ -38,11 +38,11 @@ public abstract class Product implements Serializable {
 	}
 
 	public void setNumberChild(int i) {
-		this.numberAdult = i;
+		this.numberChild = i;
 	}
 
 	public void setNumberAdult(int i) {
-		this.numberChild = i;
+		this.numberAdult = i;
 	}
 
 	public void setDate(Date date) {
@@ -114,6 +114,7 @@ public abstract class Product implements Serializable {
 		str += String.format("<b>%s</b> %s<br>", Internationalization.getString("location").toUpperCase(),
 				getPark().getCity() + "-" + getPark().getCountry() + " (" + getPark().getName() + ")");
 		return str;
-	}
+	}	
+	
 
 }

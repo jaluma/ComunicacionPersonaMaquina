@@ -71,6 +71,14 @@ public class Order {
 	public List<Product> getProducts() {
 		return products;
 	}
+	
+	public List<String> getCodes() {
+		List<String> list =new ArrayList<>();
+		for (int i = 0; i < products.size(); i++) {
+			list.add(products.get(i).getCode());
+		}
+		return list;
+	}
 
 	public void add(String code, int numberAdult, int numberChild, Date date, int days) {
 		Product productList = ListProduct.searchProduct(code);

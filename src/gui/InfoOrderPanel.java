@@ -152,6 +152,7 @@ public class InfoOrderPanel extends JPanel {
 	private JButton getBtnBack() {
 		if (btnBack == null) {
 			btnBack = new JButton(Internationalization.getString("back")); //$NON-NLS-1$
+			btnBack.setToolTipText(Internationalization.getToolTips("back"));
 			btnBack.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			btnBack.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
