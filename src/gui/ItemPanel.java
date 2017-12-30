@@ -282,13 +282,13 @@ public class ItemPanel extends JPanel {
 			}
 
 			if (product instanceof Accommodation
+					&& ((Accommodation) product).getType().equals(TypeHotel.AP.toString()))
+				panelServices.add(getLblApartament());
+			else if (product instanceof Accommodation
 					&& ((Accommodation) product).getType().equals(TypeHotel.HO.toString())) {
 				panelServices.add(getLblHotel());
 				panelServices.add(getChckbxChbreakfast());
-			} else if (product instanceof Accommodation
-					&& ((Accommodation) product).getType().equals(TypeHotel.AP.toString()))
-				panelServices.add(getLblApartament());
-			else if (product instanceof Accommodation) {
+			} else if (product instanceof Accommodation) {
 				panelServices.add(getLblHotel());
 				panelServices.add(getLblApartament());
 			}

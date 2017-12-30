@@ -352,14 +352,6 @@ public class InitialPanel extends JPanel {
 			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-			// dateArrive.getCalendarButton().addChangeListener(new ChangeListener() {
-			// @Override
-			// public void stateChanged(ChangeEvent e) {
-			// getDateExit().setDate(new Date(dateArrive.getDate().getTime() + 86400000));
-			// getDateExit().setMinSelectableDate(new Date(dateArrive.getDate().getTime() +
-			// 86400000));
-			// }
-			// });
 			Date date = new Date(System.currentTimeMillis());
 			dateArrive.setDate(date);
 			dateArrive.setMinSelectableDate(new Date());
@@ -370,8 +362,8 @@ public class InitialPanel extends JPanel {
 				public void propertyChange(PropertyChangeEvent arg0) {
 					if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
 						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
-						getDateExit().setDate(date2);
 						getDateExit().setMinSelectableDate(date2);
+						getDateExit().setDate(date2);
 					}
 				}
 			});

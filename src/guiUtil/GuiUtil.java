@@ -6,6 +6,8 @@ import java.text.NumberFormat;
 
 import javax.swing.text.NumberFormatter;
 
+import gui.ItemPanel;
+
 public class GuiUtil {
 
 	public static NumberFormatter numberFormat(int maximum) {
@@ -31,7 +33,7 @@ public class GuiUtil {
 		Container container = (Container) c;
 
 		for (int i = 0; i < container.getComponentCount(); i++)
-			if (container.getComponent(i).isVisible())
+			if (container.getComponent(i).isVisible() && container.getComponent(i) instanceof ItemPanel)
 				count++;
 
 		return count;
