@@ -4,6 +4,7 @@ import internationalization.Internationalization;
 
 public class Accommodation extends Product {
 
+	private static final long serialVersionUID = 1L;
 	private static final double BREAKFAST = 1.1;
 	private TypeHotel type;
 	private int stars;

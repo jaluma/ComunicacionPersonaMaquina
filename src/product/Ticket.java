@@ -4,6 +4,7 @@ import internationalization.Internationalization;
 
 public class Ticket extends Product {
 
+	private static final long serialVersionUID = 1L;
 	private String codeTicket;
 	private double priceAdult;
 	private double priceChild;

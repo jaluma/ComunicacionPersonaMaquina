@@ -5,6 +5,7 @@ import internationalization.Internationalization;
 
 public class Package extends Product {
 
+	private static final long serialVersionUID = 1L;
 	private Accommodation accom;
 	private double priceAdult;
 	private double priceChild;
