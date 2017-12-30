@@ -262,7 +262,8 @@ public class ItemPanel extends JPanel {
 
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					((Accommodation) product).setBreakfast(chckbxChbreakfast.isSelected());
+					((Accommodation) product).setBreakfast(!((Accommodation) product).isBreakfast());
+					chckbxChbreakfast.setSelected(((Accommodation) product).isBreakfast());
 					updatePrice();
 				}
 			});

@@ -158,6 +158,10 @@ public class ProductListPanel extends JPanel {
 		order = new Order(order, name, dni, obs);
 	}
 	
+	public static void setOrder(Order order2) {
+		order = order2;
+	}
+	
 	public List<Product> getListProduct() {
 		return list;
 	}
@@ -1122,7 +1126,7 @@ public class ProductListPanel extends JPanel {
 						JPanel panel = (JPanel) panelItem.getComponent(i);
 						if (panel instanceof ItemPanel) {
 							Product product = ((ItemPanel) panel).getProduct();
-							product.setDate(dateExit.getDate());
+							product.setDate(dateArrive.getDate());
 							product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
 							((ItemPanel) panelItem.getComponent(i)).updatePrice();
 						}

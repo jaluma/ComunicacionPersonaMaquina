@@ -18,6 +18,7 @@ import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.zip.DataFormatException;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -37,9 +38,12 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
+import fileUtil.IncorrectOrderException;
 import fileUtil.StringUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import order.ListOrders;
+import order.Order;
 import product.ListProduct;
 
 public class InitialPanel extends JPanel {
@@ -253,32 +257,33 @@ public class InitialPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// check dnio
-//					String text = txtDni.getText();
-//					try {
-//						// no dni length
-//						if (text.length() != 9)
-//							throw new NumberFormatException();
-//						// first 8 chracters no Digit
-//						Integer.parseInt(text.substring(0, text.length() - 1));
-//
-//						Order order = ListOrders.search(getDateChooser().getDate(), txtDni.getText());
-//
-//						mainWindow.setOrder(order);
-//
-//						CartDialog dialog = new CartDialog(mainWindow, true);
-//						dialog.setVisible(true);
-//
-//					} catch (NumberFormatException exc) {
-//						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
-//								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
-//					} catch (IncorrectOrderException exc1) {
-//						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_search_order"),
-//								Internationalization.getString("error_search_order_title"),
-//								JOptionPane.WARNING_MESSAGE);
-//					} catch (DataFormatException e1) {
-//						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-//								Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
-//					}
+					String text = txtDni.getText();
+					try {
+						// no dni length
+						if (text.length() != 9)
+							throw new NumberFormatException();
+						// first 8 chracters no Digit
+						Integer.parseInt(text.substring(0, text.length() - 1));			
+
+						Order order = ListOrders.search(getDateChooser().getDate(), txtDni.getText());
+
+						ProductListPanel.setOrder(order);
+
+						CartDialog dialog = new CartDialog(mainWindow, InitialPanel.this, true);
+						dialog.setVisible(true);
+
+					} catch (NumberFormatException exc) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
+								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
+					}
+					catch (IncorrectOrderException exc1) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_search_order"),
+								Internationalization.getString("error_search_order_title"),
+								JOptionPane.WARNING_MESSAGE);
+					} catch (DataFormatException e1) {
+						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
+								Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			});
 		}

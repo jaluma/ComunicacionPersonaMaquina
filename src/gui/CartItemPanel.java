@@ -239,27 +239,21 @@ public class CartItemPanel extends JPanel {
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
 			dateArrive.setToolTipText(Internationalization.getToolTips("start"));
-			dateArrive.setMinSelectableDate(new Date());
+			dateArrive.setMinSelectableDate(product.getDate());
 			dateArrive.setDate(product.getDate());
 			dateArrive.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
 			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					if (dateArrive.getDate() != null ) {
-						if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
-							Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
-							getDateExit().setDate(date2);
-							getDateExit().setMinSelectableDate(date2);
-						}
-						product.setDate(dateArrive.getDate());
+					if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
+						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
+						getDateExit().setMinSelectableDate(date2);
+						getDateExit().setDate(date2);
 						cartWindow.updatePrice();
-					} else
-						dateArrive.setDate(product.getDate());
-					
-					cartWindow.updatePrice();
-					updatePrice();
-				} 
+						updatePrice();
+					}
+				}
 			});
 		}
 		return dateArrive;
@@ -272,24 +266,20 @@ public class CartItemPanel extends JPanel {
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
 			dateExit.setToolTipText(Internationalization.getToolTips("finish"));
-			dateExit.setDate(DateUtil.sumDate(dateArrive.getDate(), product.getDuration()));
-			dateExit.setMinSelectableDate(new Date(dateArrive.getDate().getTime() + 86400000));
+			dateExit.setDate(DateUtil.sumDate(product.getDate(), product.getDuration()));
+			dateExit.setMinSelectableDate(new Date(product.getDate().getTime() + 86400000));
 			dateExit.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
 			dateExit.addPropertyChangeListener(new PropertyChangeListener() {
-
-				@Override
 				public void propertyChange(PropertyChangeEvent arg0) {
-					if (dateExit.getDate() != null) {
-						product.setDate(dateExit.getDate());
-					} else
-						dateExit.setDate(DateUtil.sumDate(dateArrive.getDate(), product.getDuration()));
-					
-					cartWindow.updatePrice();
-					updatePrice();
+					if (getDateArrive().getDate() != null) {
+							product.setDate(dateArrive.getDate());
+							product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
+							cartWindow.updatePrice();
+							updatePrice();
+					}
 				}
-				
 			});
 		}
 		return dateExit;
@@ -380,8 +370,10 @@ public class CartItemPanel extends JPanel {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					((Accommodation) product).setBreakfast(!((Accommodation) product).isBreakfast());
 					chckbxBreakfast.setSelected(((Accommodation) product).isBreakfast());
-					cartWindow.getLblSubTotal().setText(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal()));
+					cartWindow.updatePrice();
+					updatePrice();
 				}
 			});
 		}
