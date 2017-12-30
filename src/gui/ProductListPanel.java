@@ -132,9 +132,11 @@ public class ProductListPanel extends JPanel {
 	private JDateChooser dateArrive;
 	private JDateChooser dateExit;
 	private ComboBoxSortEvent comboBoxSortEvent;
+	private InitialPanel initialWindow;
 
-	public ProductListPanel(MainWindow mainWindow) {
+	public ProductListPanel(MainWindow mainWindow, InitialPanel initialWindow) {
 		this.mainWindow = mainWindow;
+		this.initialWindow = initialWindow;
 		list = ListProduct.products;
 		comboBoxSortEvent = new ComboBoxSortEvent(mainWindow, this);
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
@@ -494,20 +496,18 @@ public class ProductListPanel extends JPanel {
 			sliderPerson.setToolTipText(Internationalization.getToolTips("slider_adult"));
 			sliderPerson.setMinimum(1);
 			sliderPerson.setMinorTickSpacing(1);
-			int valueMax = setMaxSlider(mainWindow.getNumberAdult());
+			int valueMax = setMaxSlider(Integer.parseInt(initialWindow.getTxtNumberadult().getText()));
 			sliderPerson.setMaximum(valueMax + 1);
-			sliderPerson.setValue(mainWindow.getNumberAdult());
+			sliderPerson.setValue(Integer.parseInt(initialWindow.getTxtNumberadult().getText()));
 			sliderPerson.addMouseWheelListener(new SliderMouseWheelEvent());
 			sliderPerson.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					getTxAdult().setText(String.valueOf(sliderPerson.getValue()));
-					mainWindow.setNumberAdult(sliderPerson.getValue());
 					for (int i = 0; i < panelItem.getComponentCount(); i++) {
 						JPanel panel = (JPanel) panelItem.getComponent(i);
 						if (panel instanceof ItemPanel) {
 							Product product = ((ItemPanel) panel).getProduct();
 							product.setNumberAdult(sliderPerson.getValue());
-							mainWindow.setNumberAdult(sliderPerson.getValue());
 							((ItemPanel) panelItem.getComponent(i)).updatePrice();
 						}
 					}
@@ -533,9 +533,9 @@ public class ProductListPanel extends JPanel {
 			sliderChild = new JSlider();
 			sliderChild.setPaintLabels(true);
 			sliderChild.setMinimum(0);
-			int valueMax = setMaxSlider(mainWindow.getNumberChild());
+			int valueMax = setMaxSlider(Integer.parseInt(initialWindow.getTxtNumberchild().getText()));
 			sliderChild.setMaximum(valueMax);
-			sliderChild.setValue(mainWindow.getNumberChild());
+			sliderChild.setValue(Integer.parseInt(initialWindow.getTxtNumberchild().getText()));
 			sliderChild.setMinorTickSpacing(1);
 			sliderChild.setToolTipText(Internationalization.getToolTips("slider_child"));
 			sliderChild.setBackground(Color.WHITE);
@@ -544,13 +544,12 @@ public class ProductListPanel extends JPanel {
 			sliderChild.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
 					getTxChild().setText(String.valueOf(sliderChild.getValue()));
-					mainWindow.setNumberChild(sliderChild.getValue());
+					txChild.setText(String.valueOf(sliderChild.getValue()));
 					for (int i = 0; i < panelItem.getComponentCount(); i++) {
 						JPanel panel = (JPanel) panelItem.getComponent(i);
 						if (panel instanceof ItemPanel) {
 							Product product = ((ItemPanel) panel).getProduct();
 							product.setNumberChild(sliderChild.getValue());
-							mainWindow.setNumberChild(sliderChild.getValue());
 							((ItemPanel) panelItem.getComponent(i)).updatePrice();
 						}
 					}
@@ -729,10 +728,10 @@ public class ProductListPanel extends JPanel {
 	public void loadItems() {
 		for (int i = 0; i < list.size(); i++) {
 			Product product = list.get(i);
-			int numberAdult = mainWindow.getNumberAdult();
-			int numberChild = mainWindow.getNumberChild();
-			Date date = mainWindow.getDate();
-			int days = mainWindow.getDays();
+			int numberAdult = Integer.parseInt(txAdult.getText());
+			int numberChild = Integer.parseInt(txChild.getText());
+			Date date = dateArrive.getDate();
+			int days = mainWindow.getDays(date, dateExit.getDate());
 			product.loadData(numberAdult, numberChild, date, days);
 			panelItem.add(new ItemPanel(mainWindow, product));
 		}
@@ -1076,7 +1075,7 @@ public class ProductListPanel extends JPanel {
 			dateArrive.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-			Date date = mainWindow.getDate();
+			Date date = initialWindow.getDateArrive().getDate();
 			dateArrive.setDate(date);
 			dateArrive.setMinSelectableDate(date);
 			dateArrive.setDateFormatString(
@@ -1089,7 +1088,7 @@ public class ProductListPanel extends JPanel {
 						getDateExit().setDate(date2);
 						getDateExit().setMinSelectableDate(date2);
 					}
-					mainWindow.setDateFinish(dateArrive.getDate());
+					getDateExit().setDate(dateArrive.getDate());
 					// for (int i = 0; i < panelItem.getComponentCount(); i++) {
 					// JPanel panel = (JPanel) panelItem.getComponent(i);
 					// if (panel instanceof ItemPanel) {
@@ -1111,7 +1110,7 @@ public class ProductListPanel extends JPanel {
 			dateExit.setFont(new Font("Tahoma", Font.BOLD, 13));
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateExit.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
-			Date date = mainWindow.getDateFinish();
+			Date date = initialWindow.getDateExit().getDate();
 			dateExit.setDate(date);
 			dateExit.setMinSelectableDate(date);
 			dateExit.setDateFormatString(
@@ -1119,13 +1118,12 @@ public class ProductListPanel extends JPanel {
 							.toLocalizedPattern());
 			dateExit.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					mainWindow.setDateFinish(dateExit.getDate());
 					for (int i = 0; i < panelItem.getComponentCount(); i++) {
 						JPanel panel = (JPanel) panelItem.getComponent(i);
 						if (panel instanceof ItemPanel) {
 							Product product = ((ItemPanel) panel).getProduct();
 							product.setDate(dateExit.getDate());
-							product.setDuration(mainWindow.getDays());
+							product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
 							((ItemPanel) panelItem.getComponent(i)).updatePrice();
 						}
 					}

@@ -58,10 +58,6 @@ public class MainWindow extends JFrame {
 	private CartDialog cartWindow;
 
 	private Order order;
-	private int numberChild;
-	private int numberAdult;
-	private Date dateStart;
-	private Date dateFinish;
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenu mnHelp;
@@ -159,43 +155,7 @@ public class MainWindow extends JFrame {
 		return order;
 	}
 
-	public void setNumberChild(int numberChild) {
-		this.numberChild = numberChild;
-	}
-
-	public void setNumberAdult(int numberAdult) {
-		this.numberAdult = numberAdult;
-	}
-
-	public void setDate(Date date) {
-		this.dateStart = date;
-	}
-
-	public void setDateFinish(Date date) {
-		this.dateFinish = date;
-	}
-
-	public int getNumberChild() {
-		return numberChild;
-	}
-
-	public int getNumberAdult() {
-		return numberAdult;
-	}
-
-	public Date getDate() {
-		if (dateStart == null)
-			return new Date();
-		return dateStart;
-	}
-
-	public Date getDateFinish() {
-		if (dateFinish == null)
-			return new Date();
-		return dateFinish;
-	}
-
-	public int getDays() {
+	public int getDays(Date dateStart, Date dateFinish) {
 		long diff = Math.abs(dateFinish.getTime() - dateStart.getTime());
 		long diffDays = diff / (24 * 60 * 60 * 1000);
 		return (int) diffDays;

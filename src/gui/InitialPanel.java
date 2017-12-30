@@ -349,7 +349,7 @@ public class InitialPanel extends JPanel {
 		return panelDate;
 	}
 
-	private JDateChooser getDateArrive() {
+	protected JDateChooser getDateArrive() {
 		if (dateArrive == null) {
 			dateArrive = new JDateChooser();
 			dateArrive.setToolTipText(lblStart.getToolTipText());
@@ -383,7 +383,7 @@ public class InitialPanel extends JPanel {
 		return dateArrive;
 	}
 
-	private JDateChooser getDateExit() {
+	protected JDateChooser getDateExit() {
 		if (dateExit == null) {
 			dateExit = new JDateChooser();
 			dateExit.setToolTipText(getLblFinish().getToolTipText());
@@ -509,7 +509,7 @@ public class InitialPanel extends JPanel {
 		return lblChild;
 	}
 
-	private JTextField getTxtNumberadult() {
+	protected JTextField getTxtNumberadult() {
 		if (txtNumberadult == null) {
 			txtNumberadult = new JTextField();
 			txtNumberadult.setHorizontalAlignment(SwingConstants.CENTER);
@@ -533,7 +533,7 @@ public class InitialPanel extends JPanel {
 		return txtNumberadult;
 	}
 
-	private JTextField getTxtNumberchild() {
+	protected JTextField getTxtNumberchild() {
 		if (txtNumberchild == null) {
 			txtNumberchild = new JTextField();
 			txtNumberchild.setHorizontalAlignment(SwingConstants.CENTER);
@@ -625,13 +625,8 @@ public class InitialPanel extends JPanel {
 		mainWindow.mntmOnlyphotos.setEnabled(true);
 		mainWindow.mntmCart.setEnabled(true);
 
-		mainWindow.setNumberAdult(Integer.parseInt(txtNumberadult.getText()));
-		mainWindow.setNumberChild(Integer.parseInt(txtNumberchild.getText()));
-		mainWindow.setDate(dateArrive.getDate());
-		mainWindow.setDateFinish(dateExit.getDate());
-
 		removeAll();
-		mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow));
+		mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow, this));
 		add(mainWindow.getProductListPanel());
 		repaint();
 		revalidate();
