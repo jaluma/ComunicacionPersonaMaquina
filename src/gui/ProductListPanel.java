@@ -153,15 +153,15 @@ public class ProductListPanel extends JPanel {
 	public static Order getOrder() {
 		return order;
 	}
-	
+
 	public static void setOrder(String name, String dni, String obs) {
 		order = new Order(order, name, dni, obs);
 	}
-	
+
 	public static void setOrder(Order order2) {
 		order = order2;
 	}
-	
+
 	public List<Product> getListProduct() {
 		return list;
 	}
@@ -453,11 +453,12 @@ public class ProductListPanel extends JPanel {
 
 				// update gui
 				rbOnlyAccom.setSelected(true);
-				
+
 				if (buttonPressed.getText().equals("\u2606")) {
 					for (int i = 0; i < panelStar.getComponentCount(); i++) {
 						if (panelStar.getComponent(i) instanceof JButton) {
-							int numberButton = Integer.parseInt(((JButton) panelStar.getComponent(i)).getActionCommand());
+							int numberButton = Integer
+									.parseInt(((JButton) panelStar.getComponent(i)).getActionCommand());
 							if (numberButton <= numberStars) {
 								((JButton) panelStar.getComponent(i)).setText("\u2605");
 							}
@@ -466,7 +467,8 @@ public class ProductListPanel extends JPanel {
 					}
 				} else {
 					for (int i = numberStars; i < panelStar.getComponentCount(); i++) {
-						if (panelStar.getComponent(i) instanceof JButton && ((JButton)panelStar.getComponent(i)).getText().equals("\u2605")) {
+						if (panelStar.getComponent(i) instanceof JButton
+								&& ((JButton) panelStar.getComponent(i)).getText().equals("\u2605")) {
 							((JButton) panelStar.getComponent(i)).setText("\u2606");
 						}
 
@@ -1100,7 +1102,8 @@ public class ProductListPanel extends JPanel {
 							.toLocalizedPattern());
 			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					if (dateArrive.getDate() != null && dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
+					if (dateArrive.getDate() != null
+							&& dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
 						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
 						getDateExit().setMinSelectableDate(date2);
 						getDateExit().setDate(date2);
@@ -1151,7 +1154,7 @@ public class ProductListPanel extends JPanel {
 		panelItem.repaint();
 		new Thread(new RefreshItemThread(this)).start();
 	}
-	
+
 	protected void filtersReset() {
 		getDateExit().setEnabled(true);
 		filterPlaceChange();
@@ -1280,22 +1283,23 @@ public class ProductListPanel extends JPanel {
 		}
 
 	}
-	
+
 	private void filterSize() {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
-				if (panelItem.getComponent(i) instanceof ItemPanel) {
-					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
-					int number = Integer.parseInt(getTxAdult().getText()) + Integer.parseInt(getTxChild().getText());
-					if (panelItem.getComponent(i).isVisible() && (product instanceof Accommodation && ((Accommodation)product).getNum() >= number || product instanceof Package && ((Package)product).getAccom().getNum() >= number)) {
-						panelItem.getComponent(i).setVisible(true);
-					}else if (panelItem.getComponent(i).isVisible() && product instanceof Ticket) {
-						panelItem.getComponent(i).setVisible(true);
-					}
-					else {
-						panelItem.getComponent(i).setVisible(false);
-					}
+		for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			if (panelItem.getComponent(i) instanceof ItemPanel) {
+				Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
+				int number = Integer.parseInt(getTxAdult().getText()) + Integer.parseInt(getTxChild().getText());
+				if (panelItem.getComponent(i).isVisible()
+						&& (product instanceof Accommodation && ((Accommodation) product).getNum() >= number
+								|| product instanceof Package && ((Package) product).getAccom().getNum() >= number)) {
+					panelItem.getComponent(i).setVisible(true);
+				} else if (panelItem.getComponent(i).isVisible() && product instanceof Ticket) {
+					panelItem.getComponent(i).setVisible(true);
+				} else {
+					panelItem.getComponent(i).setVisible(false);
 				}
 			}
+		}
 	}
 
 }

@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,8 +29,6 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 public class CartDialog extends JDialog {
 
@@ -70,7 +70,7 @@ public class CartDialog extends JDialog {
 		setBounds(0, 0, 950, 580);
 		setLocationRelativeTo(mainWindow);
 		getRootPane().setDefaultButton(btnFinish);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{getBtnAddmore()}));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getBtnAddmore() }));
 	}
 
 	public CartDialog(MainWindow mainWindow2, InitialPanel ip, boolean b) {
@@ -188,7 +188,7 @@ public class CartDialog extends JDialog {
 					if (panelItem.getComponentCount() == 0) {
 						getBtnFinish().setEnabled(false);
 					}
-					
+
 					for (int i = 0; i < panelItem.getComponentCount(); i++) {
 						if (panelItem.getComponent(i).isVisible())
 							getBtnFinish().setEnabled(true);
@@ -198,7 +198,8 @@ public class CartDialog extends JDialog {
 			panelItem.setBorder(UIManager.getBorder("Spinner.border"));
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
 			for (int i = 0; i < ProductListPanel.getOrder().getItems(); i++) {
-				panelItem.add(new CartItemPanel(mainWindow, CartDialog.this, ProductListPanel.getOrder().getProduct(i)));
+				panelItem
+						.add(new CartItemPanel(mainWindow, CartDialog.this, ProductListPanel.getOrder().getProduct(i)));
 			}
 		}
 
@@ -207,7 +208,8 @@ public class CartDialog extends JDialog {
 
 	public JLabel getLblSubTotal() {
 		if (lblSubTotal == null) {
-			lblSubTotal = new JLabel(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal() - ProductListPanel.getOrder().getDiscount()));
+			lblSubTotal = new JLabel(Internationalization
+					.getCurrency(ProductListPanel.getOrder().getTotal() - ProductListPanel.getOrder().getDiscount()));
 			updatePrice();
 			lblSubTotal.setForeground(Color.DARK_GRAY);
 			lblSubTotal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
@@ -219,7 +221,8 @@ public class CartDialog extends JDialog {
 	}
 
 	public void updatePrice() {
-		lblSubTotal.setText(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal() - ProductListPanel.getOrder().getDiscount())); // $NON-NLS-1$
+		lblSubTotal.setText(Internationalization
+				.getCurrency(ProductListPanel.getOrder().getTotal() - ProductListPanel.getOrder().getDiscount())); // $NON-NLS-1$
 	}
 
 	private JPanel getPanelAcount() {

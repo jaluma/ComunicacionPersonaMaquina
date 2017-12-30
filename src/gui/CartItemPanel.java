@@ -11,8 +11,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
@@ -26,6 +24,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
@@ -37,7 +36,6 @@ import javax.swing.event.DocumentListener;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
-import event.FocusTextFieldEvent;
 import event.NumberTextFieldFormatEvent;
 import guiUtil.DateUtil;
 import guiUtil.ResizableImage;
@@ -47,8 +45,6 @@ import product.Package;
 import product.Product;
 import product.Ticket;
 import product.TypeHotel;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
 public class CartItemPanel extends JPanel {
 
@@ -279,10 +275,10 @@ public class CartItemPanel extends JPanel {
 			dateExit.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
 					if (getDateArrive().getDate() != null && !(product instanceof Package)) {
-							product.setDate(dateArrive.getDate());
-							product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
-							cartWindow.updatePrice();
-							updatePrice();
+						product.setDate(dateArrive.getDate());
+						product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
+						cartWindow.updatePrice();
+						updatePrice();
 					}
 				}
 			});
@@ -314,32 +310,35 @@ public class CartItemPanel extends JPanel {
 			txAdult.setColumns(10);
 			txAdult.addKeyListener(new NumberTextFieldFormatEvent());
 			txAdult.getDocument().addDocumentListener(new DocumentListener() {
-				  public void changedUpdate(DocumentEvent e) {
-				    warn();
-				  }
-				  public void removeUpdate(DocumentEvent e) {
-				    warn();
-				  }
-				  public void insertUpdate(DocumentEvent e) {
-				    warn();
-				  }
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
 
-				  public void warn() {
-					  int number = product.getNumberAdult() + product.getNumberChild();
-						if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-							JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
-									Internationalization.getString("error_number_size_title"),
-									JOptionPane.WARNING_MESSAGE);
-							txAdult.setText(String.valueOf(product.getNumberAdult()));
-							return;
-						} else {
-							if (!txAdult.getText().equals(""))
-								product.setNumberAdult(Integer.parseInt(txAdult.getText()));
-							cartWindow.updatePrice();
-							updatePrice();
-						}
-				  }
-				});
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+
+				public void warn() {
+					int number = product.getNumberAdult() + product.getNumberChild();
+					if (product instanceof Accommodation && ((Accommodation) product).getNum() < number
+							|| product instanceof Package && ((Package) product).getAccom().getNum() < number) {
+						JOptionPane.showMessageDialog(CartItemPanel.this,
+								Internationalization.getString("error_number_size"),
+								Internationalization.getString("error_number_size_title"), JOptionPane.WARNING_MESSAGE);
+						txAdult.setText(String.valueOf(product.getNumberAdult()));
+						return;
+					} else {
+						if (!txAdult.getText().equals(""))
+							product.setNumberAdult(Integer.parseInt(txAdult.getText()));
+						cartWindow.updatePrice();
+						updatePrice();
+					}
+				}
+			});
 		}
 		return txAdult;
 	}
@@ -355,32 +354,35 @@ public class CartItemPanel extends JPanel {
 			txChild.setColumns(10);
 			txChild.addKeyListener(new NumberTextFieldFormatEvent());
 			txChild.getDocument().addDocumentListener(new DocumentListener() {
-				  public void changedUpdate(DocumentEvent e) {
-				    warn();
-				  }
-				  public void removeUpdate(DocumentEvent e) {
-				    warn();
-				  }
-				  public void insertUpdate(DocumentEvent e) {
-				    warn();
-				  }
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
 
-				  public void warn() {
-					  int number = product.getNumberAdult() + product.getNumberChild();
-						if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-							JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
-									Internationalization.getString("error_number_size_title"),
-									JOptionPane.WARNING_MESSAGE);
-							txChild.setText(String.valueOf(product.getNumberChild()));
-							return;
-						} else {
-							if (!txChild.getText().equals(""))
-								product.setNumberChild(Integer.parseInt(txChild.getText()));
-							cartWindow.updatePrice();
-							updatePrice();
-						}
-				  }
-				});
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+
+				public void warn() {
+					int number = product.getNumberAdult() + product.getNumberChild();
+					if (product instanceof Accommodation && ((Accommodation) product).getNum() < number
+							|| product instanceof Package && ((Package) product).getAccom().getNum() < number) {
+						JOptionPane.showMessageDialog(CartItemPanel.this,
+								Internationalization.getString("error_number_size"),
+								Internationalization.getString("error_number_size_title"), JOptionPane.WARNING_MESSAGE);
+						txChild.setText(String.valueOf(product.getNumberChild()));
+						return;
+					} else {
+						if (!txChild.getText().equals(""))
+							product.setNumberChild(Integer.parseInt(txChild.getText()));
+						cartWindow.updatePrice();
+						updatePrice();
+					}
+				}
+			});
 		}
 		return txChild;
 	}
@@ -392,7 +394,7 @@ public class CartItemPanel extends JPanel {
 			chckbxBreakfast.setSelected(((Accommodation) product).isBreakfast());
 			chckbxBreakfast.setBackground(Color.WHITE);
 			chckbxBreakfast.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					((Accommodation) product).setBreakfast(!((Accommodation) product).isBreakfast());
@@ -441,6 +443,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return panel_1;
 	}
+
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel(Internationalization.getString("date"));
@@ -452,6 +455,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return label;
 	}
+
 	private JLabel getLabel_1() {
 		if (label_1 == null) {
 			label_1 = new JLabel(Internationalization.getString("number_person"));
@@ -462,9 +466,10 @@ public class CartItemPanel extends JPanel {
 		}
 		return label_1;
 	}
+
 	private JLabel getLblPrice() {
 		if (lblPrice == null) {
-			lblPrice = new JLabel(); //$NON-NLS-1$
+			lblPrice = new JLabel(); // $NON-NLS-1$
 			updatePrice();
 			lblPrice.setForeground(Color.DARK_GRAY);
 			lblPrice.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 25));
@@ -474,9 +479,11 @@ public class CartItemPanel extends JPanel {
 		}
 		return lblPrice;
 	}
+
 	public void updatePrice() {
 		lblPrice.setText(Internationalization.getCurrency(product.getTotal() - product.getDiscount())); // $NON-NLS-1$
 	}
+
 	private JPanel getPanelPrice() {
 		if (panelPrice == null) {
 			panelPrice = new JPanel();
@@ -485,6 +492,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return panelPrice;
 	}
+
 	private JPanel getPanelTools() {
 		if (panelTools == null) {
 			panelTools = new JPanel();
@@ -495,6 +503,7 @@ public class CartItemPanel extends JPanel {
 		}
 		return panelTools;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();

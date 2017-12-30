@@ -13,7 +13,7 @@ import sorter.NameSorter;
 public class ComboBoxSortEvent implements ItemListener {
 
 	private ProductListPanel productWindow;
-	private int count=0;
+	private int count = 0;
 
 	public ComboBoxSortEvent(ProductListPanel productWindow) {
 		this.productWindow = productWindow;
@@ -21,14 +21,14 @@ public class ComboBoxSortEvent implements ItemListener {
 	}
 
 	public void resetCount() {
-		count=0;
+		count = 0;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		productWindow.setNumberItemsCart(0);
-		if (count==0) {
+		if (count == 0) {
 			JComboBox<String> cb = (JComboBox<String>) e.getSource();
 			switch (cb.getSelectedIndex()) {
 			case 0:

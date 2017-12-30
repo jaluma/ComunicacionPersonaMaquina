@@ -168,13 +168,14 @@ public class ItemPanel extends JPanel {
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					int number = product.getNumberAdult() + product.getNumberChild();
-					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-						JOptionPane.showMessageDialog(ItemPanel.this, Internationalization.getString("error_number_size"),
-								Internationalization.getString("error_number_size_title"),
-								JOptionPane.WARNING_MESSAGE);
+					if (product instanceof Accommodation && ((Accommodation) product).getNum() < number
+							|| product instanceof Package && ((Package) product).getAccom().getNum() < number) {
+						JOptionPane.showMessageDialog(ItemPanel.this,
+								Internationalization.getString("error_number_size"),
+								Internationalization.getString("error_number_size_title"), JOptionPane.WARNING_MESSAGE);
 						return;
 					}
-					
+
 					ProductListPanel.getOrder().add(CopyObject.copy(product));
 					productListPanel.setNumberItemsCart(ProductListPanel.getOrder().getItems());
 				}
@@ -288,8 +289,7 @@ public class ItemPanel extends JPanel {
 				panelServices.add(getLblTicket());
 			}
 
-			if (product instanceof Accommodation
-					&& ((Accommodation) product).getType().equals(TypeHotel.AP.toString()))
+			if (product instanceof Accommodation && ((Accommodation) product).getType().equals(TypeHotel.AP.toString()))
 				panelServices.add(getLblApartament());
 			else if (product instanceof Accommodation
 					&& ((Accommodation) product).getType().equals(TypeHotel.HO.toString())) {

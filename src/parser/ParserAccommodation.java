@@ -22,7 +22,6 @@ public class ParserAccommodation extends ParserAdapter<Product> {
 			String codePark = lineArray[4];
 			int num = Integer.parseInt(lineArray[5]);
 			double price = Double.parseDouble(lineArray[6]);
-			
 
 			return new Accommodation(code, type, stars, name, codePark, num, price);
 		} catch (NumberFormatException e) {

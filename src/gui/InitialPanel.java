@@ -263,7 +263,7 @@ public class InitialPanel extends JPanel {
 						if (text.length() != 9)
 							throw new NumberFormatException();
 						// first 8 chracters no Digit
-						Integer.parseInt(text.substring(0, text.length() - 1));			
+						Integer.parseInt(text.substring(0, text.length() - 1));
 
 						Order order = ListOrders.search(getDateChooser().getDate(), txtDni.getText());
 
@@ -275,8 +275,7 @@ public class InitialPanel extends JPanel {
 					} catch (NumberFormatException exc) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_dni"),
 								Internationalization.getString("error_dni_title"), JOptionPane.WARNING_MESSAGE);
-					}
-					catch (IncorrectOrderException exc1) {
+					} catch (IncorrectOrderException exc1) {
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_search_order"),
 								Internationalization.getString("error_search_order_title"),
 								JOptionPane.WARNING_MESSAGE);
@@ -591,7 +590,7 @@ public class InitialPanel extends JPanel {
 				protected void checkDate(JDateChooser date) {
 					if (date.getDate() == null || date.getMinSelectableDate() == null)
 						throw new IllegalArgumentException();
-					
+
 					long time1 = date.getDate().getTime();
 					String timeA = String.valueOf(time1).substring(0, 4) + "0000000";
 					time1 = Long.valueOf(timeA);

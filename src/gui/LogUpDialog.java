@@ -130,7 +130,8 @@ public class LogUpDialog extends JDialog {
 						// first 8 chracters no Digit
 						Integer.parseInt(text.substring(0, text.length() - 1));
 
-						ProductListPanel.setOrder(txName.getText() + " " + txSurname.getText(), txDni.getText(), txObs.getText());
+						ProductListPanel.setOrder(txName.getText() + " " + txSurname.getText(), txDni.getText(),
+								txObs.getText());
 						contentPane.removeAll();
 						contentPane.add(new InfoOrderPanel(main));
 						contentPane.revalidate();

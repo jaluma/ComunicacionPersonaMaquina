@@ -1,13 +1,12 @@
 package guiUtil;
 
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import product.Product;
-
-import java.io.ObjectInputStream;
 
 /**
  * Utility for making deep copies (vs. clone()'s shallow copies) of objects.
@@ -44,7 +43,7 @@ public class CopyObject {
 		} catch (ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();
 		}
-		return (Product)obj;
+		return (Product) obj;
 	}
 
 }

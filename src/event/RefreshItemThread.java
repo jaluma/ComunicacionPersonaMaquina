@@ -3,9 +3,9 @@ package event;
 import gui.ProductListPanel;
 
 public class RefreshItemThread implements Runnable {
-	
+
 	private ProductListPanel panel;
-	
+
 	public RefreshItemThread(ProductListPanel panel) {
 		this.panel = panel;
 	}

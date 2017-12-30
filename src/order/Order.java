@@ -90,7 +90,7 @@ public class Order {
 	public void remove(String code) {
 		products.remove(ListProduct.searchProduct(code));
 	}
-	
+
 	public void remove(Product product) {
 		products.remove(product);
 	}

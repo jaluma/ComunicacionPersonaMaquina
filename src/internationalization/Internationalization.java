@@ -55,7 +55,7 @@ public class Internationalization {
 	public static Locale getLocate() {
 		return locale;
 	}
-	
+
 	public static int getIndexLanguageSelected() {
 		return Arrays.asList(LOCATION_SUPPORTED).indexOf(locale);
 	}

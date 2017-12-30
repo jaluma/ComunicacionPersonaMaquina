@@ -390,7 +390,7 @@ public class MainWindow extends JFrame {
 					for (int i = 0; i < localeString.length; i++) {
 						localeString[i] = Internationalization.LOCATION_SUPPORTED[i].getDisplayName();
 					}
-					
+
 					int in = Internationalization.getIndexLanguageSelected();
 
 					String value = (String) JOptionPane.showInputDialog(null,
@@ -498,7 +498,7 @@ public class MainWindow extends JFrame {
 
 	public void setProductListPanel(ProductListPanel productListPanel2) {
 		this.productListPanel = productListPanel2;
-		
+
 	}
 
 	public ProductListPanel getProductListPanel() {

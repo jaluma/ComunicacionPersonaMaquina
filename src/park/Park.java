@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import fileUtil.AssertParam;
 
-public class Park implements Serializable{
+public class Park implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
