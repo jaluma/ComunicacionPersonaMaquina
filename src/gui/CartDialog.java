@@ -27,6 +27,8 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class CartDialog extends JDialog {
 
@@ -127,8 +129,7 @@ public class CartDialog extends JDialog {
 	protected JButton getBtnFinish() {
 		if (btnFinish == null) {
 			btnFinish = new JButton(Internationalization.getString("cart_finish"));
-			if (restoreBool)
-				btnFinish.setEnabled(false);
+			btnFinish.setEnabled(false);
 			btnFinish.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (ProductListPanel.getOrder().getItems() == 0)
@@ -182,6 +183,18 @@ public class CartDialog extends JDialog {
 	protected JPanel getItemPanel() {
 		if (panelItem == null) {
 			panelItem = new JPanel();
+			panelItem.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					if (panelItem.getComponentCount() == 0) {
+						getBtnFinish().setEnabled(false);
+					}
+					
+					for (int i = 0; i < panelItem.getComponentCount(); i++) {
+						if (panelItem.getComponent(i).isVisible())
+							getBtnFinish().setEnabled(true);
+					}
+				}
+			});
 			panelItem.setBorder(UIManager.getBorder("Spinner.border"));
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
 			for (int i = 0; i < ProductListPanel.getOrder().getItems(); i++) {

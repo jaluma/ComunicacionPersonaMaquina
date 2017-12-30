@@ -390,11 +390,13 @@ public class MainWindow extends JFrame {
 					for (int i = 0; i < localeString.length; i++) {
 						localeString[i] = Internationalization.LOCATION_SUPPORTED[i].getDisplayName();
 					}
+					
+					int in = Internationalization.getIndexLanguageSelected();
 
 					String value = (String) JOptionPane.showInputDialog(null,
 							"<html>" + Internationalization.getString("select_language"),
 							Internationalization.getString("select_language_title"), JOptionPane.OK_CANCEL_OPTION,
-							new ImageIcon("/img/lang.png"), localeString, 0);
+							new ImageIcon("/img/lang.png"), localeString, localeString[in]);
 					if (value != null) {
 						for (int i = 0; i < localeString.length; i++) {
 							if (localeString[i].equals(value)) {

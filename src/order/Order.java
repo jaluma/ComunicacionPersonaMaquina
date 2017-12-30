@@ -90,6 +90,10 @@ public class Order {
 	public void remove(String code) {
 		products.remove(ListProduct.searchProduct(code));
 	}
+	
+	public void remove(Product product) {
+		products.remove(product);
+	}
 
 	@Override
 	public String toString() {
@@ -120,11 +124,11 @@ public class Order {
 		}
 		str += "\n";
 		str += "**** " + Internationalization.getString("paid_title").toUpperCase() + " ****\n\n";
-		str += String.format("%-30s %31s %15s \n", Internationalization.getString("package_title"), " ",
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("package_title").toUpperCase(), " ",
 				Internationalization.getCurrency(getPrice(Package.class)));
-		str += String.format("%-30s %31s %15s \n", Internationalization.getString("accom_title"), " ",
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("accom_title").toUpperCase(), " ",
 				Internationalization.getCurrency(getPrice(Accommodation.class)));
-		str += String.format("%-30s %31s %15s \n", Internationalization.getString("tickets_title"), " ",
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("tickets_title").toUpperCase(), " ",
 				Internationalization.getCurrency(getPrice(Ticket.class)));
 
 		if (checkOffer())

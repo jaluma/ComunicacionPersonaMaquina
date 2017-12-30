@@ -574,21 +574,24 @@ public class InitialPanel extends JPanel {
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
 					else { // valores correctos, pasamos a siguiente ventana
-//						try {
+						try {
 							checkDate(dateArrive);
 							checkDate(dateExit);
 							// update values mainWindow
 							btnSearch.setEnabled(false);
 							loadListProduct();
-//						} catch (NullPointerException e) {
-//							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-//									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
-//						}
+						} catch (IllegalArgumentException e) {
+							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
+									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+						}
 					}
 
 				}
 
 				protected void checkDate(JDateChooser date) {
+					if (date.getDate() == null || date.getMinSelectableDate() == null)
+						throw new IllegalArgumentException();
+					
 					long time1 = date.getDate().getTime();
 					String timeA = String.valueOf(time1).substring(0, 4) + "0000000";
 					time1 = Long.valueOf(timeA);
@@ -597,7 +600,7 @@ public class InitialPanel extends JPanel {
 					time2 = Long.valueOf(timeB);
 
 					if (time1 < time2)
-						throw new NullPointerException();
+						throw new IllegalArgumentException();
 				}
 
 			});

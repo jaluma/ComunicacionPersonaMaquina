@@ -443,6 +443,7 @@ public class ProductListPanel extends JPanel {
 		btnStar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnStar.setActionCommand(String.valueOf(index));
 		btnStar.setBackground(Color.WHITE);
+		btnStar.setFont(new Font("Code2000", Font.PLAIN, 14));
 		btnStar.setToolTipText(
 				String.format(Internationalization.getToolTips("star_number"), btnStar.getActionCommand()));
 		btnStar.addActionListener(new ActionListener() {
@@ -452,18 +453,20 @@ public class ProductListPanel extends JPanel {
 
 				// update gui
 				rbOnlyAccom.setSelected(true);
+				
 				if (buttonPressed.getText().equals("\u2606")) {
 					for (int i = 0; i < panelStar.getComponentCount(); i++) {
 						if (panelStar.getComponent(i) instanceof JButton) {
-							if (Integer
-									.parseInt(((JButton) panelStar.getComponent(i)).getActionCommand()) <= numberStars)
+							int numberButton = Integer.parseInt(((JButton) panelStar.getComponent(i)).getActionCommand());
+							if (numberButton <= numberStars) {
 								((JButton) panelStar.getComponent(i)).setText("\u2605");
+							}
 						}
 
 					}
-				} else {				
-					for (int i = 0; i < panelStar.getComponentCount(); i++) {
-						if (panelStar.getComponent(i) instanceof JButton) {
+				} else {
+					for (int i = numberStars; i < panelStar.getComponentCount(); i++) {
+						if (panelStar.getComponent(i) instanceof JButton && ((JButton)panelStar.getComponent(i)).getText().equals("\u2605")) {
 							((JButton) panelStar.getComponent(i)).setText("\u2606");
 						}
 
@@ -747,7 +750,7 @@ public class ProductListPanel extends JPanel {
 			Date date = dateArrive.getDate();
 			int days = mainWindow.getDays(date, getDateExit().getDate());
 			product.loadData(numberAdult, numberChild, date, days);
-			panelItem.add(new ItemPanel(product));
+			panelItem.add(new ItemPanel(this, product));
 		}
 	}
 
@@ -1097,7 +1100,7 @@ public class ProductListPanel extends JPanel {
 							.toLocalizedPattern());
 			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
+					if (dateArrive.getDate() != null && dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
 						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
 						getDateExit().setMinSelectableDate(date2);
 						getDateExit().setDate(date2);
@@ -1122,13 +1125,15 @@ public class ProductListPanel extends JPanel {
 							.toLocalizedPattern());
 			dateExit.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					for (int i = 0; i < panelItem.getComponentCount(); i++) {
-						JPanel panel = (JPanel) panelItem.getComponent(i);
-						if (panel instanceof ItemPanel) {
-							Product product = ((ItemPanel) panel).getProduct();
-							product.setDate(dateArrive.getDate());
-							product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
-							((ItemPanel) panelItem.getComponent(i)).updatePrice();
+					if (dateExit.getDate() != null) {
+						for (int i = 0; i < panelItem.getComponentCount(); i++) {
+							JPanel panel = (JPanel) panelItem.getComponent(i);
+							if (panel instanceof ItemPanel) {
+								Product product = ((ItemPanel) panel).getProduct();
+								product.setDate(dateArrive.getDate());
+								product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
+								((ItemPanel) panelItem.getComponent(i)).updatePrice();
+							}
 						}
 					}
 				}
@@ -1148,6 +1153,7 @@ public class ProductListPanel extends JPanel {
 	}
 	
 	protected void filtersReset() {
+		getDateExit().setEnabled(true);
 		filterPlaceChange();
 		filterOnlyAccomCh();
 		filterOnlyTicketCh();
@@ -1191,6 +1197,7 @@ public class ProductListPanel extends JPanel {
 
 	private void filterOnlyPackageCh() {
 		if (rbOnlyPackage.isSelected()) {
+			getDateExit().setEnabled(false);
 			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();

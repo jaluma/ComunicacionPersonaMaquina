@@ -31,6 +31,8 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
@@ -45,6 +47,8 @@ import product.Package;
 import product.Product;
 import product.Ticket;
 import product.TypeHotel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 public class CartItemPanel extends JPanel {
 
@@ -79,6 +83,7 @@ public class CartItemPanel extends JPanel {
 	private JLabel lblPrice;
 	private JPanel panelPrice;
 	private JPanel panelTools;
+	private JScrollPane scrollPane;
 
 	public CartItemPanel(MainWindow mainWindow, CartDialog cartWindow, Product product) {
 		this.mainWindow = mainWindow;
@@ -159,15 +164,13 @@ public class CartItemPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ProductListPanel.getOrder().remove(product.getCode());
+					ProductListPanel.getOrder().remove(product);
 					mainWindow.getProductListPanel().setNumberItemsCart(ProductListPanel.getOrder().getItems());
 					cartWindow.getLblSubTotal()
 							.setText(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal()));
 
 					CartItemPanel.this.setVisible(false);
 					repaint();
-
-					cartWindow.getBtnFinish().setEnabled(true);
 				}
 			});
 		}
@@ -267,13 +270,15 @@ public class CartItemPanel extends JPanel {
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
 			dateExit.setToolTipText(Internationalization.getToolTips("finish"));
 			dateExit.setDate(DateUtil.sumDate(product.getDate(), product.getDuration()));
+			if (product instanceof Package)
+				getDateExit().setEnabled(false);
 			dateExit.setMinSelectableDate(new Date(product.getDate().getTime() + 86400000));
 			dateExit.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
 			dateExit.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					if (getDateArrive().getDate() != null) {
+					if (getDateArrive().getDate() != null && !(product instanceof Package)) {
 							product.setDate(dateArrive.getDate());
 							product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
 							cartWindow.updatePrice();
@@ -292,8 +297,8 @@ public class CartItemPanel extends JPanel {
 			panelDate.setBackground(Color.WHITE);
 			panelDate.setLayout(new GridLayout(0, 1, 0, 2));
 			panelDate.add(getLabel_1());
-			panelDate.add(getTxChild());
 			panelDate.add(getTxAdult());
+			panelDate.add(getTxChild());
 		}
 		return panelDate;
 	}
@@ -308,23 +313,33 @@ public class CartItemPanel extends JPanel {
 			txAdult.setFont(new Font("Tahoma", Font.BOLD, 13));
 			txAdult.setColumns(10);
 			txAdult.addKeyListener(new NumberTextFieldFormatEvent());
-			txAdult.addFocusListener(new FocusTextFieldEvent(String.valueOf(txAdult.getText())));
-			txAdult.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusLost(FocusEvent arg0) {
-					int number = product.getNumberAdult() + product.getNumberChild();
-					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-						JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
-								Internationalization.getString("error_number_size_title"),
-								JOptionPane.WARNING_MESSAGE);
-						return;
-					} else {
-						product.setNumberChild(Integer.parseInt(txAdult.getText()));
-						cartWindow.updatePrice();
-						updatePrice();
-					}
-				}
-			});
+			txAdult.getDocument().addDocumentListener(new DocumentListener() {
+				  public void changedUpdate(DocumentEvent e) {
+				    warn();
+				  }
+				  public void removeUpdate(DocumentEvent e) {
+				    warn();
+				  }
+				  public void insertUpdate(DocumentEvent e) {
+				    warn();
+				  }
+
+				  public void warn() {
+					  int number = product.getNumberAdult() + product.getNumberChild();
+						if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
+							JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
+									Internationalization.getString("error_number_size_title"),
+									JOptionPane.WARNING_MESSAGE);
+							txAdult.setText(String.valueOf(product.getNumberAdult()));
+							return;
+						} else {
+							if (!txAdult.getText().equals(""))
+								product.setNumberAdult(Integer.parseInt(txAdult.getText()));
+							cartWindow.updatePrice();
+							updatePrice();
+						}
+				  }
+				});
 		}
 		return txAdult;
 	}
@@ -339,23 +354,33 @@ public class CartItemPanel extends JPanel {
 			txChild.setFont(new Font("Tahoma", Font.BOLD, 13));
 			txChild.setColumns(10);
 			txChild.addKeyListener(new NumberTextFieldFormatEvent());
-			txChild.addFocusListener(new FocusTextFieldEvent(String.valueOf(txChild.getText())));
-			txChild.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusLost(FocusEvent arg0) {
-					int number = product.getNumberAdult() + product.getNumberChild();
-					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-						JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
-								Internationalization.getString("error_number_size_title"),
-								JOptionPane.WARNING_MESSAGE);
-						return;
-					} else {
-						product.setNumberChild(Integer.parseInt(txChild.getText()));
-						cartWindow.updatePrice();
-						updatePrice();
-					}
-				}
-			});
+			txChild.getDocument().addDocumentListener(new DocumentListener() {
+				  public void changedUpdate(DocumentEvent e) {
+				    warn();
+				  }
+				  public void removeUpdate(DocumentEvent e) {
+				    warn();
+				  }
+				  public void insertUpdate(DocumentEvent e) {
+				    warn();
+				  }
+
+				  public void warn() {
+					  int number = product.getNumberAdult() + product.getNumberChild();
+						if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
+							JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
+									Internationalization.getString("error_number_size_title"),
+									JOptionPane.WARNING_MESSAGE);
+							txChild.setText(String.valueOf(product.getNumberChild()));
+							return;
+						} else {
+							if (!txChild.getText().equals(""))
+								product.setNumberChild(Integer.parseInt(txChild.getText()));
+							cartWindow.updatePrice();
+							updatePrice();
+						}
+				  }
+				});
 		}
 		return txChild;
 	}
@@ -386,7 +411,7 @@ public class CartItemPanel extends JPanel {
 			panelCentrar.setBackground(Color.WHITE);
 			panelCentrar.setLayout(new BorderLayout(0, 0));
 			panelCentrar.add(getLblName(), BorderLayout.NORTH);
-			panelCentrar.add(getEditorPane());
+			panelCentrar.add(getScrollPane(), BorderLayout.CENTER);
 		}
 		return panelCentrar;
 	}
@@ -418,7 +443,7 @@ public class CartItemPanel extends JPanel {
 	}
 	private JLabel getLabel() {
 		if (label == null) {
-			label = new JLabel("Fecha de la reserva");
+			label = new JLabel(Internationalization.getString("date"));
 			label.setHorizontalAlignment(SwingConstants.CENTER);
 			label.setFont(new Font("Tahoma", Font.BOLD, 16));
 			label.setBackground(Color.WHITE);
@@ -429,7 +454,7 @@ public class CartItemPanel extends JPanel {
 	}
 	private JLabel getLabel_1() {
 		if (label_1 == null) {
-			label_1 = new JLabel("N\u00FAmero de personas");
+			label_1 = new JLabel(Internationalization.getString("number_person"));
 			label_1.setHorizontalAlignment(SwingConstants.CENTER);
 			label_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 			label_1.setAlignmentY(0.0f);
@@ -469,5 +494,14 @@ public class CartItemPanel extends JPanel {
 			panelTools.add(getBtnRemove());
 		}
 		return panelTools;
+	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBackground(Color.WHITE);
+			scrollPane.setBorder(new EmptyBorder(5, 5, 5, 0));
+			scrollPane.setViewportView(getEditorPane());
+		}
+		return scrollPane;
 	}
 }

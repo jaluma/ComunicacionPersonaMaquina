@@ -60,10 +60,12 @@ public class ItemPanel extends JPanel {
 	private JLabel lblHotel;
 	private JLabel lblTicket;
 	private JLabel lblApartament;
+	private ProductListPanel productListPanel;
 
-	public ItemPanel(Product product) {
+	public ItemPanel(ProductListPanel plPanel, Product product) {
 		setBackground(Color.WHITE);
 		this.product = product;
+		this.productListPanel = plPanel;
 		setBorder(UIManager.getBorder("Spinner.border"));
 		setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 230));
 		setPreferredSize(new Dimension(900, 230));
@@ -174,6 +176,7 @@ public class ItemPanel extends JPanel {
 					}
 					
 					ProductListPanel.getOrder().add(CopyObject.copy(product));
+					productListPanel.setNumberItemsCart(ProductListPanel.getOrder().getItems());
 				}
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.BOLD, 33));
@@ -262,8 +265,11 @@ public class ItemPanel extends JPanel {
 
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					((Accommodation) product).setBreakfast(!((Accommodation) product).isBreakfast());
-					chckbxChbreakfast.setSelected(((Accommodation) product).isBreakfast());
+					if (chckbxChbreakfast.isSelected()) {
+						((Accommodation) product).setBreakfast(true);
+					} else {
+						((Accommodation) product).setBreakfast(false);
+					}
 					updatePrice();
 				}
 			});
@@ -342,7 +348,7 @@ public class ItemPanel extends JPanel {
 	private JLabel getLblApartament() {
 		if (lblApartament == null) {
 			lblApartament = new JLabel(); // $NON-NLS-1$
-			lblApartament.setToolTipText(Internationalization.getString("accom"));
+			lblApartament.setToolTipText(Internationalization.getString("apartament"));
 			ResizableImage.setResizeImage(this, lblApartament, "/img/apartament.png", 50, 50);
 		}
 		return lblApartament;

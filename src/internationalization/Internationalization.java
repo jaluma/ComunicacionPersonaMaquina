@@ -3,6 +3,7 @@ package internationalization;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -53,6 +54,10 @@ public class Internationalization {
 
 	public static Locale getLocate() {
 		return locale;
+	}
+	
+	public static int getIndexLanguageSelected() {
+		return Arrays.asList(LOCATION_SUPPORTED).indexOf(locale);
 	}
 
 	public static String getActualDate() {
