@@ -1,12 +1,14 @@
 package product;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import internationalization.Internationalization;
 import park.Park;
 
-public abstract class Product {
+public abstract class Product implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private static final double DISCOUNT = 0.2;
 	protected String code;
 	protected String name;

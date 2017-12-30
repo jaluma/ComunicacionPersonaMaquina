@@ -28,7 +28,6 @@ import event.FocusTextAreaEvent;
 import event.FocusTextFieldEvent;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import order.Order;
 
 public class LogUpDialog extends JDialog {
 

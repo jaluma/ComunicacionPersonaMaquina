@@ -18,7 +18,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -141,7 +140,7 @@ public class ProductListPanel extends JPanel {
 		this.mainWindow = mainWindow;
 		this.initialWindow = initialWindow;
 		list = ListProduct.products;
-		comboBoxSortEvent = new ComboBoxSortEvent(mainWindow, this);
+		comboBoxSortEvent = new ComboBoxSortEvent(this);
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelNorth(), BorderLayout.NORTH);
@@ -744,7 +743,7 @@ public class ProductListPanel extends JPanel {
 			Date date = dateArrive.getDate();
 			int days = mainWindow.getDays(date, dateExit.getDate());
 			product.loadData(numberAdult, numberChild, date, days);
-			panelItem.add(new ItemPanel(this, product));
+			panelItem.add(new ItemPanel(product));
 		}
 	}
 

@@ -6,7 +6,6 @@ import java.util.Collections;
 
 import javax.swing.JComboBox;
 
-import gui.MainWindow;
 import gui.ProductListPanel;
 import sorter.AmountSorter;
 import sorter.NameSorter;
@@ -14,11 +13,9 @@ import sorter.NameSorter;
 public class ComboBoxSortEvent implements ItemListener {
 
 	private ProductListPanel productWindow;
-	private MainWindow mainWindow;
 	private int count=0;
 
-	public ComboBoxSortEvent(MainWindow main, ProductListPanel productWindow) {
-		this.mainWindow = main;
+	public ComboBoxSortEvent(ProductListPanel productWindow) {
 		this.productWindow = productWindow;
 		resetCount();
 	}
@@ -30,6 +27,7 @@ public class ComboBoxSortEvent implements ItemListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		productWindow.setNumberItemsCart(0);
 		if (count==0) {
 			JComboBox<String> cb = (JComboBox<String>) e.getSource();
 			switch (cb.getSelectedIndex()) {

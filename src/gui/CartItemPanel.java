@@ -80,7 +80,7 @@ public class CartItemPanel extends JPanel {
 	private JPanel panelPrice;
 	private JPanel panelTools;
 
-	public CartItemPanel(CartDialog cartWindow, Product product) {
+	public CartItemPanel(MainWindow mainWindow, CartDialog cartWindow, Product product) {
 		this.mainWindow = mainWindow;
 		this.cartWindow = cartWindow;
 		this.product = product;
@@ -196,17 +196,15 @@ public class CartItemPanel extends JPanel {
 			GridBagLayout gbl_panelEdit = new GridBagLayout();
 			gbl_panelEdit.columnWidths = new int[] { 250, 0 };
 			gbl_panelEdit.rowHeights = new int[] { 90, 90, 0, 0 };
-			gbl_panelEdit.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+			gbl_panelEdit.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 			gbl_panelEdit.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 			panelEdit.setLayout(gbl_panelEdit);
 			GridBagConstraints gbc_panelNumber = new GridBagConstraints();
-			gbc_panelNumber.fill = GridBagConstraints.HORIZONTAL;
 			gbc_panelNumber.insets = new Insets(0, 0, 5, 5);
 			gbc_panelNumber.gridx = 0;
 			gbc_panelNumber.gridy = 0;
 			panelEdit.add(getPanel_2_1(), gbc_panelNumber);
 			GridBagConstraints gbc_panelDate = new GridBagConstraints();
-			gbc_panelDate.fill = GridBagConstraints.HORIZONTAL;
 			gbc_panelDate.insets = new Insets(0, 0, 5, 5);
 			gbc_panelDate.gridx = 0;
 			gbc_panelDate.gridy = 1;
@@ -241,8 +239,8 @@ public class CartItemPanel extends JPanel {
 			JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateArrive.getDateEditor();
 			dateEditor.setHorizontalAlignment(JTextField.CENTER);
 			dateArrive.setToolTipText(Internationalization.getToolTips("start"));
-			dateArrive.setDate(product.getDate());
 			dateArrive.setMinSelectableDate(new Date());
+			dateArrive.setDate(product.getDate());
 			dateArrive.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
@@ -326,7 +324,7 @@ public class CartItemPanel extends JPanel {
 				public void focusLost(FocusEvent arg0) {
 					int number = product.getNumberAdult() + product.getNumberChild();
 					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_size"),
+						JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
 								Internationalization.getString("error_number_size_title"),
 								JOptionPane.WARNING_MESSAGE);
 						return;
@@ -357,7 +355,7 @@ public class CartItemPanel extends JPanel {
 				public void focusLost(FocusEvent arg0) {
 					int number = product.getNumberAdult() + product.getNumberChild();
 					if (product instanceof Accommodation && ((Accommodation)product).getNum() < number || product instanceof Package && ((Package)product).getAccom().getNum() < number) {
-						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_number_size"),
+						JOptionPane.showMessageDialog(CartItemPanel.this, Internationalization.getString("error_number_size"),
 								Internationalization.getString("error_number_size_title"),
 								JOptionPane.WARNING_MESSAGE);
 						return;

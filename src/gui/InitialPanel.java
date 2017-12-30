@@ -577,16 +577,16 @@ public class InitialPanel extends JPanel {
 								Internationalization.getString("error_number_child_title"),
 								JOptionPane.WARNING_MESSAGE);
 					else { // valores correctos, pasamos a siguiente ventana
-						try {
+//						try {
 							checkDate(dateArrive);
 							checkDate(dateExit);
 							// update values mainWindow
 							btnSearch.setEnabled(false);
 							loadListProduct();
-						} catch (NullPointerException e) {
-							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
-									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
-						}
+//						} catch (NullPointerException e) {
+//							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
+//									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
+//						}
 					}
 
 				}

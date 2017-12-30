@@ -1,9 +1,12 @@
 package park;
 
+import java.io.Serializable;
+
 import fileUtil.AssertParam;
 
-public class Park {
+public class Park implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private String code;
 	private String country;

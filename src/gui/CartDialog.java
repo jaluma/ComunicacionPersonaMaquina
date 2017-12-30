@@ -181,7 +181,7 @@ public class CartDialog extends JDialog {
 			panelItem.setBorder(UIManager.getBorder("Spinner.border"));
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
 			for (int i = 0; i < ProductListPanel.getOrder().getItems(); i++) {
-				panelItem.add(new CartItemPanel(CartDialog.this, ProductListPanel.getOrder().getProduct(i)));
+				panelItem.add(new CartItemPanel(mainWindow, CartDialog.this, ProductListPanel.getOrder().getProduct(i)));
 			}
 		}
 

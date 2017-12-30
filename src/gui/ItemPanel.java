@@ -26,6 +26,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import guiUtil.CopyObject;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 import product.Accommodation;
@@ -47,7 +48,6 @@ public class ItemPanel extends JPanel {
 	private JLabel lblNameproduct;
 	private JPanel panelSouth;
 
-	private ProductListPanel panelProducts;
 	private Product product;
 	private JLabel lblSale;
 	private JPanel panelPrice;
@@ -61,9 +61,8 @@ public class ItemPanel extends JPanel {
 	private JLabel lblTicket;
 	private JLabel lblApartament;
 
-	public ItemPanel(ProductListPanel panel, Product product) {
+	public ItemPanel(Product product) {
 		setBackground(Color.WHITE);
-		this.panelProducts = panel;
 		this.product = product;
 		setBorder(UIManager.getBorder("Spinner.border"));
 		setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 230));
@@ -174,7 +173,7 @@ public class ItemPanel extends JPanel {
 						return;
 					}
 					
-					ProductListPanel.getOrder().add(product);
+					ProductListPanel.getOrder().add(CopyObject.copy(product));
 				}
 			});
 			btnAdd.setFont(new Font("Tahoma", Font.BOLD, 33));
