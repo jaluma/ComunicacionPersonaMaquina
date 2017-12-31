@@ -192,7 +192,7 @@ public class CartDialog extends JDialog {
 			panelItem = new JPanel();
 			panelItem.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					if (GuiUtil.getVisibleChildrenCount(panelItem) == 0)
+					if (GuiUtil.getVisibleChildrenCountC(panelItem) == 0)
 						getBtnFinish().setEnabled(false);
 					else
 						getBtnFinish().setEnabled(true);

@@ -1348,6 +1348,7 @@ public class ProductListPanel extends JPanel {
 			scrollPane.setBorder(null);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			scrollPane.setViewportView(getPanelFilter());
+			scrollPane.getVerticalScrollBar().setValue(0);
 		}
 		return scrollPane;
 	}

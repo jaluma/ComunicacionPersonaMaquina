@@ -38,6 +38,7 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 import event.NumberTextFieldFormatEvent;
 import guiUtil.DateUtil;
+import guiUtil.GuiUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 import product.Accommodation;
@@ -169,6 +170,11 @@ public class CartItemPanel extends JPanel {
 					cartWindow.getBtnFinish().setEnabled(true);
 					CartItemPanel.this.setVisible(false);
 					repaint();
+					
+					if(GuiUtil.getVisibleChildrenCountC(cartWindow.getItemPanel()) == 0)
+						cartWindow.getBtnFinish().setEnabled(false);
+					else
+						cartWindow.getBtnFinish().setEnabled(true);
 				}
 			});
 		}
@@ -513,6 +519,7 @@ public class CartItemPanel extends JPanel {
 			scrollPane.setBackground(Color.WHITE);
 			scrollPane.setBorder(new EmptyBorder(5, 5, 5, 0));
 			scrollPane.setViewportView(getEditorPane());
+			scrollPane.getVerticalScrollBar().setValue(0);
 		}
 		return scrollPane;
 	}

@@ -581,7 +581,7 @@ public class InitialPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					// algun campo vacio
-					if (modelPlace.getIndexOf(StringUtil.formatSentece((String) comboBox.getSelectedItem())) == -1)
+					if (modelPlace.getIndexOf(StringUtil.formatSentece((String) comboBox.getEditor().getItem())) == -1)
 						JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_place"),
 								Internationalization.getString("error_place_title"), JOptionPane.WARNING_MESSAGE);
 					else if (Integer.parseInt(txtNumberadult.getText()) <= 0)
@@ -662,8 +662,8 @@ public class InitialPanel extends JPanel {
 			comboBox.setEditable(true);
 			comboBox.setBackground(Color.WHITE);
 			comboBox.setModel(modelPlace);
-			comboBox.getEditor().setItem(Internationalization.getString("combo_place"));
 			final JTextComponent tc = (JTextComponent) comboBox.getEditor().getEditorComponent();
+			tc.setText(Internationalization.getString("combo_place"));
 			tc.setForeground(Color.DARK_GRAY);
 			tc.getDocument().addDocumentListener(new DocumentListener() {
 				public void changedUpdate(DocumentEvent e) {

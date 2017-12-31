@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 
 import javax.swing.text.NumberFormatter;
 
+import gui.CartItemPanel;
 import gui.ItemPanel;
 
 public class GuiUtil {
@@ -39,4 +40,17 @@ public class GuiUtil {
 		return count;
 	}
 
+	public static int getVisibleChildrenCountC(Component c) {
+		if (c == null || !(c instanceof Container))
+			return 0;
+
+		int count = 0;
+		Container container = (Container) c;
+
+		for (int i = 0; i < container.getComponentCount(); i++)
+			if (container.getComponent(i).isVisible() && container.getComponent(i) instanceof CartItemPanel)
+				count++;
+
+		return count;
+	}
 }
