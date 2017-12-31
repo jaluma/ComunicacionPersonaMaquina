@@ -6,11 +6,12 @@
 <toc version="1.0">
   
   <tocitem text="EII Tours APP" target="introduction"/>
-  <tocitem text="Organizar la libreria">
-  	<tocitem text="Añadir musica" target="añadir"/>
-  	<tocitem text="Eliminar musica" target="eliminar"/>
+  <tocitem text="Catalogo">
+  	<tocitem text="Filtros" target="filters"/>
+  	<tocitem text="Producto" target="item"/>
+	<tocitem text="Añadir producto" target="add"/>
   	</tocitem>
-  <tocitem text="Reproducir musica" target="reproducir"/>
+  <tocitem text="Carrito" target="cart"/>
   
 
 </toc>

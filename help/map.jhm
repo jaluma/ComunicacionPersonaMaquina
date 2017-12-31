@@ -6,8 +6,9 @@
 <map version="1.0">
 
 <mapID target="introduction" url="html/introduction.html" />
-<mapID target="añadir" url="html/añadir.html" />
-<mapID target="eliminar" url="html/eliminar.html" />
-<mapID target="reproducir" url="html/reproducir.html" />
+<mapID target="filters" url="html/filters.html" />
+<mapID target="item" url="html/item.html" />
+<mapID target="add" url="html/add.html" />
+<mapID target="cart" url="html/cart.html" />
 
 </map>

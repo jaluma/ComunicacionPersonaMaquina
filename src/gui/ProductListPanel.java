@@ -1306,7 +1306,7 @@ public class ProductListPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	private void filterTicket() {
 		for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 			if (panelItem.getComponent(i) instanceof ItemPanel) {
@@ -1318,7 +1318,7 @@ public class ProductListPanel extends JPanel {
 				}
 			}
 		}
-		
+
 	}
 
 }

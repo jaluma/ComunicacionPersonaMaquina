@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Carrito</title>
+	<link rel=StyleSheet type="text/css" href="css/style.css" /> 
+</head>
+
+<body>
+	<h1>Carrito de la comprar</h1>
+	<p>Pantalla que permite modificar el pedido (editar algún producto o eliminarlo) y finalizar la operación.</p>
+		
+	<br>
+	<img src ="img/cart.jpg">
+	<br>
+	
+	<p>La pantalla del carrito es muy sencilla:</p>
+	<ul>
+		<li> En la parte superior izquierda se mantendrá una etiqueta actualizado que refleja el precio total del pedido.
+		<li> Panel de cada producto:
+		<ul>
+			<li> Imagen: Todo producto tiene a su disposición una imagen. En caso de que no la tengamos en la base de datos se muestra una por defecto.
+			<li> Nombre: Todo producto viene dado con un formato descriptivo del tipo de producto en cuestión (PAQUETE/ENTRADA/ALOJAMIENTO <name_product>).
+			<li> Descripción: Todo producto tiene una breve descripción de sus caracteristicas. Entra ellas se encuentran:
+			<ul>
+				<li> Descripción del parque: Breve descripción de las bondades del parque.
+				<li> Lugar: Lugar del mundo donde se encuentra el parque.
+				<li> (Solo alojamiento/paquete) Estrellas: Categoria que tiene el alojamiento en cuestión.
+				<li> (Solo paquete) Nombre del alojamiento: Nombre que tiene el alojamiento incluido en el paquete.
+				<li> (Solo paquete) Duración: Duración del paquete.
+			</ul>
+			<li> Precio: Indica el precio que tiene el producto con los filtros seleccionados.
+			<li> Editar: Se muestra un nuevo panel que permite modificar los valores de ese producto:
+			<ul>
+				<li> Panel de fecha: Consta de dos calendarios que permiten modificar la fecha. Si se introduce un valor mal, se resetea al original.
+				<li> Panel de personas: Consta de dos cuadros de texto que permiten cambiar el número de adultos y de niños.
+				<li> (Solo si es un Hotel) Desayuno: Aparece un botón selector para determinar si el producto lleva consigo el desayuno.
+			</ul>
+			<li> Eliminar: Borra el producto del pedido.
+		</ul>
+		<li> Añadir más: La ventana del carrito se cerrará y se volverá a la pantalla del catalogo.
+		<li> Finalizar: La ventana del carrito se cerrará y se abrirá una nueva ventana emergente para registrarse.	
+	</ul>
+</body>
+
+</html>

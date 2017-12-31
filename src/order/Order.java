@@ -71,9 +71,9 @@ public class Order {
 	public List<Product> getProducts() {
 		return products;
 	}
-	
+
 	public List<String> getCodes() {
-		List<String> list =new ArrayList<>();
+		List<String> list = new ArrayList<>();
 		for (int i = 0; i < products.size(); i++) {
 			list.add(products.get(i).getCode());
 		}

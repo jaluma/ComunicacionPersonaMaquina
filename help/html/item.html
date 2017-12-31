@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Producto</title>
+	<link rel=StyleSheet type="text/css" href="css/style.css" /> 
+</head>
+
+<body>
+	<h1>Panel que compone cada producto</h1>
+	
+	<br>
+	<img src ="img/item.jpg">
+	<br>
+	
+	<p>Mediante una lista de productos, podemos ojear todo el catalogo que se dispone. Cada producto tiene un panel que le muestra la información referente a él. Consta: </p>
+	<ul>
+		<li> Imagen: Todo producto tiene a su disposición una imagen. En caso de que no la tengamos en la base de datos se muestra una por defecto.
+		<li> Nombre: Todo producto viene dado con un formato descriptivo del tipo de producto en cuestión (PAQUETE/ENTRADA/ALOJAMIENTO <name_product>).
+		<li> Descripción: Todo producto tiene una breve descripción de sus caracteristicas. Entra ellas se encuentran:
+		<ul>
+			<li> Descripción del parque: Breve descripción de las bondades del parque.
+			<li> Lugar: Lugar del mundo donde se encuentra el parque.
+			<li> (Solo alojamiento/paquete) Estrellas: Categoria que tiene el alojamiento en cuestión.
+			<li> (Solo paquete) Nombre del alojamiento: Nombre que tiene el alojamiento incluido en el paquete.
+			<li> (Solo paquete) Duración: Duración del paquete.
+		</ul>
+		<li> Panel de tipo: Se incluye una pequeña descripción grafica del tipo de producto:
+		<ul>
+			<li> Hotel: Icono de un Hotel. Además se incluirá un boton selector para añadir el desayuno.
+			<li> Apartahotel: Icono de un Hotel y un edificio.
+			<li> Apartamento: Icono de un edificio.
+			<li> Entrada: Icono de parque y entrada.
+			<li> Paquete: Todos los iconos anteriores.
+		</ul>
+		<li> Precio: Indica el precio que tiene el producto con los filtros seleccionados.
+		<li> Añadir: Se añade a el carro un producto.
+		<li> (Solo si se encuentra en oferta) OFERTA: Aparece una etiqueta mostrando si un producto está en oferta.
+	</ul>
+	
+</body>
+
+</html>

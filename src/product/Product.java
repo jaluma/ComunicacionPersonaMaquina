@@ -114,7 +114,6 @@ public abstract class Product implements Serializable {
 		str += String.format("<b>%s</b> %s<br>", Internationalization.getString("location").toUpperCase(),
 				getPark().getCity() + "-" + getPark().getCountry() + " (" + getPark().getName() + ")");
 		return str;
-	}	
-	
+	}
 
 }
