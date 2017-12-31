@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import guiUtil.GuiUtil;
 import guiUtil.ResizableImage;
 import internationalization.Internationalization;
 
@@ -75,6 +77,9 @@ public class CartDialog extends JDialog {
 	public CartDialog(MainWindow mainWindow2, boolean b) {
 		this(mainWindow2);
 		restoreBool = b;
+		setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width * 2 / 3,
+				Toolkit.getDefaultToolkit().getScreenSize().height * 2 / 3);
+		setLocationRelativeTo(mainWindow);
 	}
 
 	private JPanel getPanelNorth() {
@@ -117,8 +122,10 @@ public class CartDialog extends JDialog {
 					CartDialog.this.dispose();
 					if (restoreBool) {
 						mainWindow.setVisible(true);
+						mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
+						getBtnFinish().setEnabled(true);
 					}
-					
+
 				}
 			});
 			btnAddmore.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -185,21 +192,17 @@ public class CartDialog extends JDialog {
 			panelItem = new JPanel();
 			panelItem.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
-					if (panelItem.getComponentCount() == 0) {
+					if (GuiUtil.getVisibleChildrenCount(panelItem) == 0)
 						getBtnFinish().setEnabled(false);
-					}
-
-					for (int i = 0; i < panelItem.getComponentCount(); i++) {
-						if (panelItem.getComponent(i).isVisible())
-							getBtnFinish().setEnabled(true);
-					}
+					else
+						getBtnFinish().setEnabled(true);
 				}
 			});
 			panelItem.setBorder(UIManager.getBorder("Spinner.border"));
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
 			for (int i = 0; i < ProductListPanel.getOrder().getItems(); i++) {
-				panelItem
-						.add(new CartItemPanel(mainWindow, CartDialog.this, ProductListPanel.getOrder().getProduct(i), restoreBool));
+				panelItem.add(new CartItemPanel(mainWindow, CartDialog.this, ProductListPanel.getOrder().getProduct(i),
+						restoreBool));
 			}
 		}
 

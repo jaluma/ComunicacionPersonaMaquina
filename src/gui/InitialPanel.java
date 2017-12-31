@@ -6,11 +6,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
@@ -30,6 +31,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
@@ -113,7 +117,7 @@ public class InitialPanel extends JPanel {
 
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				getComboBox().grabFocus();
+				getLblPlace().grabFocus();
 			}
 		});
 	}
@@ -209,6 +213,19 @@ public class InitialPanel extends JPanel {
 			txtDni.setText(Internationalization.getString("dni").toLowerCase());
 			txtDni.setColumns(10);
 			txtDni.addFocusListener(new FocusTextFieldEvent("dni"));
+			txtDni.addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					InitialPanel.this.mainWindow.getRootPane().setDefaultButton(btnSearch);
+				}
+
+				@Override
+				public void focusGained(FocusEvent e) {
+					InitialPanel.this.mainWindow.getRootPane().setDefaultButton(btnRestoreinfo);
+
+				}
+			});
 		}
 		return txtDni;
 	}
@@ -268,9 +285,10 @@ public class InitialPanel extends JPanel {
 						Order order = ListOrders.search(getDateChooser().getDate(), txtDni.getText());
 
 						ProductListPanel.setOrder(order);
-						
-						loadListProduct();
-						mainWindow.setVisible(false);
+
+						btnRestoreinfo.setText(Internationalization.getString("loading"));
+
+						loadListProduct(true);
 
 						CartDialog dialog = new CartDialog(mainWindow, true);
 						dialog.setVisible(true);
@@ -579,9 +597,11 @@ public class InitialPanel extends JPanel {
 						try {
 							checkDate(dateArrive);
 							checkDate(dateExit);
+							comboBox.setSelectedIndex(modelPlace
+									.getIndexOf(StringUtil.formatSentece((String) comboBox.getSelectedItem())));
 							// update values mainWindow
 							btnSearch.setEnabled(false);
-							loadListProduct();
+							loadListProduct(false);
 						} catch (IllegalArgumentException e) {
 							JOptionPane.showMessageDialog(mainWindow, Internationalization.getString("error_date"),
 									Internationalization.getString("error_date_title"), JOptionPane.WARNING_MESSAGE);
@@ -610,26 +630,17 @@ public class InitialPanel extends JPanel {
 		return btnSearch;
 	}
 
-	protected void loadListProduct() {
+	protected void loadListProduct(boolean restore) {
+		if (restore)
+			mainWindow.setVisible(false);
 		btnSearch.revalidate();
 		btnSearch.repaint();
-		mainWindow.mntmFullscreen.setEnabled(true);
-		mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
-		mainWindow.mnSort.setEnabled(true);
-		mainWindow.mntmPeople.setEnabled(true);
-		mainWindow.mntmPlace.setEnabled(true);
-		mainWindow.mntmPrice.setEnabled(true);
-		mainWindow.mntmStars.setEnabled(true);
-		mainWindow.mntmOnlyphotos.setEnabled(true);
-		mainWindow.mntmCart.setEnabled(true);
 
 		removeAll();
 		mainWindow.setProductListPanel(new ProductListPanel(InitialPanel.this.mainWindow, this));
 		add(mainWindow.getProductListPanel());
 		repaint();
 		revalidate();
-		mainWindow.setResizable(true);
-		mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
 
 	private JPanel getPanelPeopleCount() {
@@ -651,6 +662,46 @@ public class InitialPanel extends JPanel {
 			comboBox.setEditable(true);
 			comboBox.setBackground(Color.WHITE);
 			comboBox.setModel(modelPlace);
+			comboBox.getEditor().setItem(Internationalization.getString("combo_place"));
+			final JTextComponent tc = (JTextComponent) comboBox.getEditor().getEditorComponent();
+			tc.setForeground(Color.DARK_GRAY);
+			tc.getDocument().addDocumentListener(new DocumentListener() {
+				public void changedUpdate(DocumentEvent e) {
+					warn();
+				}
+
+				public void removeUpdate(DocumentEvent e) {
+					warn();
+				}
+
+				public void insertUpdate(DocumentEvent e) {
+					warn();
+				}
+
+				public void warn() {
+					if (modelPlace.getIndexOf(StringUtil.formatSentece((String) tc.getText())) != (-1)) {
+						tc.setForeground(Color.BLACK);
+					} else {
+						tc.setForeground(Color.DARK_GRAY);
+					}
+				}
+			});
+			tc.addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (modelPlace.getIndexOf(StringUtil.formatSentece((String) tc.getText())) == (-1))
+						tc.setText(Internationalization.getString("combo_place"));
+
+				}
+
+				@Override
+				public void focusGained(FocusEvent e) {
+					if (comboBox.getEditor().getItem().equals(Internationalization.getString("combo_place")))
+						tc.setText("");
+
+				}
+			});
 		}
 		return comboBox;
 	}
@@ -670,6 +721,19 @@ public class InitialPanel extends JPanel {
 			dateChooser.setDateFormatString(
 					((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT, Internationalization.getLocate()))
 							.toLocalizedPattern());
+			dateEditor.addFocusListener(new FocusListener() {
+
+				@Override
+				public void focusLost(FocusEvent e) {
+					InitialPanel.this.mainWindow.getRootPane().setDefaultButton(btnSearch);
+				}
+
+				@Override
+				public void focusGained(FocusEvent e) {
+					InitialPanel.this.mainWindow.getRootPane().setDefaultButton(btnRestoreinfo);
+
+				}
+			});
 		}
 		return dateChooser;
 	}

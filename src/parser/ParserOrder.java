@@ -50,7 +50,7 @@ public class ParserOrder {
 					} else if (product instanceof Accommodation) {// puede estar mal
 						numberAdult = getNumberAdult(lines, indexLine);
 						days = getDays(lines, indexLine);
-						((Accommodation)product).setBreakfast(getBreakfast(lines, indexLine));
+						((Accommodation) product).setBreakfast(getBreakfast(lines, indexLine));
 					}
 
 					product.loadData(numberAdult, numberChild, date, days);
@@ -87,7 +87,7 @@ public class ParserOrder {
 		String line = lines.get(indexLine + 1).split(" / ")[0].split(": ")[1];
 		return Internationalization.getDate(line);
 	}
-	
+
 	private boolean getBreakfast(List<String> lines, int indexLine) {
 		String line = lines.get(indexLine + 1).split(" / ")[2].split(": ")[1];
 		if (Internationalization.getString("no_one_letter").toUpperCase().equals(line.toUpperCase()))

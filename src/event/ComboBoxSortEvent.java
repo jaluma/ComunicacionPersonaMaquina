@@ -27,7 +27,7 @@ public class ComboBoxSortEvent implements ItemListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		productWindow.setNumberItemsCart(0);
+		productWindow.updateNumberItems();
 		if (count == 0) {
 			JComboBox<String> cb = (JComboBox<String>) e.getSource();
 			switch (cb.getSelectedIndex()) {

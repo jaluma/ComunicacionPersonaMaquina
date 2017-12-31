@@ -25,7 +25,7 @@ public class Park implements Serializable {
 	public void sale() {
 		sale = true;
 	}
-	
+
 	public void noSale() {
 		sale = false;
 	}

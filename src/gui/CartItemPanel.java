@@ -166,7 +166,7 @@ public class CartItemPanel extends JPanel {
 					mainWindow.getProductListPanel().setNumberItemsCart(ProductListPanel.getOrder().getItems());
 					cartWindow.getLblSubTotal()
 							.setText(Internationalization.getCurrency(ProductListPanel.getOrder().getTotal()));
-
+					cartWindow.getBtnFinish().setEnabled(true);
 					CartItemPanel.this.setVisible(false);
 					repaint();
 				}
@@ -427,6 +427,7 @@ public class CartItemPanel extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					getLblPhoto().setVisible(!tglbtnEdit.isSelected());
 					getPanelEdit().setVisible(tglbtnEdit.isSelected());
+					cartWindow.getBtnFinish().setEnabled(true);
 				}
 			});
 			tglbtnEdit.setFont(new Font("Tahoma", Font.PLAIN, 14));

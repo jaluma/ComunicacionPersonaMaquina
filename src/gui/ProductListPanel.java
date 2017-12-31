@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -35,6 +36,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
@@ -135,6 +137,7 @@ public class ProductListPanel extends JPanel {
 	private ComboBoxSortEvent comboBoxSortEvent;
 	private InitialPanel initialWindow;
 	private static Order order = new Order();
+	private JScrollPane scrollPane;
 
 	public ProductListPanel(MainWindow mainWindow, InitialPanel initialWindow) {
 		this.mainWindow = mainWindow;
@@ -144,10 +147,28 @@ public class ProductListPanel extends JPanel {
 		modelPlace = new DefaultComboBoxModel<String>(ListProduct.loadPlaces());
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelNorth(), BorderLayout.NORTH);
-		add(getPanelFilter(), BorderLayout.WEST);
+		add(getScrollPane(), BorderLayout.WEST);
+		// add(getPanelFilter(), BorderLayout.WEST);
 		add(getPanelCentral(), BorderLayout.CENTER);
+		updateMainWindow();
+	}
+
+	public void updateMainWindow() {
 		mainWindow.setMinimumSize(new Dimension(1200, 720));
 		mainWindow.setLocationRelativeTo(null);
+
+		mainWindow.mntmFullscreen.setEnabled(true);
+		mainWindow.rdbtnmntmPanelfilter.setEnabled(true);
+		mainWindow.mnSort.setEnabled(true);
+		mainWindow.mntmPeople.setEnabled(true);
+		mainWindow.mntmPlace.setEnabled(true);
+		mainWindow.mntmPrice.setEnabled(true);
+		mainWindow.mntmStars.setEnabled(true);
+		mainWindow.mntmOnlyphotos.setEnabled(true);
+		mainWindow.mntmCart.setEnabled(true);
+
+		mainWindow.setResizable(true);
+		mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
 
 	public static Order getOrder() {
@@ -1321,4 +1342,13 @@ public class ProductListPanel extends JPanel {
 
 	}
 
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBorder(null);
+			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			scrollPane.setViewportView(getPanelFilter());
+		}
+		return scrollPane;
+	}
 }
