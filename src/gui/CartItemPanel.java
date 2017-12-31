@@ -81,7 +81,7 @@ public class CartItemPanel extends JPanel {
 	private JPanel panelTools;
 	private JScrollPane scrollPane;
 
-	public CartItemPanel(MainWindow mainWindow, CartDialog cartWindow, Product product) {
+	public CartItemPanel(MainWindow mainWindow, CartDialog cartWindow, Product product, boolean restoreBool) {
 		this.mainWindow = mainWindow;
 		this.cartWindow = cartWindow;
 		this.product = product;
@@ -90,6 +90,8 @@ public class CartItemPanel extends JPanel {
 		setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, 230));
 		setPreferredSize(new Dimension(905, 230));
 		add(getPanel());
+		if (restoreBool)
+			product.getPark().noSale();
 	}
 
 	private JPanel getPanel() {
@@ -246,7 +248,7 @@ public class CartItemPanel extends JPanel {
 			dateArrive.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
 					if (dateArrive.getDate().getTime() >= getDateExit().getDate().getTime()) {
-						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
+						Date date2 = DateUtil.sumDate(dateArrive.getDate(), product.getDuration());
 						getDateExit().setMinSelectableDate(date2);
 						getDateExit().setDate(date2);
 						cartWindow.updatePrice();

@@ -43,13 +43,14 @@ public class FinishPanel extends JPanel {
 	private JLabel lblRestore;
 	private JButton btnRestore;
 	private MainWindow main;
+	private PropertyChangeListener timer;
 
 	/**
 	 * Create the panel.
 	 */
 	public FinishPanel(MainWindow main) {
 		this.main = main;
-		addPropertyChangeListener(new PropertyChangeListener() {
+		timer = new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				new Thread(new Runnable() {
 
@@ -70,7 +71,8 @@ public class FinishPanel extends JPanel {
 				}).start();
 				removePropertyChangeListener(this);
 			}
-		});
+		};
+		addPropertyChangeListener(timer);
 		setBackground(Color.WHITE);
 		setLayout(new BorderLayout(0, 0));
 		add(getPanelNorth(), BorderLayout.NORTH);
@@ -167,6 +169,7 @@ public class FinishPanel extends JPanel {
 			btnRestore = new JButton(Internationalization.getString("restore_now")); //$NON-NLS-1$
 			btnRestore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					removePropertyChangeListener(timer);
 					Window w = SwingUtilities.getWindowAncestor(FinishPanel.this);
 					w.dispose();
 					main.dispose();

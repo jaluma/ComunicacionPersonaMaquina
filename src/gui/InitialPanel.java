@@ -268,8 +268,11 @@ public class InitialPanel extends JPanel {
 						Order order = ListOrders.search(getDateChooser().getDate(), txtDni.getText());
 
 						ProductListPanel.setOrder(order);
+						
+						loadListProduct();
+						mainWindow.setVisible(false);
 
-						CartDialog dialog = new CartDialog(mainWindow, InitialPanel.this, true);
+						CartDialog dialog = new CartDialog(mainWindow, true);
 						dialog.setVisible(true);
 
 					} catch (NumberFormatException exc) {

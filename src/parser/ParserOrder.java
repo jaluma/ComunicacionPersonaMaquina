@@ -6,6 +6,7 @@ import java.util.List;
 
 import fileUtil.FileUtil;
 import fileUtil.IncorrectOrderException;
+import guiUtil.CopyObject;
 import internationalization.Internationalization;
 import order.Order;
 import product.Accommodation;
@@ -49,11 +50,12 @@ public class ParserOrder {
 					} else if (product instanceof Accommodation) {// puede estar mal
 						numberAdult = getNumberAdult(lines, indexLine);
 						days = getDays(lines, indexLine);
+						((Accommodation)product).setBreakfast(getBreakfast(lines, indexLine));
 					}
 
 					product.loadData(numberAdult, numberChild, date, days);
 
-					order.add(product);
+					order.add(CopyObject.copy(product));
 
 				}
 
@@ -84,5 +86,13 @@ public class ParserOrder {
 	private Date getDate(List<String> lines, int indexLine) {
 		String line = lines.get(indexLine + 1).split(" / ")[0].split(": ")[1];
 		return Internationalization.getDate(line);
+	}
+	
+	private boolean getBreakfast(List<String> lines, int indexLine) {
+		String line = lines.get(indexLine + 1).split(" / ")[2].split(": ")[1];
+		if (Internationalization.getString("no_one_letter").toUpperCase().equals(line.toUpperCase()))
+			return false;
+		else
+			return true;
 	}
 }

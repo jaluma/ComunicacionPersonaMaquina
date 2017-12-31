@@ -49,7 +49,6 @@ public class CartDialog extends JDialog {
 	private JPanel panelItem;
 	private boolean restoreBool;
 	private MainWindow mainWindow;
-	private InitialPanel ipOnlyRestore;
 
 	/**
 	 * @wbp.parser.constructor
@@ -73,9 +72,8 @@ public class CartDialog extends JDialog {
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getBtnAddmore() }));
 	}
 
-	public CartDialog(MainWindow mainWindow2, InitialPanel ip, boolean b) {
+	public CartDialog(MainWindow mainWindow2, boolean b) {
 		this(mainWindow2);
-		ipOnlyRestore = ip;
 		restoreBool = b;
 	}
 
@@ -117,8 +115,10 @@ public class CartDialog extends JDialog {
 			btnAddmore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					CartDialog.this.dispose();
-					if (restoreBool)
-						ipOnlyRestore.loadListProduct();
+					if (restoreBool) {
+						mainWindow.setVisible(true);
+					}
+					
 				}
 			});
 			btnAddmore.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -199,7 +199,7 @@ public class CartDialog extends JDialog {
 			panelItem.setLayout(new BoxLayout(panelItem, BoxLayout.Y_AXIS));
 			for (int i = 0; i < ProductListPanel.getOrder().getItems(); i++) {
 				panelItem
-						.add(new CartItemPanel(mainWindow, CartDialog.this, ProductListPanel.getOrder().getProduct(i)));
+						.add(new CartItemPanel(mainWindow, CartDialog.this, ProductListPanel.getOrder().getProduct(i), restoreBool));
 			}
 		}
 
