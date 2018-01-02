@@ -13,6 +13,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -1128,8 +1130,28 @@ public class ProductListPanel extends JPanel {
 						Date date2 = new Date(dateArrive.getDate().getTime() + 86400000);
 						getDateExit().setMinSelectableDate(date2);
 						getDateExit().setDate(date2);
-					}
+					} 
 				}
+			});
+			dateEditor.addFocusListener(new FocusListener() {
+				private Date dateC;
+				
+				@Override
+				public void focusGained(FocusEvent e) {	
+					dateC = dateArrive.getDate();
+				}
+				
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (dateArrive.getDate() == null) {
+						Date date2 = dateExit.getDate();
+						dateEditor.setDate(dateC);
+						getDateExit().setMinSelectableDate(date2);
+						getDateExit().setDate(date2);
+					}
+					
+				}
+				
 			});
 		}
 		return dateArrive;
@@ -1161,6 +1183,23 @@ public class ProductListPanel extends JPanel {
 						}
 					}
 				}
+			});
+			dateEditor.addFocusListener(new FocusListener() {
+				private Date dateC;
+				
+				@Override
+				public void focusGained(FocusEvent e) {	
+					dateC = dateExit.getDate();
+				}
+				
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (dateExit.getDate() == null) {
+						dateEditor.setDate(dateC);
+					}
+					
+				}
+				
 			});
 		}
 		return dateExit;

@@ -148,9 +148,12 @@ public class MainWindow extends JFrame {
 	}
 
 	public int getDays(Date dateStart, Date dateFinish) {
-		long diff = Math.abs(dateFinish.getTime() - dateStart.getTime());
-		long diffDays = diff / (24 * 60 * 60 * 1000);
-		return (int) diffDays;
+		if (dateStart != null && dateFinish != null) {
+			long diff = Math.abs(dateFinish.getTime() - dateStart.getTime());
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			return (int) diffDays;
+		}
+		return 0;
 	}
 
 	public InitialPanel getInitialPanel() {
