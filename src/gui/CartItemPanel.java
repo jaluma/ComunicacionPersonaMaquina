@@ -172,8 +172,8 @@ public class CartItemPanel extends JPanel {
 					cartWindow.getBtnFinish().setEnabled(true);
 					CartItemPanel.this.setVisible(false);
 					repaint();
-					
-					if(GuiUtil.getVisibleChildrenCountC(cartWindow.getItemPanel()) == 0)
+
+					if (GuiUtil.getVisibleChildrenCountC(cartWindow.getItemPanel()) == 0)
 						cartWindow.getBtnFinish().setEnabled(false);
 					else
 						cartWindow.getBtnFinish().setEnabled(true);
@@ -266,12 +266,12 @@ public class CartItemPanel extends JPanel {
 			});
 			dateEditor.addFocusListener(new FocusListener() {
 				private Date dateC;
-				
+
 				@Override
-				public void focusGained(FocusEvent e) {	
+				public void focusGained(FocusEvent e) {
 					dateC = dateArrive.getDate();
 				}
-				
+
 				@Override
 				public void focusLost(FocusEvent e) {
 					if (dateArrive.getDate() == null) {
@@ -280,9 +280,9 @@ public class CartItemPanel extends JPanel {
 						getDateExit().setMinSelectableDate(date2);
 						getDateExit().setDate(date2);
 					}
-					
+
 				}
-				
+
 			});
 		}
 		return dateArrive;
@@ -316,20 +316,20 @@ public class CartItemPanel extends JPanel {
 			});
 			dateEditor.addFocusListener(new FocusListener() {
 				private Date dateC;
-				
+
 				@Override
-				public void focusGained(FocusEvent e) {	
+				public void focusGained(FocusEvent e) {
 					dateC = dateExit.getDate();
 				}
-				
+
 				@Override
 				public void focusLost(FocusEvent e) {
 					if (dateExit.getDate() == null) {
 						dateEditor.setDate(dateC);
 					}
-					
+
 				}
-				
+
 			});
 		}
 		return dateExit;

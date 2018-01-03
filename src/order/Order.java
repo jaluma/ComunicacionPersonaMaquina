@@ -140,11 +140,11 @@ public class Order {
 				Internationalization.getCurrency(getPrice(Ticket.class)));
 
 		if (checkOffer())
-			str += String.format("%-30s %31s %15s \n", Internationalization.getString("discount_title"), " ",
-					Internationalization.getCurrency(getDiscount()));
+			str += String.format("%-30s %31s %15s \n", Internationalization.getString("discount_title").toUpperCase(),
+					" ", Internationalization.getCurrency(getDiscount()));
 		str += "\n";
 
-		str += String.format("%-30s %31s %15s \n", Internationalization.getString("total_title"), " ",
+		str += String.format("%-30s %31s %15s \n", Internationalization.getString("total_title").toUpperCase(), " ",
 				Internationalization.getCurrency(getTotal()));
 		return str;
 	}
