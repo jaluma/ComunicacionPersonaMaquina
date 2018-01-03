@@ -41,7 +41,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import internationalization.Internationalization;
-import product.ListProduct;
+import logic.product.ListProduct;
 
 public class MainWindow extends JFrame {
 

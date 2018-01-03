@@ -26,14 +26,14 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import guiUtil.CopyObject;
-import guiUtil.ResizableImage;
+import gui.guiUtil.CopyObject;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import product.Accommodation;
-import product.Package;
-import product.Product;
-import product.Ticket;
-import product.TypeHotel;
+import logic.product.Accommodation;
+import logic.product.Package;
+import logic.product.Product;
+import logic.product.Ticket;
+import logic.product.TypeHotel;
 
 public class ItemPanel extends JPanel {
 

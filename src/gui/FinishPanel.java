@@ -23,7 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import guiUtil.ResizableImage;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
 
 public class FinishPanel extends JPanel {

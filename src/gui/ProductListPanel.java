@@ -47,22 +47,22 @@ import javax.swing.event.ChangeListener;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
-import event.ComboBoxSortEvent;
-import event.FocusTextFieldEvent;
-import event.NumberTextFieldFormatEvent;
-import event.RefreshItemThread;
-import event.SliderMouseWheelEvent;
-import event.SliderTextFieldEvent;
-import guiUtil.GuiUtil;
-import guiUtil.ResizableImage;
+import gui.event.ComboBoxSortEvent;
+import gui.event.FocusTextFieldEvent;
+import gui.event.NumberTextFieldFormatEvent;
+import gui.event.RefreshItemThread;
+import gui.event.SliderMouseWheelEvent;
+import gui.event.SliderTextFieldEvent;
+import gui.guiUtil.GuiUtil;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import logic.order.Order;
+import logic.product.Accommodation;
+import logic.product.ListProduct;
+import logic.product.Package;
+import logic.product.Product;
+import logic.product.Ticket;
 import net.miginfocom.swing.MigLayout;
-import order.Order;
-import product.Accommodation;
-import product.ListProduct;
-import product.Package;
-import product.Product;
-import product.Ticket;
 
 public class ProductListPanel extends JPanel {
 

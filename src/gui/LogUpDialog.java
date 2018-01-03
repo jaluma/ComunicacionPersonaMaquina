@@ -24,9 +24,9 @@ import javax.swing.UIManager;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import event.FocusTextAreaEvent;
-import event.FocusTextFieldEvent;
-import guiUtil.ResizableImage;
+import gui.event.FocusTextAreaEvent;
+import gui.event.FocusTextFieldEvent;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
 
 public class LogUpDialog extends JDialog {

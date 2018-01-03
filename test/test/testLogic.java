@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 
-import order.Order;
+import logic.order.Order;
 
 class testLogic {
 

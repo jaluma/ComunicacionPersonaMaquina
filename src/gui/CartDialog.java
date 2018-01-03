@@ -28,8 +28,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import guiUtil.GuiUtil;
-import guiUtil.ResizableImage;
+import gui.guiUtil.GuiUtil;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
 
 public class CartDialog extends JDialog {

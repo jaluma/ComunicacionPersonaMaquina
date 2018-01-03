@@ -22,9 +22,9 @@ import javax.swing.SwingUtilities;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import fileUtil.FileUtil;
-import guiUtil.ResizableImage;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
+import util.file.FileUtil;
 
 public class InfoOrderPanel extends JPanel {
 

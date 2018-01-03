@@ -38,16 +38,16 @@ import javax.swing.event.DocumentListener;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
-import event.NumberTextFieldFormatEvent;
-import guiUtil.DateUtil;
-import guiUtil.GuiUtil;
-import guiUtil.ResizableImage;
+import gui.event.NumberTextFieldFormatEvent;
+import gui.guiUtil.DateUtil;
+import gui.guiUtil.GuiUtil;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import product.Accommodation;
-import product.Package;
-import product.Product;
-import product.Ticket;
-import product.TypeHotel;
+import logic.product.Accommodation;
+import logic.product.Package;
+import logic.product.Product;
+import logic.product.Ticket;
+import logic.product.TypeHotel;
 
 public class CartItemPanel extends JPanel {
 

@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import guiUtil.ResizableImage;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
 
 public class AboutAtDialog extends JDialog {

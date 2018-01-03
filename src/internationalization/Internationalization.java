@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import product.ListProduct;
+import logic.product.ListProduct;
 
 public class Internationalization {
 	private static final String BUNDLE_NAME = "resources.values";

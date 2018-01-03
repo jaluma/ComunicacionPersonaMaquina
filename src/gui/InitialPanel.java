@@ -40,15 +40,15 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
-import event.FocusTextFieldEvent;
-import event.NumberTextFieldFormatEvent;
-import fileUtil.IncorrectOrderException;
-import fileUtil.StringUtil;
-import guiUtil.ResizableImage;
+import gui.event.FocusTextFieldEvent;
+import gui.event.NumberTextFieldFormatEvent;
+import gui.guiUtil.ResizableImage;
 import internationalization.Internationalization;
-import order.ListOrders;
-import order.Order;
-import product.ListProduct;
+import logic.order.ListOrders;
+import logic.order.Order;
+import logic.product.ListProduct;
+import util.file.IncorrectOrderException;
+import util.file.StringUtil;
 
 public class InitialPanel extends JPanel {
 
