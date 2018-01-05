@@ -53,17 +53,17 @@ import gui.event.NumberTextFieldFormatEvent;
 import gui.event.RefreshItemThread;
 import gui.event.SliderMouseWheelEvent;
 import gui.event.SliderTextFieldEvent;
-import gui.guiUtil.GuiUtil;
-import gui.guiUtil.ResizableImage;
-import gui.guiUtil.internationalization.Internationalization;
 import logic.order.Order;
 import logic.product.Accommodation;
 import logic.product.ListProduct;
 import logic.product.Package;
 import logic.product.Product;
 import logic.product.Ticket;
-import logic.util.LogicUtil;
 import net.miginfocom.swing.MigLayout;
+import util.gui.GuiUtil;
+import util.gui.ResizableImage;
+import util.gui.internationalization.Internationalization;
+import util.logic.LogicUtil;
 
 public class ProductListPanel extends JPanel {
 

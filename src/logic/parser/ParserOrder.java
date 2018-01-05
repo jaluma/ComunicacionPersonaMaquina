@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import gui.guiUtil.CopyObject;
-import gui.guiUtil.internationalization.Internationalization;
 import logic.order.Order;
 import logic.product.Accommodation;
 import logic.product.ListProduct;
@@ -14,6 +12,8 @@ import logic.product.Product;
 import logic.product.Ticket;
 import util.file.FileUtil;
 import util.file.IncorrectOrderException;
+import util.gui.CopyObject;
+import util.gui.internationalization.Internationalization;
 
 public class ParserOrder {
 

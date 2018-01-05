@@ -6,7 +6,7 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JTextField;
 
-import gui.guiUtil.internationalization.Internationalization;
+import util.gui.internationalization.Internationalization;
 
 public class FocusTextFieldEvent implements FocusListener {
 

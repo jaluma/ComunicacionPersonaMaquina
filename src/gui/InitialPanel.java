@@ -42,13 +42,13 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 import gui.event.FocusTextFieldEvent;
 import gui.event.NumberTextFieldFormatEvent;
-import gui.guiUtil.ResizableImage;
-import gui.guiUtil.internationalization.Internationalization;
 import logic.order.ListOrders;
 import logic.order.Order;
 import logic.product.ListProduct;
 import util.file.IncorrectOrderException;
 import util.file.StringUtil;
+import util.gui.ResizableImage;
+import util.gui.internationalization.Internationalization;
 
 public class InitialPanel extends JPanel {
 

@@ -3,8 +3,8 @@ package logic.product;
 import java.io.Serializable;
 import java.util.Date;
 
-import gui.guiUtil.internationalization.Internationalization;
 import logic.park.Park;
+import util.gui.internationalization.Internationalization;
 
 public abstract class Product implements Serializable {
 

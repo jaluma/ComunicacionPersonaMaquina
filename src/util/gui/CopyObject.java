@@ -1,4 +1,4 @@
-package gui.guiUtil;
+package util.gui;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

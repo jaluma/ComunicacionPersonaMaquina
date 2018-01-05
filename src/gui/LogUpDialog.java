@@ -26,8 +26,8 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import gui.event.FocusTextAreaEvent;
 import gui.event.FocusTextFieldEvent;
-import gui.guiUtil.ResizableImage;
-import gui.guiUtil.internationalization.Internationalization;
+import util.gui.ResizableImage;
+import util.gui.internationalization.Internationalization;
 
 public class LogUpDialog extends JDialog {
 
@@ -224,7 +224,7 @@ public class LogUpDialog extends JDialog {
 			txName = new JTextField();
 			txName.setForeground(Color.DARK_GRAY);
 			txName.setFont(new Font("Tahoma", Font.BOLD, 14));
-			if (ProductListPanel.getOrder().equals(""))
+			if (ProductListPanel.getOrder().getName().equals(""))
 				txName.setText(Internationalization.getString("log_name").toLowerCase());
 			else
 				txName.setText(ProductListPanel.getOrder().getName().split(" ")[0]);

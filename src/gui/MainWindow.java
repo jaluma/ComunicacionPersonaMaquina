@@ -39,8 +39,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
-import gui.guiUtil.internationalization.Internationalization;
 import logic.product.ListProduct;
+import util.gui.internationalization.Internationalization;
 
 public class MainWindow extends JFrame {
 

@@ -1,6 +1,6 @@
 package logic.product;
 
-import gui.guiUtil.internationalization.Internationalization;
+import util.gui.internationalization.Internationalization;
 
 public class Ticket extends Product {
 

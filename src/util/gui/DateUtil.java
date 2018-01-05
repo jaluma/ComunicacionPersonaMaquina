@@ -1,4 +1,4 @@
-package gui.guiUtil;
+package util.gui;
 
 import java.util.Calendar;
 import java.util.Date;

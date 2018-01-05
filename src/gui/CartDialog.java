@@ -25,9 +25,9 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import gui.guiUtil.GuiUtil;
-import gui.guiUtil.ResizableImage;
-import gui.guiUtil.internationalization.Internationalization;
+import util.gui.GuiUtil;
+import util.gui.ResizableImage;
+import util.gui.internationalization.Internationalization;
 
 public class CartDialog extends JDialog {
 

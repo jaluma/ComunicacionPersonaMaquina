@@ -1,4 +1,4 @@
-package gui.guiUtil.internationalization;
+package util.gui.internationalization;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;

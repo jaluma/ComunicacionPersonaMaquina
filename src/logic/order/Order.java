@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import gui.guiUtil.internationalization.Internationalization;
 import logic.product.Accommodation;
 import logic.product.ListProduct;
 import logic.product.Package;
 import logic.product.Product;
 import logic.product.Ticket;
+import util.gui.internationalization.Internationalization;
 
 public class Order {
 	private String name;
