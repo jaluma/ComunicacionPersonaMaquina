@@ -136,11 +136,11 @@ public class ItemPanel extends JPanel {
 			lblPhoto = new JLabel("");
 			String path = "";
 			if (product instanceof Ticket)
-				path = "/img/" + product.getPark().getCode() + ".jpg";
+				path = "/img/products/" + product.getPark().getCode() + ".jpg";
 			else if (product instanceof Package)
-				path = "/img/" + product.getCode() + ".jpg";
+				path = "/img/products/" + product.getCode() + ".jpg";
 			else
-				path = "/img/" + product.getCode() + ".jpg";
+				path = "/img/products/" + product.getCode() + ".jpg";
 
 			image = ResizableImage.setResizeImage(this, lblPhoto, path, 300, 200);
 			lblPhoto.setToolTipText(product.getName());

@@ -126,11 +126,11 @@ public class CartItemPanel extends JPanel {
 			lblPhoto.setBackground(Color.WHITE);
 			String path = "";
 			if (product instanceof Ticket)
-				path = "/img/" + product.getPark().getCode() + ".jpg";
+				path = "/img/products/" + product.getPark().getCode() + ".jpg";
 			else if (product instanceof Package)
-				path = "/img/" + product.getCode() + ".jpg";
+				path = "/img/products/" + product.getCode() + ".jpg";
 			else
-				path = "/img/" + product.getCode() + ".jpg";
+				path = "/img/products/" + product.getCode() + ".jpg";
 
 			ResizableImage.setResizeImage(this, lblPhoto, path, 250, 150);
 		}
