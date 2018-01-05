@@ -55,7 +55,7 @@ import gui.event.SliderMouseWheelEvent;
 import gui.event.SliderTextFieldEvent;
 import gui.guiUtil.GuiUtil;
 import gui.guiUtil.ResizableImage;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.order.Order;
 import logic.product.Accommodation;
 import logic.product.ListProduct;
@@ -1382,7 +1382,7 @@ public class ProductListPanel extends JPanel {
 
 	}
 
-	private JScrollPane getScrollPane() {
+	public JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setBorder(null);

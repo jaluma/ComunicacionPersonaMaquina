@@ -1,6 +1,6 @@
 package logic.product;
 
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 
 public class Accommodation extends Product {
 

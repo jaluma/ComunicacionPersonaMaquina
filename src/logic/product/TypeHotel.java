@@ -1,6 +1,6 @@
 package logic.product;
 
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 
 public enum TypeHotel {
 	HO("Hotel"), AH("ApartHotel"), AP("Apartment");

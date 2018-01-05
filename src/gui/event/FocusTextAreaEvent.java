@@ -6,7 +6,7 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JTextArea;
 
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 
 public class FocusTextAreaEvent implements FocusListener {
 

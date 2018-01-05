@@ -43,7 +43,7 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import gui.event.FocusTextFieldEvent;
 import gui.event.NumberTextFieldFormatEvent;
 import gui.guiUtil.ResizableImage;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.order.ListOrders;
 import logic.order.Order;
 import logic.product.ListProduct;

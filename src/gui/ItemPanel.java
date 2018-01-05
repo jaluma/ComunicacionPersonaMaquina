@@ -28,7 +28,7 @@ import javax.swing.event.ChangeListener;
 
 import gui.guiUtil.CopyObject;
 import gui.guiUtil.ResizableImage;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.product.Accommodation;
 import logic.product.Package;
 import logic.product.Product;
@@ -157,6 +157,7 @@ public class ItemPanel extends JPanel {
 			txtrInfo.setEditable(false);
 			txtrInfo.setHighlighter(null);
 			txtrInfo.setText("<font face=\"Tahoma\">" + product.toString3() + "</font>");
+			txtrInfo.setCaretPosition(0);
 		}
 		return txtrInfo;
 	}
@@ -259,6 +260,7 @@ public class ItemPanel extends JPanel {
 			scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setViewportView(getTxtrInfo());
+			scrollPane.getVerticalScrollBar().setValue(0);
 		}
 		return scrollPane;
 	}

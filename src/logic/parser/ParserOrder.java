@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import gui.guiUtil.CopyObject;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.order.Order;
 import logic.product.Accommodation;
 import logic.product.ListProduct;

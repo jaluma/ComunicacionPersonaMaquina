@@ -42,7 +42,7 @@ import gui.event.NumberTextFieldFormatEvent;
 import gui.guiUtil.DateUtil;
 import gui.guiUtil.GuiUtil;
 import gui.guiUtil.ResizableImage;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.product.Accommodation;
 import logic.product.Package;
 import logic.product.Product;
@@ -101,8 +101,9 @@ public class CartItemPanel extends JPanel {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
+			panel.setBackground(Color.WHITE);
 			panel.setBorder(UIManager.getBorder("Spinner.border"));
-			panel.setLayout(new BorderLayout(0, 0));
+			panel.setLayout(new BorderLayout(15, 0));
 			panel.add(getPanel_1(), BorderLayout.WEST);
 			panel.add(getPanelCenterOrder(), BorderLayout.CENTER);
 		}
@@ -193,6 +194,7 @@ public class CartItemPanel extends JPanel {
 			editorPane.setEditable(false);
 			editorPane.setHighlighter(null);
 			editorPane.setText("<font face=\"Tahoma\">" + product.toString3() + "</font>");
+			editorPane.setCaretPosition(0);
 		}
 		return editorPane;
 	}
@@ -559,7 +561,6 @@ public class CartItemPanel extends JPanel {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setBackground(Color.WHITE);
-			scrollPane.setBorder(new EmptyBorder(5, 5, 5, 0));
 			scrollPane.setViewportView(getEditorPane());
 			scrollPane.getVerticalScrollBar().setValue(0);
 		}

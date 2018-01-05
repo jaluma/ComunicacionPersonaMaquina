@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.product.Accommodation;
 import logic.product.ListProduct;
 import logic.product.Package;

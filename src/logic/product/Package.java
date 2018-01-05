@@ -1,6 +1,6 @@
 package logic.product;
 
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import util.file.AssertParam;
 
 public class Package extends Product {

@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import gui.guiUtil.ResizableImage;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 
 public class FinishPanel extends JPanel {
 

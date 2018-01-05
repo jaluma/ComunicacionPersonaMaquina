@@ -39,7 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.product.ListProduct;
 
 public class MainWindow extends JFrame {
@@ -234,10 +234,14 @@ public class MainWindow extends JFrame {
 			rdbtnmntmPanelfilter.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (rdbtnmntmPanelfilter.isSelected()) {
-						productListPanel.getPanelFilter().setVisible(true);
+						//productListPanel.getPanelFilter().setVisible(true);
+						productListPanel.getScrollPane().setVisible(true);
 					} else {
-						productListPanel.getPanelFilter().setVisible(false);
+						//productListPanel.getPanelFilter().setVisible(false);
+						productListPanel.getScrollPane().setVisible(false);
 					}
+					revalidate();
+					repaint();
 				}
 			});
 			rdbtnmntmPanelfilter.setSelected(true);
@@ -469,7 +473,6 @@ public class MainWindow extends JFrame {
 	}
 
 	private void loadHelp() {
-
 		URL hsURL;
 		HelpSet hs;
 
@@ -477,14 +480,11 @@ public class MainWindow extends JFrame {
 			File fichero = new File("help/help.hs");
 			hsURL = fichero.toURI().toURL();
 			hs = new HelpSet(null, hsURL);
-		}
-
-		catch (Exception e) {
+		} catch (Exception e) {
 			return;
 		}
 
 		HelpBroker hb = hs.createHelpBroker();
-
 		hb.enableHelpKey(getRootPane(), "introduction", hs);
 		hb.enableHelpOnButton(mntmContents, "introduction", hs);
 	}

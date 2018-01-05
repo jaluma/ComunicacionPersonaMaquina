@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Scrollbar;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +24,7 @@ import javax.swing.SwingUtilities;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import gui.guiUtil.ResizableImage;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import util.file.FileUtil;
 
 public class InfoOrderPanel extends JPanel {
@@ -72,8 +73,8 @@ public class InfoOrderPanel extends JPanel {
 		if (scrollPaneOrder == null) {
 			scrollPaneOrder = new JScrollPane();
 			scrollPaneOrder.setViewportView(getTxtrInfoOrder());
-			scrollPaneOrder.getVerticalScrollBar().setValue(0);
 			scrollPaneOrder.getVerticalScrollBar().setUnitIncrement(20);
+			scrollPaneOrder.getVerticalScrollBar().setValue(scrollPaneOrder.getVerticalScrollBar().getMinimum());
 		}
 		return scrollPaneOrder;
 	}
@@ -86,6 +87,7 @@ public class InfoOrderPanel extends JPanel {
 			txtrInfoOrder.setLineWrap(true);
 			txtrInfoOrder.setEditable(false);
 			txtrInfoOrder.setText(ProductListPanel.getOrder().toString());
+			txtrInfoOrder.setCaretPosition(0);
 		}
 		return txtrInfoOrder;
 	}

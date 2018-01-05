@@ -3,7 +3,7 @@ package logic.product;
 import java.io.Serializable;
 import java.util.Date;
 
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 import logic.park.Park;
 
 public abstract class Product implements Serializable {

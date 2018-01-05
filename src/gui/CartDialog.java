@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -26,11 +25,9 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-
 import gui.guiUtil.GuiUtil;
 import gui.guiUtil.ResizableImage;
-import internationalization.Internationalization;
+import gui.guiUtil.internationalization.Internationalization;
 
 public class CartDialog extends JDialog {
 
@@ -71,7 +68,6 @@ public class CartDialog extends JDialog {
 		setBounds(0, 0, mainWindow.getWidth() * 2 / 3, mainWindow.getHeight() * 2 / 3);
 		setLocationRelativeTo(mainWindow);
 		getRootPane().setDefaultButton(btnFinish);
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { getBtnAddmore() }));
 	}
 
 	public CartDialog(MainWindow mainWindow2, boolean b) {
