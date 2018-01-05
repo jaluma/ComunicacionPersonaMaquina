@@ -234,10 +234,10 @@ public class MainWindow extends JFrame {
 			rdbtnmntmPanelfilter.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (rdbtnmntmPanelfilter.isSelected()) {
-						//productListPanel.getPanelFilter().setVisible(true);
+						// productListPanel.getPanelFilter().setVisible(true);
 						productListPanel.getScrollPane().setVisible(true);
 					} else {
-						//productListPanel.getPanelFilter().setVisible(false);
+						// productListPanel.getPanelFilter().setVisible(false);
 						productListPanel.getScrollPane().setVisible(false);
 					}
 					revalidate();

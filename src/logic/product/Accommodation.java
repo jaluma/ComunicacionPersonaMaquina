@@ -87,7 +87,7 @@ public class Accommodation extends Product {
 	public double getTotal() {
 		int numPeople = numberAdult + numberChild;
 		double total = price * duration;
-		
+
 		if (type.equals(TypeHotel.HO))
 			total *= numPeople;
 
