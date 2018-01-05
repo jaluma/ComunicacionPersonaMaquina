@@ -52,7 +52,7 @@ public class Ticket extends Product {
 
 	@Override
 	public double getTotal() {
-		return numberAdult * priceAdult + numberChild * priceChild;
+		return (numberAdult * priceAdult + numberChild * priceChild) * duration;
 	}
 
 	@Override

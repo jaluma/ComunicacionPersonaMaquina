@@ -48,6 +48,7 @@ import logic.product.Package;
 import logic.product.Product;
 import logic.product.Ticket;
 import logic.product.TypeHotel;
+import logic.util.LogicUtil;
 
 public class CartItemPanel extends JPanel {
 
@@ -126,7 +127,7 @@ public class CartItemPanel extends JPanel {
 			if (product instanceof Ticket)
 				path = "/img/" + product.getPark().getCode() + ".jpg";
 			else if (product instanceof Package)
-				path = "/img/" + ((Package) product).getAccom().getCode() + ".jpg";
+				path = "/img/" + product.getCode() + ".jpg";
 			else
 				path = "/img/" + product.getCode() + ".jpg";
 
@@ -306,11 +307,11 @@ public class CartItemPanel extends JPanel {
 				public void propertyChange(PropertyChangeEvent arg0) {
 					if (getDateArrive().getDate() != null) {
 						product.setDate(dateArrive.getDate());
-						product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
+						product.setDuration(LogicUtil.getDays(dateArrive.getDate(), dateExit.getDate()));
 						cartWindow.updatePrice();
 						updatePrice();
 					} else if (dateExit.getDate() != null) {
-						product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
+						product.setDuration(LogicUtil.getDays(dateArrive.getDate(), dateExit.getDate()));
 					}
 				}
 			});

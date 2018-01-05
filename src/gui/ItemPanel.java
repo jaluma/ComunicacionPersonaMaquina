@@ -138,7 +138,7 @@ public class ItemPanel extends JPanel {
 			if (product instanceof Ticket)
 				path = "/img/" + product.getPark().getCode() + ".jpg";
 			else if (product instanceof Package)
-				path = "/img/" + ((Package) product).getAccom().getCode() + ".jpg";
+				path = "/img/" + product.getCode() + ".jpg";
 			else
 				path = "/img/" + product.getCode() + ".jpg";
 

@@ -17,7 +17,6 @@ import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
 
@@ -145,15 +144,6 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-	}
-
-	public int getDays(Date dateStart, Date dateFinish) {
-		if (dateStart != null && dateFinish != null) {
-			long diff = Math.abs(dateFinish.getTime() - dateStart.getTime());
-			long diffDays = diff / (24 * 60 * 60 * 1000);
-			return (int) diffDays;
-		}
-		return 0;
 	}
 
 	public InitialPanel getInitialPanel() {

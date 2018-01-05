@@ -62,6 +62,7 @@ import logic.product.ListProduct;
 import logic.product.Package;
 import logic.product.Product;
 import logic.product.Ticket;
+import logic.util.LogicUtil;
 import net.miginfocom.swing.MigLayout;
 
 public class ProductListPanel extends JPanel {
@@ -773,7 +774,7 @@ public class ProductListPanel extends JPanel {
 			int numberAdult = Integer.parseInt(getTxAdult().getText());
 			int numberChild = Integer.parseInt(getTxChild().getText());
 			Date date = dateArrive.getDate();
-			int days = mainWindow.getDays(date, getDateExit().getDate());
+			int days = LogicUtil.getDays(date, getDateExit().getDate());
 			product.loadData(numberAdult, numberChild, date, days);
 			panelItem.add(new ItemPanel(this, product));
 		}
@@ -1177,7 +1178,7 @@ public class ProductListPanel extends JPanel {
 							if (panel instanceof ItemPanel) {
 								Product product = ((ItemPanel) panel).getProduct();
 								product.setDate(dateArrive.getDate());
-								product.setDuration(mainWindow.getDays(dateArrive.getDate(), dateExit.getDate()));
+								product.setDuration(LogicUtil.getDays(dateArrive.getDate(), dateExit.getDate()));
 								((ItemPanel) panelItem.getComponent(i)).updatePrice();
 							}
 						}
