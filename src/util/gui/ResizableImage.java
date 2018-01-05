@@ -15,7 +15,7 @@ public class ResizableImage {
 		try {
 			imgOriginal = new ImageIcon(panel.getClass().getResource(path)).getImage();
 		} catch (Exception e) {
-			imgOriginal = new ImageIcon(panel.getClass().getResource("/img/DE000.jpg")).getImage();
+			imgOriginal = new ImageIcon(panel.getClass().getResource("/img/products/DE000.jpg")).getImage();
 			image = false;
 		}
 		Image imgResize = imgOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -30,7 +30,7 @@ public class ResizableImage {
 		try {
 			imgOriginal = new ImageIcon(panel.getClass().getResource(path)).getImage();
 		} catch (Exception e) {
-			imgOriginal = new ImageIcon(panel.getClass().getResource("/img/DE000.jpg")).getImage();
+			imgOriginal = new ImageIcon(panel.getClass().getResource("/img/products/DE000.jpg")).getImage();
 			image = false;
 		}
 		Image imgResize = imgOriginal.getScaledInstance(width, height, Image.SCALE_SMOOTH);
