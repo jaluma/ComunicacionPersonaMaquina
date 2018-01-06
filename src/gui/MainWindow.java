@@ -16,13 +16,16 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -30,8 +33,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
@@ -65,7 +70,7 @@ public class MainWindow extends JFrame {
 	private JSeparator separatorHekp;
 	private JMenuItem mntmLanguage;
 	protected JMenuItem mntmPlace;
-	protected JMenuItem mntmStars;
+	protected JMenuItem mntmType;
 	protected JMenuItem mntmPeople;
 	protected JMenuItem mntmOnlyphotos;
 	protected JMenuItem mntmPrice;
@@ -79,6 +84,7 @@ public class MainWindow extends JFrame {
 	protected JMenuItem mntmCart;
 	private JSeparator separator;
 	protected Rectangle location;
+	protected JMenuItem mntmStars;
 
 	/**
 	 * Launch the application.
@@ -269,37 +275,49 @@ public class MainWindow extends JFrame {
 			mntmPlace.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 			mnFilters.add(mntmPlace);
 
-			mntmStars = new JMenuItem(Internationalization.getString("category"));
-			mntmStars.addActionListener(new ActionListener() {
+			mntmType = new JMenuItem(Internationalization.getString("type"));
+			mntmType.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-//					String[] types = new String[] { Internationalization.getString("type_all_product"),
-//							Internationalization.getString("type_only_accom"),
-//							Internationalization.getString("type_only_packages"),
-//							Internationalization.getString("type_only_ticket") };
-//
-//					String value = (String) JOptionPane.showInputDialog(null,
-//							Internationalization.getString("select_category"),
-//							Internationalization.getString("select_category_title"), JOptionPane.DEFAULT_OPTION,
-//							new ImageIcon("/img/DE000.jng"), types, 0);
-//					if (value != null) {
-//						int index = Arrays.asList(types).indexOf(value);
-//						int count = 0;
-//						for (Enumeration<AbstractButton> buttons = productListPanel.buttonGroup.getElements(); buttons
-//								.hasMoreElements();) {
-//							AbstractButton button = buttons.nextElement();
-//							if (count == index) {
-//								button.doClick();
-//								break;
-//							}
-//							count++;
-//						}
-//					}
+					String[] types = new String[] { Internationalization.getString("type_all_product"),
+							Internationalization.getString("type_only_accom"),
+							Internationalization.getString("type_only_ticket"),
+							Internationalization.getString("type_only_packages") };
+
+					String value = (String) JOptionPane.showInputDialog(null,
+							Internationalization.getString("select_category"),
+							Internationalization.getString("select_category_title"), JOptionPane.DEFAULT_OPTION,
+							new ImageIcon("/img/DE000.jng"), types, 0);
+					if (value != null) {
+						int index = Arrays.asList(types).indexOf(value);
+						productListPanel.getChOnlyAccom().setSelected(false);
+						productListPanel.getChOnlyPackage().setSelected(false);
+						productListPanel.getChOnlyTicket().setSelected(false);
+						
+						switch (index) {
+						case 0:
+							productListPanel.getChOnlyAccom().setSelected(true);
+							productListPanel.getChOnlyPackage().setSelected(true);
+							productListPanel.getChOnlyTicket().setSelected(true);
+							break;
+						case 1:
+							productListPanel.getChOnlyAccom().setSelected(true);
+							break;
+						case 2:
+							productListPanel.getChOnlyTicket().setSelected(true);
+							break;
+						case 3:
+							productListPanel.getChOnlyPackage().setSelected(true);
+							break;
+						}
+						
+						productListPanel.filtersReset();
+					}
 
 				}
 			});
-			mntmStars.setEnabled(false);
-			mntmStars.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-			mnFilters.add(mntmStars);
+			mntmType.setEnabled(false);
+			mntmType.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+			mnFilters.add(mntmType);
 
 			mntmPeople = new JMenuItem(Internationalization.getString("number_people"));
 			mntmPeople.addActionListener(new ActionListener() {
@@ -328,6 +346,39 @@ public class MainWindow extends JFrame {
 					}
 				}
 			});
+
+			mntmStars = new JMenuItem(Internationalization.getString("category"));
+			mntmStars.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 5, 1);
+					JPanel panel = new JPanel();
+					JLabel label = new JLabel(Internationalization.getString("filter_star"));
+					JSpinner spinner = new JSpinner(sModel);
+					panel.add(label);
+					panel.add(spinner);
+					JOptionPane.showMessageDialog(MainWindow.this, panel, Internationalization.getString("filter_star_title"), JOptionPane.QUESTION_MESSAGE);
+					if (!spinner.getValue().equals(0)) {
+						for (int i = 0; i < productListPanel.getPanelStar().getComponentCount(); i++) {
+							if (productListPanel.getPanelStar().getComponent(i) instanceof JButton) {
+								int numberButton = Integer
+										.parseInt(((JButton) productListPanel.getPanelStar().getComponent(i)).getActionCommand());
+								if (numberButton <= (Integer)spinner.getValue()) {
+									((JButton) productListPanel.getPanelStar().getComponent(i)).setText("\u2605");
+									((JButton) productListPanel.getPanelStar().getComponent(i)).doClick();
+								}
+							}
+
+						}
+					}
+				}
+			});
+			mntmStars.setEnabled(false);
+			mntmStars.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+			mnFilters.add(mntmStars);
+			
+			
+			
+			mnFilters.add(mntmStars);
 			mntmPeople.setEnabled(false);
 			mntmPeople.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 			mnFilters.add(mntmPeople);

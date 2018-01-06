@@ -162,10 +162,11 @@ public class ProductListPanel extends JPanel {
 		mainWindow.mntmPeople.setEnabled(true);
 		mainWindow.mntmPlace.setEnabled(true);
 		mainWindow.mntmPrice.setEnabled(true);
-		mainWindow.mntmStars.setEnabled(true);
+		mainWindow.mntmType.setEnabled(true);
 		mainWindow.mntmOnlyphotos.setEnabled(true);
 		mainWindow.mntmCart.setEnabled(true);
-
+		mainWindow.mntmStars.setEnabled(true);
+		
 		mainWindow.setResizable(true);
 		mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
@@ -374,7 +375,7 @@ public class ProductListPanel extends JPanel {
 		return lblType;
 	}
 
-	private JCheckBox getChOnlyAccom() {
+	protected JCheckBox getChOnlyAccom() {
 		if (chOnlyAccom == null) {
 			chOnlyAccom = new JCheckBox(Internationalization.getString("type_only_accom"));
 			chOnlyAccom.addItemListener(new ItemListener() {
@@ -395,7 +396,7 @@ public class ProductListPanel extends JPanel {
 		return chOnlyAccom;
 	}
 
-	private JCheckBox getChOnlyPackage() {
+	protected JCheckBox getChOnlyPackage() {
 		if (chOnlyPackage == null) {
 			chOnlyPackage = new JCheckBox(Internationalization.getString("type_only_packages"));
 			chOnlyPackage.addActionListener(new ActionListener() {
@@ -410,7 +411,7 @@ public class ProductListPanel extends JPanel {
 		return chOnlyPackage;
 	}
 
-	private JCheckBox getChOnlyTicket() {
+	protected JCheckBox getChOnlyTicket() {
 		if (chOnlyTicket == null) {
 			chOnlyTicket = new JCheckBox(Internationalization.getString("type_only_ticket"));
 			chOnlyTicket.addActionListener(new ActionListener() {
@@ -441,7 +442,7 @@ public class ProductListPanel extends JPanel {
 		return lblCategory;
 	}
 
-	private JPanel getPanelStar() {
+	protected JPanel getPanelStar() {
 		if (panelStar == null) {
 			panelStar = new JPanel();
 			panelStar.setAlignmentY(Component.BOTTOM_ALIGNMENT);
@@ -1273,7 +1274,7 @@ public class ProductListPanel extends JPanel {
 	}
 
 	private void filterOnlyPhostosCh() {
-		if (chOnlyPhotos.isSelected()) {
+		if (getChOnlyPhotos().isSelected()) {
 			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					boolean value = ((ItemPanel) panelItem.getComponent(i)).getImage();
