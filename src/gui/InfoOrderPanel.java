@@ -115,7 +115,7 @@ public class InfoOrderPanel extends JPanel {
 					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 					nameFile = format.format(new Date(System.currentTimeMillis())) + "_"
 							+ ProductListPanel.getOrder().getDni();
-					nameFile += ".dat";
+					nameFile += ".txt";
 
 					try {
 						FileUtil.saveToFile(nameFile, Arrays.asList(ProductListPanel.getOrder().toString()));

@@ -14,7 +14,7 @@ public class ListOrders {
 		if (date != null) {
 			String dateString = format.format(date); // check format date
 
-			String nameFile = dateString + "_" + dni + ".dat";
+			String nameFile = dateString + "_" + dni + ".txt";
 			return new ParserOrder().parser(nameFile);
 		} else {
 			throw new DataFormatException();
