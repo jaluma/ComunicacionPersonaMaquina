@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -34,7 +33,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
@@ -82,9 +80,9 @@ public class ProductListPanel extends JPanel {
 	private JPanel panelPeople;
 	private JPanel panelOnlyPhotos;
 	private JLabel lblType;
-	private JRadioButton rbOnlyAccom;
-	private JRadioButton rbOnlyPackage;
-	private JRadioButton rbOnlyTicket;
+	private JCheckBox rbOnlyAccom;
+	private JCheckBox rbOnlyPackage;
+	private JCheckBox rbOnlyTicket;
 	private JLabel lblCategory;
 	private JPanel panelStar;
 	private JPanel panelRadioButtonType;
@@ -113,8 +111,6 @@ public class ProductListPanel extends JPanel {
 	private JComboBox<String> comboBox;
 	private DefaultComboBoxModel<String> modelPlace;
 	private JPanel panelItem;
-	private JRadioButton rbAll;
-	public final ButtonGroup buttonGroup = new ButtonGroup();
 	private JLabel lblLblnumberelem;
 	private int numberStars;
 	private JTextField txtMinprice;
@@ -378,22 +374,16 @@ public class ProductListPanel extends JPanel {
 		return lblType;
 	}
 
-	private JRadioButton getRbOnlyAccom() {
+	private JCheckBox getRbOnlyAccom() {
 		if (rbOnlyAccom == null) {
-			rbOnlyAccom = new JRadioButton(Internationalization.getString("type_only_accom"));
+			rbOnlyAccom = new JCheckBox(Internationalization.getString("type_only_accom"));
 			rbOnlyAccom.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
 					if (!rbOnlyAccom.isSelected()) {
-						for (int i = 0; i < panelStar.getComponentCount(); i++) {
-							if (panelStar.getComponent(i) instanceof JButton) {
-								((JButton) panelStar.getComponent(i)).setText("\u2606");
-							}
-
-						}
+						resetStars();
 					}
 				}
 			});
-			buttonGroup.add(rbOnlyAccom);
 			rbOnlyAccom.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					filtersReset();
@@ -405,12 +395,12 @@ public class ProductListPanel extends JPanel {
 		return rbOnlyAccom;
 	}
 
-	private JRadioButton getRbOnlyPackage() {
+	private JCheckBox getRbOnlyPackage() {
 		if (rbOnlyPackage == null) {
-			rbOnlyPackage = new JRadioButton(Internationalization.getString("type_only_packages"));
-			buttonGroup.add(rbOnlyPackage);
+			rbOnlyPackage = new JCheckBox(Internationalization.getString("type_only_packages"));
 			rbOnlyPackage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					resetStars();
 					filtersReset();
 				}
 			});
@@ -420,12 +410,12 @@ public class ProductListPanel extends JPanel {
 		return rbOnlyPackage;
 	}
 
-	private JRadioButton getRbOnlyTicket() {
+	private JCheckBox getRbOnlyTicket() {
 		if (rbOnlyTicket == null) {
-			rbOnlyTicket = new JRadioButton(Internationalization.getString("type_only_ticket"));
-			buttonGroup.add(rbOnlyTicket);
+			rbOnlyTicket = new JCheckBox(Internationalization.getString("type_only_ticket"));
 			rbOnlyTicket.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					resetStars();
 					filtersReset();
 				}
 			});
@@ -433,6 +423,12 @@ public class ProductListPanel extends JPanel {
 			rbOnlyTicket.setBackground(Color.WHITE);
 		}
 		return rbOnlyTicket;
+	}
+	
+	private void resetStars() {
+		for (int i = 0; i < panelStar.getComponentCount(); i++) {
+				((JButton) panelStar.getComponent(i)).setText("\u2606");
+		}
 	}
 
 	private JLabel getLblCategory() {
@@ -477,6 +473,8 @@ public class ProductListPanel extends JPanel {
 
 				// update gui
 				rbOnlyAccom.setSelected(true);
+				rbOnlyPackage.setSelected(false);
+				rbOnlyTicket.setSelected(false);
 
 				if (buttonPressed.getText().equals("\u2606")) {
 					for (int i = 0; i < panelStar.getComponentCount(); i++) {
@@ -511,10 +509,10 @@ public class ProductListPanel extends JPanel {
 			panelRadioButtonType = new JPanel();
 			panelRadioButtonType.setBackground(TRANSPARENT);
 			panelRadioButtonType.setLayout(new BoxLayout(panelRadioButtonType, BoxLayout.Y_AXIS));
-			panelRadioButtonType.add(getRbAll());
 			panelRadioButtonType.add(getRbOnlyAccom());
-			panelRadioButtonType.add(getRbOnlyPackage());
 			panelRadioButtonType.add(getRbOnlyTicket());
+			panelRadioButtonType.add(getRbOnlyPackage());
+			getRbAll();
 		}
 		return panelRadioButtonType;
 	}
@@ -831,7 +829,7 @@ public class ProductListPanel extends JPanel {
 			comboBox.setToolTipText(Internationalization.getToolTips("place"));
 			comboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
-					getRbAll().setSelected(true);
+					getRbAll();
 					filterPlaceChange();
 					getLblLblnumberelem().setText(String.valueOf(GuiUtil.getVisibleChildrenCount(getPanelItem())));
 				}
@@ -845,21 +843,10 @@ public class ProductListPanel extends JPanel {
 		return comboBox;
 	}
 
-	public JRadioButton getRbAll() {
-		if (rbAll == null) {
-			rbAll = new JRadioButton(Internationalization.getString("type_all_product"));
-			rbAll.setBackground(TRANSPARENT);
-			rbAll.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					filtersReset();
-				}
-			});
-			buttonGroup.add(rbAll);
-			rbAll.setSelected(true);
-			rbAll.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			rbAll.setBackground(Color.WHITE);
-		}
-		return rbAll;
+	public void getRbAll() {
+		getRbOnlyAccom().setSelected(true);
+		getRbOnlyPackage().setSelected(true);
+		getRbOnlyTicket().setSelected(true);
 	}
 
 	private JLabel getLblLblnumberelem() {
@@ -1216,12 +1203,10 @@ public class ProductListPanel extends JPanel {
 		new Thread(new RefreshItemThread(this)).start();
 	}
 
-	protected void filtersReset() {
+	public void filtersReset() {
 		getDateExit().setEnabled(true);
 		filterPlaceChange();
-		filterOnlyAccomCh();
-		filterOnlyTicketCh();
-		filterOnlyPackageCh();
+		filterType();
 		filterOnlyPhostosCh();
 		filterStars();
 		filterPriceCh();
@@ -1234,47 +1219,22 @@ public class ProductListPanel extends JPanel {
 		lblLblnumberelem.setText(String.valueOf(GuiUtil.getVisibleChildrenCount(panelItem)));
 	}
 
-	private void filterOnlyAccomCh() {
-		if (rbOnlyAccom.isSelected()) {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
-				if (panelItem.getComponent(i) instanceof ItemPanel) {
-					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
-					if (panelItem.getComponent(i).isVisible() && product instanceof Accommodation) {
+	private void filterType() {
+		for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
+			if (panelItem.getComponent(i) instanceof ItemPanel) {
+				Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
+				if (panelItem.getComponent(i).isVisible()) {
+					if (product instanceof Accommodation && rbOnlyAccom.isSelected()) {
+						panelItem.getComponent(i).setVisible(true);
+					} else if (product instanceof Ticket && rbOnlyTicket.isSelected()) {
+						panelItem.getComponent(i).setVisible(true);
+					} else if (product instanceof Package && rbOnlyPackage.isSelected()) {
 						panelItem.getComponent(i).setVisible(true);
 					} else {
 						panelItem.getComponent(i).setVisible(false);
 					}
-				}
-			}
-		}
-	}
-
-	private void filterOnlyTicketCh() {
-		if (rbOnlyTicket.isSelected()) {
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
-				if (panelItem.getComponent(i) instanceof ItemPanel) {
-					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
-					if (panelItem.getComponent(i).isVisible() && product instanceof Ticket) {
-						panelItem.getComponent(i).setVisible(true);
-					} else {
-						panelItem.getComponent(i).setVisible(false);
-					}
-				}
-			}
-		}
-	}
-
-	private void filterOnlyPackageCh() {
-		if (rbOnlyPackage.isSelected()) {
-			getDateExit().setEnabled(false);
-			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
-				if (panelItem.getComponent(i) instanceof ItemPanel) {
-					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
-					if (panelItem.getComponent(i).isVisible() && product instanceof Package) {
-						panelItem.getComponent(i).setVisible(true);
-					} else {
-						panelItem.getComponent(i).setVisible(false);
-					}
+				} else {
+					panelItem.getComponent(i).setVisible(false);
 				}
 			}
 		}
@@ -1297,7 +1257,7 @@ public class ProductListPanel extends JPanel {
 	}
 
 	private void filterStars() {
-		if (rbOnlyAccom.isSelected()) {
+		if (rbOnlyAccom.isSelected() && !rbOnlyPackage.isSelected() && !rbOnlyTicket.isSelected()) {
 			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();

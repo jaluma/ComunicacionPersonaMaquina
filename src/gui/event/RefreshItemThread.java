@@ -13,9 +13,8 @@ public class RefreshItemThread implements Runnable {
 	@Override
 	public void run() {
 		panel.loadItems();
-		panel.filterPlaceChange();
 		panel.getPanelLoading().setVisible(false);
-		panel.getRbAll().doClick();
+		panel.filtersReset();
 	}
 
 }

@@ -16,13 +16,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.Locale;
 
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -275,28 +272,28 @@ public class MainWindow extends JFrame {
 			mntmStars = new JMenuItem(Internationalization.getString("category"));
 			mntmStars.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String[] types = new String[] { Internationalization.getString("type_all_product"),
-							Internationalization.getString("type_only_accom"),
-							Internationalization.getString("type_only_packages"),
-							Internationalization.getString("type_only_ticket") };
-
-					String value = (String) JOptionPane.showInputDialog(null,
-							Internationalization.getString("select_category"),
-							Internationalization.getString("select_category_title"), JOptionPane.DEFAULT_OPTION,
-							new ImageIcon("/img/DE000.jng"), types, 0);
-					if (value != null) {
-						int index = Arrays.asList(types).indexOf(value);
-						int count = 0;
-						for (Enumeration<AbstractButton> buttons = productListPanel.buttonGroup.getElements(); buttons
-								.hasMoreElements();) {
-							AbstractButton button = buttons.nextElement();
-							if (count == index) {
-								button.doClick();
-								break;
-							}
-							count++;
-						}
-					}
+//					String[] types = new String[] { Internationalization.getString("type_all_product"),
+//							Internationalization.getString("type_only_accom"),
+//							Internationalization.getString("type_only_packages"),
+//							Internationalization.getString("type_only_ticket") };
+//
+//					String value = (String) JOptionPane.showInputDialog(null,
+//							Internationalization.getString("select_category"),
+//							Internationalization.getString("select_category_title"), JOptionPane.DEFAULT_OPTION,
+//							new ImageIcon("/img/DE000.jng"), types, 0);
+//					if (value != null) {
+//						int index = Arrays.asList(types).indexOf(value);
+//						int count = 0;
+//						for (Enumeration<AbstractButton> buttons = productListPanel.buttonGroup.getElements(); buttons
+//								.hasMoreElements();) {
+//							AbstractButton button = buttons.nextElement();
+//							if (count == index) {
+//								button.doClick();
+//								break;
+//							}
+//							count++;
+//						}
+//					}
 
 				}
 			});
