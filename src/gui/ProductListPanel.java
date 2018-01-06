@@ -80,9 +80,9 @@ public class ProductListPanel extends JPanel {
 	private JPanel panelPeople;
 	private JPanel panelOnlyPhotos;
 	private JLabel lblType;
-	private JCheckBox rbOnlyAccom;
-	private JCheckBox rbOnlyPackage;
-	private JCheckBox rbOnlyTicket;
+	private JCheckBox chOnlyAccom;
+	private JCheckBox chOnlyPackage;
+	private JCheckBox chOnlyTicket;
 	private JLabel lblCategory;
 	private JPanel panelStar;
 	private JPanel panelRadioButtonType;
@@ -374,55 +374,55 @@ public class ProductListPanel extends JPanel {
 		return lblType;
 	}
 
-	private JCheckBox getRbOnlyAccom() {
-		if (rbOnlyAccom == null) {
-			rbOnlyAccom = new JCheckBox(Internationalization.getString("type_only_accom"));
-			rbOnlyAccom.addItemListener(new ItemListener() {
+	private JCheckBox getChOnlyAccom() {
+		if (chOnlyAccom == null) {
+			chOnlyAccom = new JCheckBox(Internationalization.getString("type_only_accom"));
+			chOnlyAccom.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
-					if (!rbOnlyAccom.isSelected()) {
+					if (!chOnlyAccom.isSelected()) {
 						resetStars();
 					}
 				}
 			});
-			rbOnlyAccom.addActionListener(new ActionListener() {
+			chOnlyAccom.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					filtersReset();
 				}
 			});
-			rbOnlyAccom.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			rbOnlyAccom.setBackground(Color.WHITE);
+			chOnlyAccom.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			chOnlyAccom.setBackground(Color.WHITE);
 		}
-		return rbOnlyAccom;
+		return chOnlyAccom;
 	}
 
-	private JCheckBox getRbOnlyPackage() {
-		if (rbOnlyPackage == null) {
-			rbOnlyPackage = new JCheckBox(Internationalization.getString("type_only_packages"));
-			rbOnlyPackage.addActionListener(new ActionListener() {
+	private JCheckBox getChOnlyPackage() {
+		if (chOnlyPackage == null) {
+			chOnlyPackage = new JCheckBox(Internationalization.getString("type_only_packages"));
+			chOnlyPackage.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					resetStars();
 					filtersReset();
 				}
 			});
-			rbOnlyPackage.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			rbOnlyPackage.setBackground(Color.WHITE);
+			chOnlyPackage.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			chOnlyPackage.setBackground(Color.WHITE);
 		}
-		return rbOnlyPackage;
+		return chOnlyPackage;
 	}
 
-	private JCheckBox getRbOnlyTicket() {
-		if (rbOnlyTicket == null) {
-			rbOnlyTicket = new JCheckBox(Internationalization.getString("type_only_ticket"));
-			rbOnlyTicket.addActionListener(new ActionListener() {
+	private JCheckBox getChOnlyTicket() {
+		if (chOnlyTicket == null) {
+			chOnlyTicket = new JCheckBox(Internationalization.getString("type_only_ticket"));
+			chOnlyTicket.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					resetStars();
 					filtersReset();
 				}
 			});
-			rbOnlyTicket.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			rbOnlyTicket.setBackground(Color.WHITE);
+			chOnlyTicket.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			chOnlyTicket.setBackground(Color.WHITE);
 		}
-		return rbOnlyTicket;
+		return chOnlyTicket;
 	}
 	
 	private void resetStars() {
@@ -472,9 +472,9 @@ public class ProductListPanel extends JPanel {
 				numberStars = Integer.parseInt(buttonPressed.getActionCommand());
 
 				// update gui
-				rbOnlyAccom.setSelected(true);
-				rbOnlyPackage.setSelected(false);
-				rbOnlyTicket.setSelected(false);
+				chOnlyAccom.setSelected(true);
+				chOnlyPackage.setSelected(false);
+				chOnlyTicket.setSelected(false);
 
 				if (buttonPressed.getText().equals("\u2606")) {
 					for (int i = 0; i < panelStar.getComponentCount(); i++) {
@@ -509,9 +509,9 @@ public class ProductListPanel extends JPanel {
 			panelRadioButtonType = new JPanel();
 			panelRadioButtonType.setBackground(TRANSPARENT);
 			panelRadioButtonType.setLayout(new BoxLayout(panelRadioButtonType, BoxLayout.Y_AXIS));
-			panelRadioButtonType.add(getRbOnlyAccom());
-			panelRadioButtonType.add(getRbOnlyTicket());
-			panelRadioButtonType.add(getRbOnlyPackage());
+			panelRadioButtonType.add(getChOnlyAccom());
+			panelRadioButtonType.add(getChOnlyTicket());
+			panelRadioButtonType.add(getChOnlyPackage());
 			getRbAll();
 		}
 		return panelRadioButtonType;
@@ -844,9 +844,9 @@ public class ProductListPanel extends JPanel {
 	}
 
 	public void getRbAll() {
-		getRbOnlyAccom().setSelected(true);
-		getRbOnlyPackage().setSelected(true);
-		getRbOnlyTicket().setSelected(true);
+		getChOnlyAccom().setSelected(true);
+		getChOnlyPackage().setSelected(true);
+		getChOnlyTicket().setSelected(true);
 	}
 
 	private JLabel getLblLblnumberelem() {
@@ -1224,11 +1224,11 @@ public class ProductListPanel extends JPanel {
 			if (panelItem.getComponent(i) instanceof ItemPanel) {
 				Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
 				if (panelItem.getComponent(i).isVisible()) {
-					if (product instanceof Accommodation && rbOnlyAccom.isSelected()) {
+					if (product instanceof Accommodation && chOnlyAccom.isSelected()) {
 						panelItem.getComponent(i).setVisible(true);
-					} else if (product instanceof Ticket && rbOnlyTicket.isSelected()) {
+					} else if (product instanceof Ticket && chOnlyTicket.isSelected()) {
 						panelItem.getComponent(i).setVisible(true);
-					} else if (product instanceof Package && rbOnlyPackage.isSelected()) {
+					} else if (product instanceof Package && chOnlyPackage.isSelected()) {
 						panelItem.getComponent(i).setVisible(true);
 					} else {
 						panelItem.getComponent(i).setVisible(false);
@@ -1257,7 +1257,7 @@ public class ProductListPanel extends JPanel {
 	}
 
 	private void filterStars() {
-		if (rbOnlyAccom.isSelected() && !rbOnlyPackage.isSelected() && !rbOnlyTicket.isSelected()) {
+		if (chOnlyAccom.isSelected() && !chOnlyPackage.isSelected() && !chOnlyTicket.isSelected()) {
 			for (int i = 0; i < getPanelItem().getComponentCount(); i++) {
 				if (panelItem.getComponent(i) instanceof ItemPanel) {
 					Product product = ((ItemPanel) panelItem.getComponent(i)).getProduct();
