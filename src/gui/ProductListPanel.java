@@ -166,7 +166,7 @@ public class ProductListPanel extends JPanel {
 		mainWindow.mntmOnlyphotos.setEnabled(true);
 		mainWindow.mntmCart.setEnabled(true);
 		mainWindow.mntmStars.setEnabled(true);
-		
+
 		mainWindow.setResizable(true);
 		mainWindow.setExtendedState(mainWindow.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
@@ -425,10 +425,10 @@ public class ProductListPanel extends JPanel {
 		}
 		return chOnlyTicket;
 	}
-	
+
 	private void resetStars() {
 		for (int i = 0; i < panelStar.getComponentCount(); i++) {
-				((JButton) panelStar.getComponent(i)).setText("\u2606");
+			((JButton) panelStar.getComponent(i)).setText("\u2606");
 		}
 	}
 

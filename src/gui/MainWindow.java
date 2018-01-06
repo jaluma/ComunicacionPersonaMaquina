@@ -292,7 +292,7 @@ public class MainWindow extends JFrame {
 						productListPanel.getChOnlyAccom().setSelected(false);
 						productListPanel.getChOnlyPackage().setSelected(false);
 						productListPanel.getChOnlyTicket().setSelected(false);
-						
+
 						switch (index) {
 						case 0:
 							productListPanel.getChOnlyAccom().setSelected(true);
@@ -309,7 +309,7 @@ public class MainWindow extends JFrame {
 							productListPanel.getChOnlyPackage().setSelected(true);
 							break;
 						}
-						
+
 						productListPanel.filtersReset();
 					}
 
@@ -356,13 +356,14 @@ public class MainWindow extends JFrame {
 					JSpinner spinner = new JSpinner(sModel);
 					panel.add(label);
 					panel.add(spinner);
-					JOptionPane.showMessageDialog(MainWindow.this, panel, Internationalization.getString("filter_star_title"), JOptionPane.QUESTION_MESSAGE);
+					JOptionPane.showMessageDialog(MainWindow.this, panel,
+							Internationalization.getString("filter_star_title"), JOptionPane.QUESTION_MESSAGE);
 					if (!spinner.getValue().equals(0)) {
 						for (int i = 0; i < productListPanel.getPanelStar().getComponentCount(); i++) {
 							if (productListPanel.getPanelStar().getComponent(i) instanceof JButton) {
-								int numberButton = Integer
-										.parseInt(((JButton) productListPanel.getPanelStar().getComponent(i)).getActionCommand());
-								if (numberButton <= (Integer)spinner.getValue()) {
+								int numberButton = Integer.parseInt(
+										((JButton) productListPanel.getPanelStar().getComponent(i)).getActionCommand());
+								if (numberButton <= (Integer) spinner.getValue()) {
 									((JButton) productListPanel.getPanelStar().getComponent(i)).setText("\u2605");
 									((JButton) productListPanel.getPanelStar().getComponent(i)).doClick();
 								}
@@ -375,9 +376,7 @@ public class MainWindow extends JFrame {
 			mntmStars.setEnabled(false);
 			mntmStars.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 			mnFilters.add(mntmStars);
-			
-			
-			
+
 			mnFilters.add(mntmStars);
 			mntmPeople.setEnabled(false);
 			mntmPeople.setFont(new Font("Segoe UI", Font.PLAIN, 14));
