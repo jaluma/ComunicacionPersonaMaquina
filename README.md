@@ -20,9 +20,3 @@ Todo hecho en Java/Swing.
 ## Autor
 
 * **Javier Martinez** - *Programaa completo* - [jaluma](https://github.com/jaluma)
-
-## Otros
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
